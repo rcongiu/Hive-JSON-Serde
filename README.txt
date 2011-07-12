@@ -59,7 +59,7 @@ select religions['catholic'][0] from json_nested_test; -- result: 10
 
 * ARCHITECTURE
 
-For the JSON encoding/decoding, I am using a modified version of Douglas Rockfords JSON library:
+For the JSON encoding/decoding, I am using a modified version of Douglas Crockfords JSON library:
 https://github.com/douglascrockford/JSON-java
 which is included in the distribution. I had to make some minor changes to it, for this reason
 I included it in my distribution and moved it to another package (since it's included in hive!)
@@ -77,7 +77,7 @@ match hive table declaration.
 
 * THANKS
  
-Thanks to Douglas Rockford for the liberal license for his JSON library, and thanks to 
+Thanks to Douglas Crockford for the liberal license for his JSON library, and thanks to 
 my employer OpenX and my boss Michael Lum for letting me open source the code.
 
 
