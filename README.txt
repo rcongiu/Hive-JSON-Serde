@@ -1,4 +1,5 @@
 JsonSerde - a read/write SerDe for JSON Data
+AUTHOR: Roberto Congiu <rcongiu@yahoo.com>
 
 Serialization/Deserialization module for Apache Hadoop Hive
 
