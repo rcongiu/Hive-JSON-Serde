@@ -1,0 +1,1 @@
+{"country":"Switzerland","languages":["German","French","Italian"],"religions":{"catholic":"30","protestant":"60"}}
