@@ -31,7 +31,6 @@ import org.apache.hadoop.io.Writable;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.hadoop.hive.serde2.lazybinary.LazyBinaryStruct;
 import org.apache.hadoop.hive.serde2.objectinspector.ListObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.MapObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector.Category;
@@ -49,7 +48,6 @@ import org.apache.hadoop.io.Text;
 import org.json.JSONArray;
 import org.openx.data.jsonserde.json.JSONException;
 import org.openx.data.jsonserde.json.JSONObject;
-import org.openx.data.jsonserde.objectinspector.JSONObjectMapAdapter;
 import org.openx.data.jsonserde.objectinspector.JsonObjectInspectorFactory;
 
 /**
@@ -65,9 +63,16 @@ public class JsonSerDe implements SerDe {
     StructTypeInfo rowTypeInfo;
     StructObjectInspector rowObjectInspector;
     boolean[] columnSortOrderIsDesc;
-    ArrayList<Object> row;
-    
    
+    /**
+     * Initializes the SerDe.
+     * Gets the list of columns and their types from the table properties.
+     * Will use them to look into/create JSON data.
+     * 
+     * @param conf Hadoop configuration object
+     * @param tbl  Table Properties
+     * @throws SerDeException 
+     */
     @Override
     public void initialize(Configuration conf, Properties tbl) throws SerDeException {
         LOG.debug("Initializing SerDe");
@@ -95,11 +100,6 @@ public class JsonSerDe implements SerDe {
         // Create row related objects
         rowTypeInfo = (StructTypeInfo) TypeInfoFactory.getStructTypeInfo(columnNames, columnTypes);
         rowObjectInspector = (StructObjectInspector) JsonObjectInspectorFactory.getJsonObjectInspectorFromTypeInfo(rowTypeInfo);
-    
-        row = new ArrayList<Object>(columnNames.size());
-        for (int i = 0; i < columnNames.size(); i++) {
-            row.add(null);
-        }
 
         // Get the sort order
         String columnSortOrder = tbl.getProperty(Constants.SERIALIZATION_SORT_ORDER);
@@ -109,6 +109,14 @@ public class JsonSerDe implements SerDe {
         }
     }
 
+    /**
+     * Deserializes the object. Reads a Writable and uses JSONObject to
+     * parse its text
+     * 
+     * @param w the text to parse
+     * @return a JSONObject
+     * @throws SerDeException 
+     */
     @Override
     public Object deserialize(Writable w) throws SerDeException {
         Text rowText = (Text) w;
@@ -137,7 +145,6 @@ public class JsonSerDe implements SerDe {
                     + e.getMessage());
             throw new SerDeException(e);
         }
-        JSONObject copy = new JSONObject(jObj);
         return jObj;
     }
 
@@ -146,11 +153,27 @@ public class JsonSerDe implements SerDe {
         return rowObjectInspector;
     }
 
+    /**
+     * We serialize to Text 
+     * @return 
+     * 
+     * @see org.apache.hadoop.io.Text
+     */
     @Override
     public Class<? extends Writable> getSerializedClass() {
         return Text.class;
     }
 
+    /**
+     * Hive will call this to serialize an object. Returns a writable object
+     * of the same class returned by <a href="#getSerializedClass">getSerializedClass</a>
+     * 
+     * @param obj The object to serialize
+     * @param objInspector The ObjectInspector that knows about the object's structure
+     * @return a serialized object in form of a Writable. Must be the 
+     *         same type returned by <a href="#getSerializedClass">getSerializedClass</a>
+     * @throws SerDeException 
+     */
     @Override
     public Writable serialize(Object obj, ObjectInspector objInspector) throws SerDeException {        
         // make sure it is a struct record
@@ -208,16 +231,15 @@ public class JsonSerDe implements SerDe {
         }
         return result;
     }
-    
+   
     /**
-     * Takes an object and turns it into an object that can be put into
-     * JSONObject
-     * @param serializer
-     * @param obj
-     * @param soi
-     * @return 
-     */
-    static JSONObjectMapAdapter mapAdapter = new JSONObjectMapAdapter();
+     * Serializes a field. Since we have nested structures, it may be called
+     * recursively for instance when defining a list<struct<>> 
+     * 
+     * @param obj Object holding the fields' content
+     * @param oi  The field's objec inspector
+     * @return  the serialized object
+     */  
     Object serializeField(Object obj,
             ObjectInspector oi ){
         if(obj == null) return null;
@@ -264,7 +286,7 @@ public class JsonSerDe implements SerDe {
                 result = serializeMap(obj, (MapObjectInspector) oi);
                 break;
             case LIST:
-                result = serializeArray(obj, (ListObjectInspector)oi);
+                result = serializeList(obj, (ListObjectInspector)oi);
                 break;
             case STRUCT:
                 result = serializeStruct(obj, (StructObjectInspector)oi, null);
@@ -273,7 +295,14 @@ public class JsonSerDe implements SerDe {
         return result;
     }
 
-    private JSONArray serializeArray(Object obj, ListObjectInspector loi) {
+    /**
+     * Serializes a Hive List using a JSONArray 
+     * 
+     * @param obj the object to serialize
+     * @param loi the object's inspector
+     * @return 
+     */
+    private JSONArray serializeList(Object obj, ListObjectInspector loi) {
         // could be an array of whatever!
         // we do it in reverse order since the JSONArray is grown on demand,
         // as higher indexes are added.
@@ -292,6 +321,13 @@ public class JsonSerDe implements SerDe {
         return ar;
     }
 
+    /**
+     * Serializes a Hive map<> using a JSONObject.
+     * 
+     * @param obj the object to serialize
+     * @param moi the object's inspector
+     * @return 
+     */
     private JSONObject serializeMap(Object obj, MapObjectInspector moi) {
         if (obj==null) return null;
         
