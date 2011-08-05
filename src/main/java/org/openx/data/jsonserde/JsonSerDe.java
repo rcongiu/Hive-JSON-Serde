@@ -122,7 +122,7 @@ public class JsonSerDe implements SerDe {
         Text rowText = (Text) w;
         
         // Try parsing row into JSON object
-        JSONObject jObj;
+        JSONObject jObj = null;
         try {
             jObj = new JSONObject(rowText.toString()) {
 
@@ -143,7 +143,10 @@ public class JsonSerDe implements SerDe {
             // If row is not a JSON object, make the whole row NULL
             LOG.error("Row is not a valid JSON Object - JSONException: "
                     + e.getMessage());
-            throw new SerDeException(e);
+            try{
+              jObj = new JSONObject("{}");  
+            } catch(JSONException e2){}
+            
         }
         return jObj;
     }

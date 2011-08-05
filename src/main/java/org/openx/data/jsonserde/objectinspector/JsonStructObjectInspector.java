@@ -30,10 +30,9 @@ import org.openx.data.jsonserde.json.JSONObject;
  */
 public class JsonStructObjectInspector extends StandardStructObjectInspector {
    
-    
-    public JsonStructObjectInspector(List<String> structFieldNames, 
-            List<ObjectInspector> structFieldObjectInspectors) {
+    public JsonStructObjectInspector(List<String> structFieldNames, List<ObjectInspector> structFieldObjectInspectors) {
        super(structFieldNames, structFieldObjectInspectors);
+
     }
 
     @Override
@@ -48,7 +47,9 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
     assert (fieldID >= 0 && fieldID < fields.size());
 
     try {
-        return obj.get(f.getFieldName());
+        Object result = obj.get(f.getFieldName());
+        //if(!f.getFieldObjectInspector().getTypeName().equalsIgnoreCase(result.getClass().getName())) return null;
+        return result;
     } catch (JSONException ex) {
         // if key does not exist
         return null; 
@@ -62,13 +63,14 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
         values.clear();
         
         for(int i =0; i< fields.size(); i ++) {
+            Object result = null;
             try {
-                values.add(jObj.get(fields.get(i).getFieldName()));
+                result = jObj.get(fields.get(i).getFieldName());
                  } catch (JSONException ex) {
-                // we're iterating through the keys so 
-                // this should never happen
-                throw new RuntimeException("Key not found");
-            }
+                    // this can happen if a key doesn't exist in the json object
+                    // not totally out of the bounds of imagination for log data.
+                }
+                values.add(result);
         }
 
         return values;

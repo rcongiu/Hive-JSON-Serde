@@ -68,14 +68,16 @@
         <dependency>
             <groupId>hive</groupId>
             <artifactId>hive-serde</artifactId>
-            <version>0.6.0_trunk</version>
-            <scope>provided</scope>
+            <version>0.7.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/hive-serde.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>hive</groupId>
             <artifactId>hive-exec</artifactId>
-            <version>0.6.0_trunk</version>
-            <scope>provided</scope>
+            <version>0.7.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/hive-exec.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
