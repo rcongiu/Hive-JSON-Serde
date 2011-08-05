@@ -44,7 +44,7 @@ public class JsonObjectInspectorFactory {
         if (result == null) {
             switch (typeInfo.getCategory()) {
                 case PRIMITIVE: {
-                    result = PrimitiveObjectInspectorFactory.getPrimitiveJavaObjectInspector(((PrimitiveTypeInfo) typeInfo).getPrimitiveCategory());
+                    result = PrimitiveJSONObjectInspectorFactory.getPrimitiveJavaObjectInspector(((PrimitiveTypeInfo) typeInfo).getPrimitiveCategory());
                     break;
                 }
                 case LIST: {
@@ -81,6 +81,7 @@ public class JsonObjectInspectorFactory {
         } 
         return result;
     }
+
     
     
     /*
