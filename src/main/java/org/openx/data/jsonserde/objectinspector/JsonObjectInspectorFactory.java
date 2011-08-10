@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector.PrimitiveCategory;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorFactory;
 import org.apache.hadoop.hive.serde2.typeinfo.ListTypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.MapTypeInfo;
@@ -44,7 +46,8 @@ public class JsonObjectInspectorFactory {
         if (result == null) {
             switch (typeInfo.getCategory()) {
                 case PRIMITIVE: {
-                    result = PrimitiveObjectInspectorFactory.getPrimitiveJavaObjectInspector(((PrimitiveTypeInfo) typeInfo).getPrimitiveCategory());
+                    result = 
+                            getPrimitiveJavaObjectInspector(((PrimitiveTypeInfo) typeInfo).getPrimitiveCategory());
                     break;
                 }
                 case LIST: {
@@ -147,6 +150,21 @@ public class JsonObjectInspectorFactory {
       cachedJsonMapObjectInspector.put(signature, result);
     }
     return result;
+  }
+  
+  static JsonStringJavaObjectInspector cachedStringObjectInspector = new JsonStringJavaObjectInspector();  
+  
+  public static AbstractPrimitiveJavaObjectInspector getPrimitiveJavaObjectInspector(
+      PrimitiveCategory primitiveCategory) {
+      
+      if( primitiveCategory.equals(primitiveCategory.STRING) ) {
+          return cachedStringObjectInspector;
+      } else {
+          return PrimitiveObjectInspectorFactory.
+                            getPrimitiveJavaObjectInspector(primitiveCategory);
+          
+     }
+   
   }
 
   

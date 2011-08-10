@@ -9,9 +9,6 @@
  * See the License for the specific language governing permissions and  *
  * limitations under the License. See accompanying LICENSE file.        *
  *======================================================================*/
-
-
-
 package org.openx.data.jsonserde.objectinspector;
 
 import java.util.ArrayList;
@@ -29,49 +26,47 @@ import org.openx.data.jsonserde.json.JSONObject;
  * @author rcongiu
  */
 public class JsonStructObjectInspector extends StandardStructObjectInspector {
-   
-    
-    public JsonStructObjectInspector(List<String> structFieldNames, 
+
+    public JsonStructObjectInspector(List<String> structFieldNames,
             List<ObjectInspector> structFieldObjectInspectors) {
-       super(structFieldNames, structFieldObjectInspectors);
+        super(structFieldNames, structFieldObjectInspectors);
     }
 
     @Override
     public Object getStructFieldData(Object data, StructField fieldRef) {
-    if (data == null) {
-      return null;
+        if (data == null) {
+            return null;
+        }
+        JSONObject obj = (JSONObject) data;
+        MyField f = (MyField) fieldRef;
+
+        int fieldID = f.getFieldID();
+        assert (fieldID >= 0 && fieldID < fields.size());
+
+        try {
+            return obj.get(f.getFieldName());
+        } catch (JSONException ex) {
+            // if key does not exist
+            return null;
+        }
     }
-    JSONObject obj = (JSONObject) data;
-    MyField f = (MyField) fieldRef; 
-
-    int fieldID = f.getFieldID();
-    assert (fieldID >= 0 && fieldID < fields.size());
-
-    try {
-        return obj.get(f.getFieldName());
-    } catch (JSONException ex) {
-        // if key does not exist
-        return null; 
-    }
-  }
-
     static List<Object> values = new ArrayList<Object>();
+
     @Override
     public List<Object> getStructFieldsDataAsList(Object o) {
         JSONObject jObj = (JSONObject) o;
         values.clear();
-        
-        for(int i =0; i< fields.size(); i ++) {
+
+        for (int i = 0; i < fields.size(); i++) {
             try {
                 values.add(jObj.get(fields.get(i).getFieldName()));
-                 } catch (JSONException ex) {
+            } catch (JSONException ex) {
                 // we're iterating through the keys so 
                 // this should never happen
-                throw new RuntimeException("Key not found");
+                return null;
             }
         }
 
         return values;
     }
-    
 }

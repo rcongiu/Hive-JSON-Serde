@@ -1,20 +1,20 @@
 ----------------------------------------------------------------
-2011-07-12 02:11:45.980 GMT:
- Booting Derby version The Apache Software Foundation - Apache Derby - 10.4.2.0 - (689064): instance a816c00e-0131-1c1d-44ea-000003f7ca90
-on database directory /Users/rcongiu/work/jsonhivetesst/TempStatsStore  
+2011-08-10 01:26:16.320 GMT:
+ Booting Derby version The Apache Software Foundation - Apache Derby - 10.4.2.0 - (689064): instance a816c00e-0131-b14c-09cb-00000488a570
+on database directory /Users/rcongiu/NetBeansProjects/json-serde/src/test/scripts/TempStatsStore  
 
 Database Class Loader started - derby.database.classpath=''
 
-2011-07-12 02:11:46.392 GMT:
-Shutting down instance a816c00e-0131-1c1d-44ea-000003f7ca90
+2011-08-10 01:26:16.854 GMT:
+Shutting down instance a816c00e-0131-b14c-09cb-00000488a570
 ----------------------------------------------------------------
 ----------------------------------------------------------------
-2011-07-12 02:12:21.567 GMT:
- Booting Derby version The Apache Software Foundation - Apache Derby - 10.4.2.0 - (689064): instance 08264012-0131-1c1d-44ea-000003f7ca90
-on database directory /Users/rcongiu/work/jsonhivetesst/TempStatsStore  
+2011-08-10 01:27:01.685 GMT:
+ Booting Derby version The Apache Software Foundation - Apache Derby - 10.4.2.0 - (689064): instance 08264012-0131-b14c-09cb-00000488a570
+on database directory /Users/rcongiu/NetBeansProjects/json-serde/src/test/scripts/TempStatsStore  
 
 Database Class Loader started - derby.database.classpath=''
 
-2011-07-12 02:12:21.884 GMT:
-Shutting down instance 08264012-0131-1c1d-44ea-000003f7ca90
+2011-08-10 01:27:02.098 GMT:
+Shutting down instance 08264012-0131-b14c-09cb-00000488a570
 ----------------------------------------------------------------

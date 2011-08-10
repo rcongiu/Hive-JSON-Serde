@@ -1,4 +1,4 @@
-add jar ../../../target/json-serde-1.0-SNAPSHOT-jar-with-dependencies.jar;
+add jar ../../../target/json-serde-1.1-jar-with-dependencies.jar;
 
 DROP TABLE   simple_table_json;
 CREATE TABLE simple_table_json (

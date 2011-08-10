@@ -56,6 +56,21 @@ select * from json_nested_test;  -- result: Switzerland	["German","French","Ital
 select languages[0] from json_nested_test; -- result: German
 select religions['catholic'][0] from json_nested_test; -- result: 10
 
+* MALFORMED DATA
+
+The default behavior on malformed data is throwing an exception. 
+For example, for malformed json like 
+{"country":"Italy","languages" "Italian","religions":{"catholic":"90"}}
+
+you get:
+Failed with exception java.io.IOException:org.apache.hadoop.hive.serde2.SerDeException: Row is not a valid JSON Object - JSONException: Expected a ':' after a key at 32 [character 33 line 1]
+
+this may not be desirable if you have a few bad lines you wish to ignore. If so you can do:
+ALTER TABLE json_table SET SERDEPROPERTIES ( "ignore.malformed.json" = "true");
+
+it will not make the query fail, and the above record will be returned as
+NULL	null	null
+
 
 * ARCHITECTURE
 
@@ -73,6 +88,9 @@ Hive Maps and Structs are both implemented as object, which are less restrictive
 a JSON Object could be a mix of keys and values of different types, while hive expects you to declare the 
 type of map (example: map<string,string>). The user is responsible for having the JSON data structure 
 match hive table declaration.
+
+More detailed explanation on my blog:
+http://www.congiu.com/articles/json_serde
 
 
 * THANKS

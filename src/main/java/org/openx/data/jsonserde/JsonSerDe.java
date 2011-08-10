@@ -51,7 +51,10 @@ import org.openx.data.jsonserde.json.JSONObject;
 import org.openx.data.jsonserde.objectinspector.JsonObjectInspectorFactory;
 
 /**
- *
+ * Properties:
+ * ignore.malformed.json = true/false : malformed json will be ignored
+ *         instead of throwing an exception
+ * 
  * @author rcongiu
  */
 public class JsonSerDe implements SerDe {
@@ -63,7 +66,12 @@ public class JsonSerDe implements SerDe {
     StructTypeInfo rowTypeInfo;
     StructObjectInspector rowObjectInspector;
     boolean[] columnSortOrderIsDesc;
-   
+    
+       // if set, will ignore malformed JSON in deserialization
+    boolean ignoreMalformedJson = false;
+   public static final String PROP_IGNORE_MALFORMED_JSON = "ignore.malformed.json";
+    
+
     /**
      * Initializes the SerDe.
      * Gets the list of columns and their types from the table properties.
@@ -107,6 +115,11 @@ public class JsonSerDe implements SerDe {
         for (int i = 0; i < columnSortOrderIsDesc.length; i++) {
             columnSortOrderIsDesc[i] = (columnSortOrder != null && columnSortOrder.charAt(i) == '-');
         }
+        
+        
+        // other configuration
+        ignoreMalformedJson = Boolean.parseBoolean(tbl.getProperty(PROP_IGNORE_MALFORMED_JSON, "false"));
+        
     }
 
     /**
@@ -122,7 +135,8 @@ public class JsonSerDe implements SerDe {
         Text rowText = (Text) w;
         
         // Try parsing row into JSON object
-        JSONObject jObj;
+        JSONObject jObj = null;
+        
         try {
             jObj = new JSONObject(rowText.toString()) {
 
@@ -141,9 +155,13 @@ public class JsonSerDe implements SerDe {
             };
         } catch (JSONException e) {
             // If row is not a JSON object, make the whole row NULL
-            LOG.error("Row is not a valid JSON Object - JSONException: "
+            onMalformedJson("Row is not a valid JSON Object - JSONException: "
                     + e.getMessage());
-            throw new SerDeException(e);
+            try {
+                jObj = new JSONObject("{}");
+            } catch (JSONException ex) {
+                onMalformedJson("Error parsing empty row. This should never happen.");
+            }
         }
         return jObj;
     }
@@ -345,4 +363,13 @@ public class JsonSerDe implements SerDe {
         }
         return jo;
     }
+    
+    public void onMalformedJson(String msg) throws SerDeException {
+        if(ignoreMalformedJson) {
+            LOG.warn("Ignoring malformed JSON: " + msg);
+        }  else {
+            throw new SerDeException(msg);
+        }
+    } 
+    
 }
