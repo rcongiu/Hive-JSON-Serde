@@ -67,6 +67,11 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
             try {
                 result = jObj.get(fields.get(i).getFieldName());
                  } catch (JSONException ex) {
+                    try{
+                        result = jObj.get(fields.get(i).getFieldName().replaceAll("_", "-"));
+                    } catch(JSONException ex2){
+                        
+                    }
                     // this can happen if a key doesn't exist in the json object
                     // not totally out of the bounds of imagination for log data.
                 }

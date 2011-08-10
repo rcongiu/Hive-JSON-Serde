@@ -21,13 +21,7 @@ public class CustomJavaStringObjectInspector extends
 
   @Override
   public String getPrimitiveJavaObject(Object o) {
-  	String result = null;
-  	try{
-  		result = (String) o;
-  	} catch(ClassCastException ex){
-  		result =  o.toString();
-  	}
-  	return result;
+  	return o.toString(); //this way no casting exceptions occur!
   }
 
   @Override
