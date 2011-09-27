@@ -29,10 +29,8 @@ import org.openx.data.jsonserde.json.JSONObject;
  * @author rcongiu
  */
 public class JsonStructObjectInspector extends StandardStructObjectInspector {
-   
     public JsonStructObjectInspector(List<String> structFieldNames, List<ObjectInspector> structFieldObjectInspectors) {
        super(structFieldNames, structFieldObjectInspectors);
-
     }
 
     @Override

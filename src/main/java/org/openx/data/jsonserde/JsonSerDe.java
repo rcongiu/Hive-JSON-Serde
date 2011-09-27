@@ -109,6 +109,31 @@ public class JsonSerDe implements SerDe {
         }
     }
 
+    // private Class getClassFromTypeInfo(TypeInfo t){
+    //     String typeName = t.toString();
+    //     if(typeName.equalsIgnoreCase(Constants.INT_TYPE_NAME)) return Integer.class;
+    //     else if(typeName.equalsIgnoreCase(Constants.BIGINT_TYPE_NAME)) return Long.class;
+    //     else return Object.class;
+    // }
+
+    // private String getTypeNameFromClass(Class c){
+    //     if(c == Integer.class) return Constants.INT_TYPE_NAME;
+    //     if(c == Boolean.class) return Constants.BOOT_TYPE_NAME;
+    //     if(c == String.class) return Constants.STRING_TYPE_NAME;
+    //     return null;
+    // }
+    private String getClassName(String typeName){
+        if(typeName.equals(Constants.INT_TYPE_NAME)) return Integer.class.toString();
+        if(typeName.equals(Constants.BIGINT_TYPE_NAME)) return Long.class.toString();
+        if(typeName.equals(Constants.DOUBLE_TYPE_NAME)) return Double.class.toString();
+        if(typeName.equals(Constants.FLOAT_TYPE_NAME)) return Float.class.toString();
+        if(typeName.equals(Constants.BOOLEAN_TYPE_NAME)) return Boolean.class.toString();
+        
+        return null;
+    }
+
+
+
     /**
      * Deserializes the object. Reads a Writable and uses JSONObject to
      * parse its text
@@ -136,7 +161,18 @@ public class JsonSerDe implements SerDe {
                 @Override
                 public JSONObject put(String key, Object value)
                         throws JSONException {
-                    return super.put(key.toLowerCase(), value);
+                    String newK = key.toLowerCase();
+                    int fieldIndex = columnNames.indexOf(newK);
+                    if(fieldIndex > -1){
+                        String typeName = getClassName(columnTypes.get(fieldIndex).toString());
+                        String valueTypeName = value.getClass().toString();
+
+                        if(typeName != null && !typeName.equalsIgnoreCase(valueTypeName)){
+                            // don't put the value, and return the json object without it.
+                            return this;
+                        }
+                    }
+                    return super.put(newK, value);
                 }
             };
         } catch (JSONException e) {

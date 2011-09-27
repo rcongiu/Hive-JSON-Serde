@@ -74,6 +74,26 @@ public class JsonSerDeTest {
         
         instance.initialize(conf, tbl);
     }
+    static public void alternateInitialize() throws Exception{
+        System.out.println("initialize");
+        instance = new JsonSerDe();
+        Configuration conf = null;
+        Properties tbl = new Properties();
+        tbl.setProperty(Constants.LIST_COLUMNS, "one,two,three,four");
+        tbl.setProperty(Constants.LIST_COLUMN_TYPES, "int,boolean,array<string>,string");
+        
+        instance.initialize(conf, tbl);   
+    }
+
+    @Test(expected=JSONException.class)
+    public void testShouldDropValuesWhenWrongBasicType() throws Exception{
+        alternateInitialize();
+        Writable w = new Text("{\"one\":true, \"two\": true}");
+        JSONObject result = (JSONObject) instance.deserialize(w);
+        System.out.println(result.toString());
+        assertEquals(result.get("two"), true);
+        result.get("one");
+    }
 
     /**
      * Test of deserialize method, of class JsonSerDe.
