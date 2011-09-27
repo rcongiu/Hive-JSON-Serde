@@ -63,7 +63,10 @@ public class JsonSerDeTest {
     }
 
     static JsonSerDe instance;
- 
+    
+    static String defaultColumns = "one,two,three,four";
+    static String defaultColumnTypes = "int,boolean,array<string>,string";
+
     static public void initialize() throws Exception {
         System.out.println("initialize");
         instance = new JsonSerDe();
@@ -74,25 +77,33 @@ public class JsonSerDeTest {
         
         instance.initialize(conf, tbl);
     }
-    static public void alternateInitialize() throws Exception{
+    static public void alternateInitialize(String cols, String colTypes) throws Exception{
         System.out.println("initialize");
         instance = new JsonSerDe();
         Configuration conf = null;
         Properties tbl = new Properties();
-        tbl.setProperty(Constants.LIST_COLUMNS, "one,two,three,four");
-        tbl.setProperty(Constants.LIST_COLUMN_TYPES, "int,boolean,array<string>,string");
+        tbl.setProperty(Constants.LIST_COLUMNS, cols);
+        tbl.setProperty(Constants.LIST_COLUMN_TYPES, colTypes);
         
         instance.initialize(conf, tbl);   
     }
 
     @Test(expected=JSONException.class)
     public void testShouldDropValuesWhenWrongBasicType() throws Exception{
-        alternateInitialize();
+        alternateInitialize(defaultColumns, defaultColumnTypes);
         Writable w = new Text("{\"one\":true, \"two\": true}");
         JSONObject result = (JSONObject) instance.deserialize(w);
-        System.out.println(result.toString());
         assertEquals(result.get("two"), true);
         result.get("one");
+    }
+
+    @Test
+    public void testShouldntDropFieldWhenExpectsString() throws Exception{
+        alternateInitialize(defaultColumns, "string,string,array<string>,string");
+        Writable w = new Text("{\"one\":23, \"two\": true}");
+        JSONObject result = (JSONObject) instance.deserialize(w);
+        assertEquals(result.get("two"), true);
+        assertEquals(result.get("one"), 23);
     }
 
     /**
