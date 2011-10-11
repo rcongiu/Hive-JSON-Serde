@@ -150,6 +150,14 @@ public class JsonSerDeTest {
        
     }
 
+    @Test
+    public void testDeserializeWithBase16Numbers() throws Exception{
+        System.out.println("deserialization craziness test:");
+        String data = "{\"hello\":\"\\uA8?1\"}";
+        JSONObject j = new JSONObject(data);
+        assertEquals(j.get("hello"), "\\uA8?1");
+    }
+
     /**
      * Test of serialize method, of class JsonSerDe.
      */
