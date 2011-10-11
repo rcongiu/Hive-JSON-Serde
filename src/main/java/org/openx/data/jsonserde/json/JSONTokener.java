@@ -276,7 +276,19 @@ public class JSONTokener {
                     sb.append('\r');
                     break;
                 case 'u':
-                    sb.append((char)Integer.parseInt(next(4), 16));
+                    String chars = next(4);
+                    try{
+                        char val = (char)Integer.parseInt(chars, 16);
+                        sb.append(val);
+                        } 
+                    catch(Exception e)
+                        {
+                            //it might not be a valid base-16 integer, 
+                            //in which case it just contains slash-u for whatever reason. Duh.
+                            sb.append('\\');
+                            sb.append('u');
+                            sb.append(chars);
+                        }
                     break;
                 case '"':
                 case '\'':
