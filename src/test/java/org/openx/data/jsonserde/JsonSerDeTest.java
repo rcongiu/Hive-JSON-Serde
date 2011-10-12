@@ -106,6 +106,25 @@ public class JsonSerDeTest {
         assertEquals(result.get("one"), 23);
     }
 
+    @Test
+    public void testColumnNameReplacements() throws Exception{
+        System.out.println("initialize");
+        instance = new JsonSerDe();
+        Configuration conf = null;
+        String cols = "dt,from_field,name,age";
+        String colTypes = "string,string,string,string";
+        Properties tbl = new Properties();
+        tbl.setProperty(Constants.LIST_COLUMNS, cols);
+        tbl.setProperty(Constants.LIST_COLUMN_TYPES, colTypes);
+        tbl.setProperty(JsonSerDe.PROP_COLUMN_MAPPINGS, "date:dt, from: from_field");
+        instance.initialize(conf, tbl);
+        Writable w = new Text("{\"date\":\"2011-10-12\",\"from\":\"matthew\"}");
+        JSONObject result = (JSONObject) instance.deserialize(w);
+        System.out.println(result.toString());
+        assertEquals(result.get("dt"), "2011-10-12");
+        assertEquals(result.get("from_field"), "matthew");
+    }
+
     /**
      * Test of deserialize method, of class JsonSerDe.
      */

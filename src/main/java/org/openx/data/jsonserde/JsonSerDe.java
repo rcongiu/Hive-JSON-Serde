@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Properties;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.serde.Constants;
@@ -57,12 +58,16 @@ import org.openx.data.jsonserde.objectinspector.JsonObjectInspectorFactory;
 public class JsonSerDe implements SerDe {
 
     public static final Log LOG = LogFactory.getLog(JsonSerDe.class);
-   
+    public static final String PROP_COLUMN_MAPPINGS = "json.mappings";
+
     List<String> columnNames;
     List<TypeInfo> columnTypes;
     StructTypeInfo rowTypeInfo;
     StructObjectInspector rowObjectInspector;
     boolean[] columnSortOrderIsDesc;
+    HashMap<String,String> columnMappings;
+
+
    
     /**
      * Initializes the SerDe.
@@ -107,6 +112,17 @@ public class JsonSerDe implements SerDe {
         for (int i = 0; i < columnSortOrderIsDesc.length; i++) {
             columnSortOrderIsDesc[i] = (columnSortOrder != null && columnSortOrder.charAt(i) == '-');
         }
+
+        String specialMappings = tbl.getProperty(PROP_COLUMN_MAPPINGS, "");
+        specialMappings = specialMappings.toLowerCase();
+        columnMappings = new HashMap<String,String>();
+        String[] entries = specialMappings.split("\\s*,\\s*");
+        for(String entry: entries){
+            String[] mapping = entry.split("\\s*:\\s*");
+            if(mapping.length != 2) continue;
+            columnMappings.put(mapping[0], mapping[1]);
+        }
+
     }
 
     // private Class getClassFromTypeInfo(TypeInfo t){
@@ -151,6 +167,12 @@ public class JsonSerDe implements SerDe {
         try {
             jObj = new JSONObject(rowText.toString()) {
 
+                private String getKey(String original){
+                    String nk = original.toLowerCase();
+                    if(columnMappings.containsKey(nk)){
+                        return columnMappings.get(nk);
+                    } else return nk;
+                }
                 /**
                  * In Hive column names are case insensitive, so lower-case all
                  * field names
@@ -161,7 +183,8 @@ public class JsonSerDe implements SerDe {
                 @Override
                 public JSONObject put(String key, Object value)
                         throws JSONException {
-                    String newK = key.toLowerCase();
+                    String newK = getKey(key);
+
                     int fieldIndex = columnNames.indexOf(newK);
                     if(fieldIndex > -1){
                         String typeName = getClassName(columnTypes.get(fieldIndex).toString());

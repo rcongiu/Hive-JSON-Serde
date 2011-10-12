@@ -10,6 +10,7 @@ Features:
 * Convert data to JSON format when INSERT INTO table
 * arrays and maps are supported
 * nested data structures are also supported. 
+* Field name remapping is supported (should you have a field name that is a reserved word in hive)
 
 COMPILE
 
@@ -35,6 +36,23 @@ hive> select three[1] from json_test1;
 
 gold
 yellow
+
+EXAMPLE WITH REMAPPED COLUMNS
+
+CREATE TABLE json_test1 (
+    one boolean,
+    three array<string>,
+    two double,
+    four string )
+ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+WITH SERDEPROPERTIES ('json.mappings' = 'oldname:one,other_old_name:two')
+STORED AS TEXTFILE;
+
+What this means in practice, is that if your input looks like this:
+{'oldname':true,'other_old_name':23.4}
+it will be interpreted as if it looked like this:
+{'one':true, 'two':23.4}
+
 
 
 * Nested structures
