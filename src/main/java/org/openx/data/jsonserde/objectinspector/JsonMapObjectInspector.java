@@ -23,8 +23,8 @@ import org.openx.data.jsonserde.json.JSONObject;
  * @author rcongiu
  */
 public class JsonMapObjectInspector extends StandardMapObjectInspector {
-  
-    public JsonMapObjectInspector(ObjectInspector mapKeyObjectInspector, 
+
+    public JsonMapObjectInspector(ObjectInspector mapKeyObjectInspector,
             ObjectInspector mapValueObjectInspector) {
         super(mapKeyObjectInspector, mapValueObjectInspector);
     }
@@ -32,18 +32,18 @@ public class JsonMapObjectInspector extends StandardMapObjectInspector {
 
   @Override
   public Map<?, ?> getMap(Object data) {
-    if (data == null) {
+    if (data == null || JSONObject.NULL.equals(data)) {
       return null;
     }
-    
+
     JSONObject jObj = (JSONObject) data;
-    
+
     return new JSONObjectMapAdapter(jObj);
   }
 
   @Override
   public int getMapSize(Object data) {
-    if (data == null) {
+    if (data == null || JSONObject.NULL.equals(data)) {
       return -1;
     }
      JSONObject jObj = (JSONObject) data;
@@ -52,10 +52,10 @@ public class JsonMapObjectInspector extends StandardMapObjectInspector {
 
   @Override
   public Object getMapValueElement(Object data, Object key) {
-    if (data == null) {
-      return -1;
+    if (data == null || key == null || JSONObject.NULL.equals(data)) {
+      return null;
     }
-    
+
      JSONObject jObj = (JSONObject) data;
         try {
             return jObj.get(key.toString());
@@ -63,5 +63,5 @@ public class JsonMapObjectInspector extends StandardMapObjectInspector {
             // key does not exists -> like null
             return null;
         }
-  }   
+  }
 }
