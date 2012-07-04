@@ -100,4 +100,10 @@ my employer OpenX and my boss Michael Lum for letting me open source the code.
 
 
 
+Versions:
+1.0: initial release
+1.1: fixed some string issues
+1.1.1 (2012/07/03): fixed Map Adapter (get and put would call themselves...ooops)
+
+
 
