@@ -94,12 +94,12 @@ public class JSONObjectMapAdapter implements Map {
 
     @Override
     public Object get(Object key) {
-        return get(key);
+        return cache.get(key);
     }
 
     @Override
     public Object put(Object key, Object value) {
-        return put(key,value);
+        return cache.put(key,value);
     }
 
     @Override
