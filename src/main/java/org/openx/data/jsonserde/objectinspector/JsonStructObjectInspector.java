@@ -44,7 +44,10 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
         assert (fieldID >= 0 && fieldID < fields.size());
 
         try {
-            return obj.get(f.getFieldName());
+            if(obj.has(f.getFieldName()))
+               return obj.get(f.getFieldName());
+            else
+               return null;
         } catch (JSONException ex) {
             // if key does not exist
             return null;
@@ -59,7 +62,10 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
 
         for (int i = 0; i < fields.size(); i++) {
             try {
-                values.add(jObj.get(fields.get(i).getFieldName()));
+                if (jObj.has(fields.get(i).getFieldName()))
+                    values.add(jObj.get(fields.get(i).getFieldName()));
+                else
+                    values.add(null);
             } catch (JSONException ex) {
                 // we're iterating through the keys so 
                 // this should never happen
