@@ -17,6 +17,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StandardListObjectInspector;
 import org.openx.data.jsonserde.json.JSONArray;
 import org.openx.data.jsonserde.json.JSONException;
+import org.openx.data.jsonserde.json.JSONObject;
 
 /**
  *
@@ -30,7 +31,7 @@ public class JsonListObjectInspector extends StandardListObjectInspector {
 
      @Override
   public List<?> getList(Object data) {
-    if (data == null) {
+    if (data == null || JSONObject.NULL.equals(data)) {
       return null;
     }
     JSONArray array = (JSONArray) data;
