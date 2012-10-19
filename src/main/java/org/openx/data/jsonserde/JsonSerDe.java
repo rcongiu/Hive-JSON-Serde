@@ -91,7 +91,26 @@ public class JsonSerDe implements SerDe {
     public void initialize(Configuration conf, Properties tbl) throws SerDeException {
         LOG.debug("Initializing SerDe");
         // Get column names and sort order
-        String columnNameProperty = tbl.getProperty(Constants.LIST_COLUMNS);
+
+        String columnNameProperty = null;
+
+        /**
+         * Use the keys property set in the SERDEPROPERTIES if available
+         * This allows for JSON keys that are not valid hive column names
+         * Newlines and spaces will be stripped out of the input
+         */
+        if (tbl.stringPropertyNames().contains("keys")) {
+
+            LOG.debug("Using keys set in SERDEPROPERTIES");
+            columnNameProperty = tbl.getProperty("keys").replaceAll("\n", "").replaceAll(" ", "");
+
+        } else {
+
+            LOG.debug("Using column names as JSON keys");
+            columnNameProperty = tbl.getProperty(Constants.LIST_COLUMNS);
+
+        }
+
         String columnTypeProperty = tbl.getProperty(Constants.LIST_COLUMN_TYPES);
         
         LOG.debug("columns " + columnNameProperty + " types " + columnTypeProperty);
