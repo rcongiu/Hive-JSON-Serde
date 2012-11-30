@@ -1,4 +1,4 @@
-add jar ../../../target/json-serde-1.0-SNAPSHOT-jar-with-dependencies.jar;
+add jar ../../../target/json-serde-1.1.3-jar-with-dependencies.jar;
 
 DROP TABLE json_nested_test;
 CREATE TABLE json_nested_test (

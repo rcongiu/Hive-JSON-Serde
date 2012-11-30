@@ -105,6 +105,7 @@ Versions:
 1.1: fixed some string issues
 1.1.1 (2012/07/03): fixed Map Adapter (get and put would call themselves...ooops)
 1.1.2 (2012/07/26): Fixed issue with columns that are not mapped into JSON, reported by Michael Phung
+1.1.4 (2012/10/04): Fixed issue #13, problem with floats, Reported by Chuck Connell
 
 
 
