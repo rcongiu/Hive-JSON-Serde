@@ -27,8 +27,8 @@ SOFTWARE.
 import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -112,16 +112,28 @@ public class JSONObject {
          * @return true if the object parameter is the JSONObject.NULL object
          *  or null.
          */
+        @Override
         public boolean equals(Object object) {
-            return object == null || object == this;
+            if(! (object instanceof JSONObject)) {
+                return false;
+            } else {
+                return object == null || object == this;
+            }
         }
 
         /**
          * Get the "null" string value.
          * @return The string "null".
          */
+        @Override
         public String toString() {
             return "null";
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            return hash;
         }
     }
 
@@ -162,7 +174,7 @@ public class JSONObject {
         this();
         for (int i = 0; i < names.length; i += 1) {
             try {
-                putOnce(names[i], jo.opt(names[i]));
+                putOnce(names[i].toLowerCase(), jo.opt(names[i]));
             } catch (Exception ignore) {
             }
         }
@@ -192,7 +204,7 @@ public class JSONObject {
                 return;
             default:
                 x.back();
-                key = x.nextValue().toString();
+                key = x.nextValue().toString().toLowerCase();
             }
 
 // The key is followed by ':'. We will also tolerate '=' or '=>'.
@@ -290,7 +302,7 @@ public class JSONObject {
         for (int i = 0; i < names.length; i += 1) {
             String name = names[i];
             try {
-                putOpt(name, c.getField(name).get(object));
+                putOpt(name.toLowerCase(), c.getField(name).get(object));
             } catch (Exception ignore) {
             }
         }
@@ -341,11 +353,11 @@ public class JSONObject {
                     JSONObject nextTarget = target.optJSONObject(segment);
                     if (nextTarget == null) {
                         nextTarget = new JSONObject();
-                        target.put(segment, nextTarget);
+                        target.put(segment.toLowerCase(), nextTarget);
                     }
                     target = nextTarget;
                 }
-                target.put(path[last], bundle.getString((String)key));
+                target.put(path[last].toLowerCase(), bundle.getString((String)key));
             }
         }
     }
@@ -374,12 +386,12 @@ public class JSONObject {
         testValidity(value);
         Object object = opt(key);
         if (object == null) {
-            put(key, value instanceof JSONArray ?
+            put(key.toLowerCase(), value instanceof JSONArray ?
                     new JSONArray().put(value) : value);
         } else if (object instanceof JSONArray) {
             ((JSONArray)object).put(value);
         } else {
-            put(key, new JSONArray().put(object).put(value));
+            put(key.toLowerCase(), new JSONArray().put(object).put(value));
         }
         return this;
     }
@@ -400,9 +412,9 @@ public class JSONObject {
         testValidity(value);
         Object object = opt(key);
         if (object == null) {
-            put(key, new JSONArray().put(value));
+            put(key.toLowerCase(), new JSONArray().put(value));
         } else if (object instanceof JSONArray) {
-            put(key, ((JSONArray)object).put(value));
+            put(key.toLowerCase(), ((JSONArray)object).put(value));
         } else {
             throw new JSONException("JSONObject[" + key +
                     "] is not a JSONArray.");
@@ -1115,7 +1127,7 @@ public class JSONObject {
      * @return his.
      * @throws JSONException if the key is a duplicate
      */
-    public JSONObject putOnce(String key, Object value) throws JSONException {
+    public final JSONObject putOnce(String key, Object value) throws JSONException {
         if (key != null && value != null) {
             if (opt(key) != null) {
                 throw new JSONException("Duplicate key \"" + key + "\"");
@@ -1162,7 +1174,7 @@ public class JSONObject {
         String       hhhh;
         int          i;
         int          len = string.length();
-        StringBuffer sb = new StringBuffer(len + 4);
+        StringBuilder sb = new StringBuilder(len + 4);
 
         sb.append('"');
         for (i = 0; i < len; i += 1) {
@@ -1391,7 +1403,7 @@ public class JSONObject {
         Iterator     keys = this.keys();
         int          newindent = indent + indentFactor;
         Object       object;
-        StringBuffer sb = new StringBuffer("{");
+        StringBuilder sb = new StringBuilder("{");
         if (length == 1) {
             object = keys.next();
             sb.append(quote(object.toString()));
@@ -1502,7 +1514,7 @@ public class JSONObject {
          int    indentFactor, 
          int    indent
      ) throws JSONException {
-        if (value == null || value.equals(null)) {
+        if (value == null ) {
             return "null";
         }
         try {
