@@ -271,8 +271,6 @@ public class JsonSerDe implements SerDe {
      */  
     Object serializeField(Object obj,
             ObjectInspector oi ){
-        if(obj == null) return null;
-        
         Object result = null;
         switch(oi.getCategory()) {
             case PRIMITIVE:
