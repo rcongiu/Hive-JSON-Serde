@@ -31,7 +31,7 @@ public class JsonListObjectInspector extends StandardListObjectInspector {
 
      @Override
   public List<?> getList(Object data) {
-    if (data == null || JSONObject.NULL.equals(data)) {
+    if (data == null) {
       return null;
     }
     JSONArray array = (JSONArray) data;

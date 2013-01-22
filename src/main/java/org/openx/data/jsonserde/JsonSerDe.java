@@ -13,6 +13,7 @@
 
 package org.openx.data.jsonserde;
 
+import java.nio.charset.CharacterCodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,6 +46,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.primitive.LongObjectInspect
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.ShortObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.StringObjectInspector;
 import org.apache.hadoop.hive.serde2.typeinfo.StructTypeInfo;
+import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.Text;
 import org.openx.data.jsonserde.json.JSONArray;
 import org.openx.data.jsonserde.json.JSONException;
@@ -140,7 +142,17 @@ public class JsonSerDe implements SerDe {
      */
     @Override
     public Object deserialize(Writable w) throws SerDeException {
-        Text rowText = (Text) w;
+        Text rowText;
+        if (w instanceof BytesWritable) {
+              BytesWritable b = (BytesWritable) w;
+              try {
+                rowText = new Text(Text.decode(b.getBytes(), 0, b.getLength()));
+              } catch (CharacterCodingException e) {
+                throw new SerDeException(e);
+              }
+        } else {
+            rowText = (Text) w;
+        }
         deserializedDataSize = rowText.getBytes().length;
 	
         // Try parsing row into JSON object
@@ -271,8 +283,6 @@ public class JsonSerDe implements SerDe {
      */  
     Object serializeField(Object obj,
             ObjectInspector oi ){
-        if(obj == null) return null;
-        
         Object result = null;
         switch(oi.getCategory()) {
             case PRIMITIVE:
