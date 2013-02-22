@@ -13,6 +13,8 @@
 package org.openx.data.jsonserde.objectinspector;
 
 import java.util.Map;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StandardMapObjectInspector;
 import org.openx.data.jsonserde.json.JSONException;
@@ -23,8 +25,10 @@ import org.openx.data.jsonserde.json.JSONObject;
  * @author rcongiu
  */
 public class JsonMapObjectInspector extends StandardMapObjectInspector {
-  
-    public JsonMapObjectInspector(ObjectInspector mapKeyObjectInspector, 
+
+    public static final Log LOG = LogFactory.getLog(JsonMapObjectInspector.class);
+
+    public JsonMapObjectInspector(ObjectInspector mapKeyObjectInspector,
             ObjectInspector mapValueObjectInspector) {
         super(mapKeyObjectInspector, mapValueObjectInspector);
     }
@@ -35,9 +39,14 @@ public class JsonMapObjectInspector extends StandardMapObjectInspector {
     if (data == null) {
       return null;
     }
-    
+
+    if (!data.getClass().isAssignableFrom(JSONObject.class)) {
+        LOG.warn("Expected a JSON Map, got this: " + data.toString());
+        return null;
+    }
+
     JSONObject jObj = (JSONObject) data;
-    
+
     return new JSONObjectMapAdapter(jObj);
   }
 
@@ -55,7 +64,7 @@ public class JsonMapObjectInspector extends StandardMapObjectInspector {
     if (data == null) {
       return -1;
     }
-    
+
      JSONObject jObj = (JSONObject) data;
         try {
             return jObj.get(key.toString());
@@ -63,5 +72,5 @@ public class JsonMapObjectInspector extends StandardMapObjectInspector {
             // key does not exists -> like null
             return null;
         }
-  }   
+  }
 }
