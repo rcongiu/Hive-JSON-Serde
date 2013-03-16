@@ -15,6 +15,12 @@ COMPILE
 
 Use maven to compile the serde.
 
+$ mvn package
+
+If you want to compile the serde against a different version of the cloudera libs,
+use -D:
+mvn -Dcdh.version=0.9.0-cdh3u4c-SNAPSHOT package
+
 
 EXAMPLES
 
