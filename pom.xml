@@ -13,6 +13,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<cdh.version>0.8.0-cdh4a1-SNAPSHOT</cdh.version>
     </properties>
 
 
@@ -75,13 +76,13 @@
         <dependency>
             <groupId>org.apache.hadoop.hive</groupId>
             <artifactId>hive-serde</artifactId>
-            <version>0.8.0-cdh4a1-SNAPSHOT</version>
+            <version>${cdh.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop.hive</groupId>
             <artifactId>hive-exec</artifactId>
-            <version>0.8.0-cdh4a1-SNAPSHOT</version>
+            <version>${cdh.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
