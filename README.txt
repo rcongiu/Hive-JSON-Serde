@@ -78,7 +78,7 @@ it will not make the query fail, and the above record will be returned as
 NULL	null	null
 
 
-* ARCHITECTURE
+# ARCHITECTURE
 
 For the JSON encoding/decoding, I am using a modified version of Douglas Crockfords JSON library:
 https://github.com/douglascrockford/JSON-java
@@ -97,6 +97,10 @@ match hive table declaration.
 
 More detailed explanation on my blog:
 http://www.congiu.com/articles/json_serde
+
+# CONTRIBUTING
+
+I am using gitflow for the release cycle.
 
 
 * THANKS
