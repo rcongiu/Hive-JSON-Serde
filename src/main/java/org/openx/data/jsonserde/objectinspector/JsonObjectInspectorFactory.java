@@ -102,48 +102,7 @@ public class JsonObjectInspectorFactory {
             cachedStandardStructObjectInspector =
             new HashMap<ArrayList<Object>, JsonStructObjectInspector>();
     
-    /**
-     * We introduce this to carry mappings and other options
-     * we may want to support in the future.
-     * Signature for caching will be built using this.
-     */
-    public static class JsonStructOIOptions {
-        Map<String,String> mappings;
-        public JsonStructOIOptions (Map<String,String> mp) {
-            mappings = mp;
-        }
-
-        public Map<String, String> getMappings() {
-            return mappings;
-        }
-
-        
-        
-        @Override
-        public boolean equals(Object obj) {
-            if(!(obj instanceof JsonStructOIOptions) || obj == null) {
-                return false ;
-            } else {
-                JsonStructOIOptions oio = (JsonStructOIOptions) obj;
-                
-                if(mappings != null) {
-                    return mappings.equals(oio.mappings);
-                } else {
-                    return mappings == oio.mappings;
-                }
-            }
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 5;
-            hash = 67 * hash + (this.mappings != null ? this.mappings.hashCode() : 0);
-            return hash;
-        }
-        
-        
-    }
-
+   
     public static JsonStructObjectInspector getJsonStructObjectInspector(
             List<String> structFieldNames,
             List<ObjectInspector> structFieldObjectInspectors,

@@ -27,7 +27,7 @@ import org.openx.data.jsonserde.json.JSONObject;
  * @author rcongiu
  */
 public class JsonStructObjectInspector extends StandardStructObjectInspector {
-    JsonObjectInspectorFactory.JsonStructOIOptions options = null;
+    JsonStructOIOptions options = null;
 
   /*  
     public JsonStructObjectInspector(List<String> structFieldNames,
@@ -36,7 +36,7 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
     } */
     
       public JsonStructObjectInspector(List<String> structFieldNames,
-            List<ObjectInspector> structFieldObjectInspectors,JsonObjectInspectorFactory.JsonStructOIOptions opts) {
+            List<ObjectInspector> structFieldObjectInspectors,JsonStructOIOptions opts) {
         super(structFieldNames, structFieldObjectInspectors);   
         
         options = opts;

@@ -32,6 +32,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.serde.Constants;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorFactory;
 import org.apache.hadoop.io.Writable;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -193,9 +194,9 @@ public class JsonSerDeTest {
 
     }
     
-    // {"one":true, "timestamp":1234567, "three":["red","yellow",["blue","azure","cobalt","teal"],"orange"],"two":19.5,"four":"poop"}
-    @Test
-    public void testFromFile() throws SerDeException, IOException {
+    
+    public JsonSerDe getMappedSerde() throws SerDeException {
+        System.out.println("testMapping");
         JsonSerDe serde = new JsonSerDe();
         Configuration conf = null;
         Properties tbl = new Properties();
@@ -205,6 +206,62 @@ public class JsonSerDeTest {
         tbl.setProperty("mapping.ts", "timestamp");
 
         serde.initialize(conf, tbl);
+        return serde;
+    }
+    
+    @Test
+    public void testSerializeWithMapping() throws SerDeException, JSONException {
+        System.out.println("testSerializeWithMapping");  
+        
+        JsonSerDe serde =getMappedSerde();
+        
+        System.out.println("serialize");
+        ArrayList row = new ArrayList(5);
+
+        List<ObjectInspector> lOi = new LinkedList<ObjectInspector>();
+        List<String> fieldNames = new LinkedList<String>();
+        
+        row.add(Boolean.TRUE);
+        fieldNames.add("one");
+        lOi.add(ObjectInspectorFactory.getReflectionObjectInspector(Boolean.class,
+                ObjectInspectorFactory.ObjectInspectorOptions.JAVA));
+        
+        row.add(new Float(43.2));
+        fieldNames.add("two");
+        lOi.add(ObjectInspectorFactory.getReflectionObjectInspector(Float.class,
+                ObjectInspectorFactory.ObjectInspectorOptions.JAVA));
+        
+        List<String> lst = new LinkedList<String>();
+        row.add(lst);
+        fieldNames.add("three");
+        lOi.add(ObjectInspectorFactory.getStandardListObjectInspector(ObjectInspectorFactory
+                .getReflectionObjectInspector(String.class, ObjectInspectorFactory.ObjectInspectorOptions.JAVA)));
+        
+        row.add("value1");
+        fieldNames.add("four");
+        lOi.add(ObjectInspectorFactory.getReflectionObjectInspector(String.class,
+                ObjectInspectorFactory.ObjectInspectorOptions.JAVA));
+        
+        row.add(new Integer(7898));
+        fieldNames.add("ts");
+        lOi.add(ObjectInspectorFactory.getReflectionObjectInspector(Integer.class,
+                ObjectInspectorFactory.ObjectInspectorOptions.JAVA));
+        
+        StructObjectInspector soi = ObjectInspectorFactory.getStandardStructObjectInspector(fieldNames, lOi);
+        
+        Object obj = serde.serialize(row, soi);
+        
+        assertTrue(obj instanceof Text);
+        assertEquals("{\"timestamp\":7898,\"two\":43.2,\"one\":true,\"three\":[],\"four\":\"value1\"}", obj.toString());
+        
+        System.out.println("Output object " + obj.toString());
+    }
+    
+    // {"one":true, "timestamp":1234567, "three":["red","yellow",["blue","azure","cobalt","teal"],"orange"],"two":19.5,"four":"poop"}
+    @Test
+    public void testMapping() throws SerDeException, IOException {
+        System.out.println("testMapping");
+        JsonSerDe serde = getMappedSerde();
         
         InputStream is = this.getClass().getResourceAsStream("/testkeyword.txt");
         

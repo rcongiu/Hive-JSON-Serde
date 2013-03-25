@@ -53,6 +53,7 @@ import org.openx.data.jsonserde.json.JSONArray;
 import org.openx.data.jsonserde.json.JSONException;
 import org.openx.data.jsonserde.json.JSONObject;
 import org.openx.data.jsonserde.objectinspector.JsonObjectInspectorFactory;
+import org.openx.data.jsonserde.objectinspector.JsonStructOIOptions;
 
 /**
  * Properties:
@@ -64,22 +65,20 @@ import org.openx.data.jsonserde.objectinspector.JsonObjectInspectorFactory;
 public class JsonSerDe implements SerDe {
 
     public static final Log LOG = LogFactory.getLog(JsonSerDe.class);
-   
     List<String> columnNames;
     List<TypeInfo> columnTypes;
     StructTypeInfo rowTypeInfo;
     StructObjectInspector rowObjectInspector;
     boolean[] columnSortOrderIsDesc;
-    
     private SerDeStats stats;
     private boolean lastOperationSerialize;
     long deserializedDataSize;
     long serializedDataSize;
-    
-       // if set, will ignore malformed JSON in deserialization
+    // if set, will ignore malformed JSON in deserialization
     boolean ignoreMalformedJson = false;
-   public static final String PROP_IGNORE_MALFORMED_JSON = "ignore.malformed.json";
+    public static final String PROP_IGNORE_MALFORMED_JSON = "ignore.malformed.json";
     
+   JsonStructOIOptions options;
 
     /**
      * Initializes the SerDe.
@@ -121,8 +120,8 @@ public class JsonSerDe implements SerDe {
                 .getStructTypeInfo(columnNames, columnTypes);
         
         // build options
-        JsonObjectInspectorFactory.JsonStructOIOptions options = 
-                new JsonObjectInspectorFactory.JsonStructOIOptions(getMappings(tbl));
+        options = 
+                new JsonStructOIOptions(getMappings(tbl));
         
         rowObjectInspector = (StructObjectInspector) JsonObjectInspectorFactory
                 .getJsonObjectInspectorFromTypeInfo(rowTypeInfo, options);
@@ -242,6 +241,16 @@ public class JsonSerDe implements SerDe {
         return t;
     }
 
+    private String getSerializedFieldName( List<String> columnNames, int pos, StructField sf) {
+        String n = (columnNames==null? sf.getFieldName(): columnNames.get(pos));
+        
+        if(options.getMappings().containsKey(n)) {
+            return options.getMappings().get(n);
+        } else {
+            return n;
+        }
+    }
+    
     /**
      * Serializing means getting every field, and setting the appropriate 
      * JSONObject field. Actual serialization is done at the end when
@@ -269,13 +278,14 @@ public class JsonSerDe implements SerDe {
                 try {
                     // we want to serialize columns with their proper HIVE name,
                     // not the _col2 kind of name usually generated upstream
-                    result.put((columnNames==null?sf.getFieldName():columnNames.get(i)), 
+                    result.put(
+                            getSerializedFieldName(columnNames, i, sf), 
                             serializeField(
                                 data,
                                 sf.getFieldObjectInspector()));
                     
                 } catch (JSONException ex) {
-                   LOG.warn("Problem serialzing", ex);
+                   LOG.warn("Problem serializing", ex);
                    throw new RuntimeException(ex);
                 }
             }
