@@ -15,6 +15,7 @@ package org.openx.data.jsonserde;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -114,19 +115,28 @@ public class JsonSerDe implements SerDe {
 	stats = new SerDeStats();
 	
         // Create row related objects
-        rowTypeInfo = (StructTypeInfo) TypeInfoFactory.getStructTypeInfo(columnNames, columnTypes);
-        rowObjectInspector = (StructObjectInspector) JsonObjectInspectorFactory.getJsonObjectInspectorFromTypeInfo(rowTypeInfo);
+        rowTypeInfo = (StructTypeInfo) TypeInfoFactory
+                .getStructTypeInfo(columnNames, columnTypes);
+        
+        // build options
+        JsonObjectInspectorFactory.JsonStructOIOptions options = 
+                new JsonObjectInspectorFactory.JsonStructOIOptions(getMappings(tbl));
+        
+        rowObjectInspector = (StructObjectInspector) JsonObjectInspectorFactory
+                .getJsonObjectInspectorFromTypeInfo(rowTypeInfo, options);
 
         // Get the sort order
         String columnSortOrder = tbl.getProperty(Constants.SERIALIZATION_SORT_ORDER);
         columnSortOrderIsDesc = new boolean[columnNames.size()];
         for (int i = 0; i < columnSortOrderIsDesc.length; i++) {
-            columnSortOrderIsDesc[i] = (columnSortOrder != null && columnSortOrder.charAt(i) == '-');
+            columnSortOrderIsDesc[i] = (columnSortOrder != null && 
+                    columnSortOrder.charAt(i) == '-');
         }
         
         
         // other configuration
-        ignoreMalformedJson = Boolean.parseBoolean(tbl.getProperty(PROP_IGNORE_MALFORMED_JSON, "false"));
+        ignoreMalformedJson = Boolean.parseBoolean(tbl
+                .getProperty(PROP_IGNORE_MALFORMED_JSON, "false"));
         
     }
 
@@ -271,7 +281,7 @@ public class JsonSerDe implements SerDe {
      */  
     Object serializeField(Object obj,
             ObjectInspector oi ){
-        if(obj == null) return null;
+        if(obj == null) {return null;}
         
         Object result = null;
         switch(oi.getCategory()) {
@@ -335,7 +345,7 @@ public class JsonSerDe implements SerDe {
         // could be an array of whatever!
         // we do it in reverse order since the JSONArray is grown on demand,
         // as higher indexes are added.
-        if(obj==null) return null;
+        if(obj==null) { return null; }
         
         JSONArray ar = new JSONArray();
         for(int i=loi.getListLength(obj)-1; i>=0; i--) {
@@ -358,7 +368,7 @@ public class JsonSerDe implements SerDe {
      * @return 
      */
     private JSONObject serializeMap(Object obj, MapObjectInspector moi) {
-        if (obj==null) return null;
+        if (obj==null) { return null; }
         
         JSONObject jo = new JSONObject();  
         Map m = moi.getMap(obj);
@@ -391,6 +401,29 @@ public class JsonSerDe implements SerDe {
             stats.setRawDataSize(deserializedDataSize);
         }
         return stats;
+    }
+
+   
+    public static final String PFX = "mapping.";
+    /**
+     * Builds mappings between hive columns and json attributes
+     * 
+     * @param tbl
+     * @return 
+     */
+    private Map<String, String> getMappings(Properties tbl) {
+        int n = PFX.length();
+        Map<String,String> mps = new HashMap<String,String>();
+        
+        for(Object o: tbl.keySet()) {
+            if( ! (o instanceof String)) { continue ; }
+            String s = (String) o;
+            
+            if(s.startsWith(PFX) ) {
+                mps.put(s.substring(n), tbl.getProperty(s));
+            }
+        }
+        return mps;
     }
     
 }
