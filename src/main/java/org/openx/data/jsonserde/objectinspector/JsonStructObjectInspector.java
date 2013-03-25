@@ -13,6 +13,7 @@ package org.openx.data.jsonserde.objectinspector;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StandardStructObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
@@ -26,12 +27,28 @@ import org.openx.data.jsonserde.json.JSONObject;
  * @author rcongiu
  */
 public class JsonStructObjectInspector extends StandardStructObjectInspector {
+    JsonObjectInspectorFactory.JsonStructOIOptions options = null;
 
+  /*  
     public JsonStructObjectInspector(List<String> structFieldNames,
             List<ObjectInspector> structFieldObjectInspectors) {
         super(structFieldNames, structFieldObjectInspectors);
+    } */
+    
+      public JsonStructObjectInspector(List<String> structFieldNames,
+            List<ObjectInspector> structFieldObjectInspectors,JsonObjectInspectorFactory.JsonStructOIOptions opts) {
+        super(structFieldNames, structFieldObjectInspectors);   
+        
+        options = opts;
     }
 
+      /**
+       * Extract the data from the requested field.
+       * 
+       * @param data
+       * @param fieldRef
+       * @return 
+       */
     @Override
     public Object getStructFieldData(Object data, StructField fieldRef) {
         if (data == null) {
@@ -44,8 +61,8 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
         assert (fieldID >= 0 && fieldID < fields.size());
 
         try {
-            if(obj.has(f.getFieldName())) {
-               return obj.get(f.getFieldName());
+            if (obj.has(getJsonField(fieldRef))) {
+               return obj.get(getJsonField(fieldRef));
             } else {
                return null;
             }
@@ -55,6 +72,19 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
         }
     }
     static List<Object> values = new ArrayList<Object>();
+    
+    /**
+     * called to map from hive to json
+     * @param fr
+     * @return 
+     */
+    protected String getJsonField(StructField fr) {
+        if(options.getMappings() != null && options.getMappings().containsKey(fr.getFieldName())) {
+            return options.getMappings().get(fr.getFieldName());
+        } else {
+            return fr.getFieldName();
+        }
+    }
 
     @Override
     public List<Object> getStructFieldsDataAsList(Object o) {
@@ -62,19 +92,12 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
         values.clear();
 
         for (int i = 0; i < fields.size(); i++) {
-            try {
-                if (jObj.has(fields.get(i).getFieldName())){
-                    values.add(jObj.get(fields.get(i).getFieldName()));
+                if (jObj.has(getJsonField(fields.get(i)))){
+                    values.add(getStructFieldData(o, fields.get(i)));
                 } else {
                     values.add(null);
                 }
-            } catch (JSONException ex) {
-                // we're iterating through the keys so 
-                // this should never happen
-                return null;
-            }
         }
-
         return values;
     }
 }

@@ -77,6 +77,23 @@ ALTER TABLE json_table SET SERDEPROPERTIES ( "ignore.malformed.json" = "true");
 it will not make the query fail, and the above record will be returned as
 NULL	null	null
 
+* MAPPING HIVE KEYWORDS
+
+Sometimes it may happen that JSON data has attributes named like reserved words in hive.
+For instance, you may have a JSON attribute named 'timestamp', which is a reserved word 
+in hive, and hive will fail when issuing a CREATE TABLE.
+This SerDe can map hive columns over attributes named differently, using SerDe properties.
+
+For instance:
+CREATE TABLE mytable (
+	myfield string,
+        ts string ) ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+WITH SERDEPROPERTIES ( "mapping.ts" = "timestamp" )
+STORED AS TEXTFILE;
+
+Notice the "mapping.ts", that means: take the column 'ts' and read into it the 
+JSON attribute named "timestamp"
+
 
 # ARCHITECTURE
 
