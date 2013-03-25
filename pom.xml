@@ -5,11 +5,15 @@
 
     <groupId>org.openx.data</groupId>
     <artifactId>json-serde</artifactId>
-    <version>1.1.4</version>
+    <version>1.1.5-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>openx-json-serde</name>
     <url>http://maven.apache.org</url>
+     <scm>
+      <!-- Replace the connection below with your project connection -->
+      <connection>scm:git:git@github.com:rcongiu/Hive-JSON-Serde.git</connection>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,6 +30,14 @@
     </distributionManagement>
 
     <build>
+	 <!-- wagon-ssh-external extension is necessary for deploying with scpexe -->
+    	<extensions>
+      		<extension>
+        		<groupId>org.apache.maven.wagon</groupId>
+        		<artifactId>wagon-ssh-external</artifactId>
+        		<version>2.2</version>
+      		</extension>
+    	</extensions>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -91,7 +103,6 @@
             <version>0.20.2</version>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
 </project>
 
