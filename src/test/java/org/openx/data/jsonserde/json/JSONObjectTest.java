@@ -9,6 +9,7 @@ import org.junit.AfterClass;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  *
@@ -33,16 +34,19 @@ public class JSONObjectTest {
 
 
     
+//    
+//    @Test
+//    public void testCaseInsensitive() throws JSONException   { 
+//        
+//     String test1 = "{ \"filename\": \"test.txt\", \"meta\": { \"datas\": { \"INFO\": { \"foo\": \"bar\" } } } }";
+//     
+//     JSONObject obj = new JSONObject(test1);
+//     
+//     assertEquals("test.txt",obj.getString("filename"));
+//     assertEquals("bar", obj.getJSONObject("meta").getJSONObject("INFO").getJSONObject("foo"));
+//     
+//    }
     
-   // @Test
-    public void testCaseInsensitive() throws JSONException   { 
-     String test1 = "{ \"filename\": \"test.txt\", \"meta\": { \"datas\": { \"INFO\": { \"foo\": \"bar\" } } } }";
-     
-     JSONObject obj = new JSONObject(test1);
-     
-     assertEquals("test.txt",obj.getString("filename"));
-     assertEquals("bar", obj.getJSONObject("meta").getJSONObject("info").getJSONObject("foo"));
-     
-    }
+    
     
 }

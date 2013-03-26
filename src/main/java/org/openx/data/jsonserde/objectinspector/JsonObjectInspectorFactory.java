@@ -15,6 +15,7 @@ package org.openx.data.jsonserde.objectinspector;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector.PrimitiveCategory;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
@@ -41,7 +42,7 @@ public class JsonObjectInspectorFactory {
      * @return 
      */
     public static ObjectInspector getJsonObjectInspectorFromTypeInfo(
-            TypeInfo typeInfo) {
+            TypeInfo typeInfo, JsonStructOIOptions options) {
         ObjectInspector result = cachedJsonObjectInspector.get(typeInfo);
         if (result == null) {
             switch (typeInfo.getCategory()) {
@@ -49,19 +50,23 @@ public class JsonObjectInspectorFactory {
 		    PrimitiveTypeInfo pti = (PrimitiveTypeInfo) typeInfo;
 		    
                     result = 
-                            getPrimitiveJavaObjectInspector( pti.getPrimitiveCategory().equals(PrimitiveCategory.FLOAT) ?
-							PrimitiveCategory.DOUBLE : pti.getPrimitiveCategory() );
+                            getPrimitiveJavaObjectInspector( 
+                                pti.getPrimitiveCategory().equals(PrimitiveCategory.FLOAT) ?
+                                    PrimitiveCategory.DOUBLE : pti.getPrimitiveCategory() );
                     break;
                 }
                 case LIST: {
-                    ObjectInspector elementObjectInspector = getJsonObjectInspectorFromTypeInfo(((ListTypeInfo) typeInfo).getListElementTypeInfo());
+                    ObjectInspector elementObjectInspector = 
+                            getJsonObjectInspectorFromTypeInfo(
+                            ((ListTypeInfo) typeInfo).getListElementTypeInfo(), 
+                                options);
                     result = JsonObjectInspectorFactory.getJsonListObjectInspector(elementObjectInspector);
                     break;
                 }
                 case MAP: {
                     MapTypeInfo mapTypeInfo = (MapTypeInfo) typeInfo;
-                    ObjectInspector keyObjectInspector = getJsonObjectInspectorFromTypeInfo(mapTypeInfo.getMapKeyTypeInfo());
-                    ObjectInspector valueObjectInspector = getJsonObjectInspectorFromTypeInfo(mapTypeInfo.getMapValueTypeInfo());
+                    ObjectInspector keyObjectInspector = getJsonObjectInspectorFromTypeInfo(mapTypeInfo.getMapKeyTypeInfo(), options);
+                    ObjectInspector valueObjectInspector = getJsonObjectInspectorFromTypeInfo(mapTypeInfo.getMapValueTypeInfo(), options);
                     result = JsonObjectInspectorFactory.getJsonMapObjectInspector(keyObjectInspector,
                             valueObjectInspector);
                     break;
@@ -73,10 +78,11 @@ public class JsonObjectInspectorFactory {
                     List<ObjectInspector> fieldObjectInspectors = new ArrayList<ObjectInspector>(
                             fieldTypeInfos.size());
                     for (int i = 0; i < fieldTypeInfos.size(); i++) {
-                        fieldObjectInspectors.add(getJsonObjectInspectorFromTypeInfo(fieldTypeInfos.get(i)));
+                        fieldObjectInspectors.add(getJsonObjectInspectorFromTypeInfo(
+                                fieldTypeInfos.get(i), options));
                     }
                     result = JsonObjectInspectorFactory.getJsonStructObjectInspector(fieldNames,
-                            fieldObjectInspectors);
+                            fieldObjectInspectors, options);
                     break;
                 }
                 default: {
@@ -92,20 +98,24 @@ public class JsonObjectInspectorFactory {
     /*
      * Caches Struct Object Inspectors
      */
-    static HashMap<ArrayList<List<?>>, JsonStructObjectInspector> 
+    static HashMap<ArrayList<Object>, JsonStructObjectInspector> 
             cachedStandardStructObjectInspector =
-            new HashMap<ArrayList<List<?>>, JsonStructObjectInspector>();
-
+            new HashMap<ArrayList<Object>, JsonStructObjectInspector>();
+    
+   
     public static JsonStructObjectInspector getJsonStructObjectInspector(
             List<String> structFieldNames,
-            List<ObjectInspector> structFieldObjectInspectors) {
-        ArrayList<List<?>> signature = new ArrayList<List<?>>();
+            List<ObjectInspector> structFieldObjectInspectors,
+            JsonStructOIOptions options) {
+        ArrayList<Object> signature = new ArrayList<Object>();
         signature.add(structFieldNames);
         signature.add(structFieldObjectInspectors);
+        signature.add(options);
+        
         JsonStructObjectInspector result = cachedStandardStructObjectInspector.get(signature);
         if (result == null) {
             result = new JsonStructObjectInspector(structFieldNames,
-                    structFieldObjectInspectors);
+                    structFieldObjectInspectors, options);
             cachedStandardStructObjectInspector.put(signature, result);
         }
         return result;
@@ -160,7 +170,7 @@ public class JsonObjectInspectorFactory {
   public static AbstractPrimitiveJavaObjectInspector getPrimitiveJavaObjectInspector(
       PrimitiveCategory primitiveCategory) {
       
-      if( primitiveCategory.equals(primitiveCategory.STRING) ) {
+      if( primitiveCategory.equals(PrimitiveCategory.STRING) ) {
           return cachedStringObjectInspector;
       } else {
           return PrimitiveObjectInspectorFactory.
