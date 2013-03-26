@@ -1,6 +1,5 @@
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.openx.data</groupId>
@@ -16,7 +15,8 @@
       <developerConnection>scm:git:git@github.com:rcongiu/Hive-JSON-Serde.git</developerConnection>
       <url>scm:git:git@github.com:juven/git-demo.git</url>
      
-    </scm>
+      <tag>json-serde-1.1.5</tag>
+  </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -88,13 +88,13 @@
         <dependency>
             <groupId>org.apache.hadoop.hive</groupId>
             <artifactId>hive-serde</artifactId>
-            <version>${cdh.version}</version>
+            <version>0.8.0-cdh4a1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop.hive</groupId>
             <artifactId>hive-exec</artifactId>
-            <version>${cdh.version}</version>
+            <version>0.8.0-cdh4a1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
