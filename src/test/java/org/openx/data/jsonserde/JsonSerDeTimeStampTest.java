@@ -46,5 +46,14 @@ public class JsonSerDeTimeStampTest {
     assertEquals(result.get("five"), Timestamp.valueOf("2013-03-27 23:18:40.0"));
   }
 
+  @Test
+  public void testTimestampDeSerializeWithNanoseconds() throws Exception {
+    // Test that timestamp object can be deserialized
+    Writable w = new Text("{\"one\":true,\"five\":\"2013-03-27 23:18:40.123456\"}");
+
+    JSONObject result = (JSONObject) instance.deserialize(w);
+    assertEquals(result.get("five"), Timestamp.valueOf("2013-03-27 23:18:40.123456"));
+  }
+
 
 }

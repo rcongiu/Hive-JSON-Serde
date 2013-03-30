@@ -148,6 +148,7 @@ public class JsonSerDe implements SerDe {
 	
         // Try parsing row into JSON object
         JSONObject jObj = null;
+
         
         try {
             jObj = new JSONObject(rowText.toString()) {
@@ -160,15 +161,14 @@ public class JsonSerDe implements SerDe {
                  *      java.lang.Object)
                  */
                 @Override
-                public JSONObject put(String key, Object value)
-                        throws JSONException {
+                public JSONObject put(String key, Object value) throws JSONException {
 
                     try {
-                      if (rowTypeInfo.getStructFieldTypeInfo(key).getTypeName().equalsIgnoreCase("timestamp")) {
-                          value = Timestamp.valueOf((String)value);
-                      }
+                        if (columnNames.contains(key) && rowTypeInfo.getStructFieldTypeInfo(key).getTypeName().equalsIgnoreCase("timestamp")) {
+                            value = Timestamp.valueOf((String)value);
+                        }
                     } catch (IllegalArgumentException e) {
-                      throw new JSONException("Timestamp " + value + "improperly formatted.");
+                        throw new JSONException("Timestamp " + value + "improperly formatted.");
                     }
 
                     return super.put(key.toLowerCase(), value);
@@ -195,7 +195,7 @@ public class JsonSerDe implements SerDe {
 
     /**
      * We serialize to Text 
-     * @return 
+     * @return
      * 
      * @see org.apache.hadoop.io.Text
      */
@@ -228,7 +228,7 @@ public class JsonSerDe implements SerDe {
         
         Text t = new Text(serializer.toString());
         
-	serializedDataSize = t.getBytes().length;
+        serializedDataSize = t.getBytes().length;
         return t;
     }
 
@@ -394,7 +394,7 @@ public class JsonSerDe implements SerDe {
 
     @Override
     public SerDeStats getSerDeStats() {
-	if(lastOperationSerialize) {
+        if(lastOperationSerialize) {
             stats.setRawDataSize(serializedDataSize);
         } else {
             stats.setRawDataSize(deserializedDataSize);
