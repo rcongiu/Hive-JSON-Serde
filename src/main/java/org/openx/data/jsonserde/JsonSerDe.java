@@ -13,6 +13,7 @@
 
 package org.openx.data.jsonserde;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,6 +52,8 @@ import org.openx.data.jsonserde.json.JSONException;
 import org.openx.data.jsonserde.json.JSONObject;
 import org.openx.data.jsonserde.objectinspector.JsonObjectInspectorFactory;
 
+import javax.print.attribute.standard.DateTimeAtCompleted;
+
 /**
  * Properties:
  * ignore.malformed.json = true/false : malformed json will be ignored
@@ -75,7 +78,7 @@ public class JsonSerDe implements SerDe {
     
        // if set, will ignore malformed JSON in deserialization
     boolean ignoreMalformedJson = false;
-   public static final String PROP_IGNORE_MALFORMED_JSON = "ignore.malformed.json";
+    public static final String PROP_IGNORE_MALFORMED_JSON = "ignore.malformed.json";
     
 
     /**
@@ -111,8 +114,8 @@ public class JsonSerDe implements SerDe {
         }
         assert (columnNames.size() == columnTypes.size());
 
-	stats = new SerDeStats();
-	
+        stats = new SerDeStats();
+
         // Create row related objects
         rowTypeInfo = (StructTypeInfo) TypeInfoFactory.getStructTypeInfo(columnNames, columnTypes);
         rowObjectInspector = (StructObjectInspector) JsonObjectInspectorFactory.getJsonObjectInspectorFromTypeInfo(rowTypeInfo);
@@ -159,6 +162,15 @@ public class JsonSerDe implements SerDe {
                 @Override
                 public JSONObject put(String key, Object value)
                         throws JSONException {
+
+                    try {
+                      if (rowTypeInfo.getStructFieldTypeInfo(key).getTypeName().equalsIgnoreCase("timestamp")) {
+                          value = Timestamp.valueOf((String)value);
+                      }
+                    } catch (IllegalArgumentException e) {
+                      throw new JSONException("Timestamp " + value + "improperly formatted.");
+                    }
+
                     return super.put(key.toLowerCase(), value);
                 }
             };
@@ -224,9 +236,6 @@ public class JsonSerDe implements SerDe {
      * Serializing means getting every field, and setting the appropriate 
      * JSONObject field. Actual serialization is done at the end when
      * the whole JSON object is built
-     * @param serializer
-     * @param obj
-     * @param structObjectInspector 
      */
     private JSONObject serializeStruct( Object obj,
             StructObjectInspector soi, List<String> columnNames) {
