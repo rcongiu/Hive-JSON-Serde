@@ -86,9 +86,15 @@ public class JsonSerDeTest {
     public void testDeserialize() throws Exception {
         System.out.println("deserialize");
         Writable w = new Text("{\"one\":true,\"three\":[\"red\",\"yellow\",\"orange\"],\"two\":19.5,\"four\":\"poop\"}");
-        Object expResult = null;
+
         JSONObject result = (JSONObject) instance.deserialize(w);
-        assertEquals(result.get("four"), "poop");
+        assertEquals(result.get("four"),"poop");
+        
+        assertTrue(result.get("three") instanceof JSONArray);
+        
+        assertTrue( ((JSONArray)result.get("three")).get(0) instanceof String );
+        assertEquals( ((JSONArray)result.get("three")).get(0),"red");
+    }
 
         assertTrue(result.get("three") instanceof JSONArray);
 
@@ -108,6 +114,19 @@ public class JsonSerDeTest {
 
         assertTrue(((JSONArray) result.get("three")).get(0) instanceof String);
         assertEquals(((JSONArray) result.get("three")).get(0), "red");
+    }
+
+    @Test
+    public void testDeserializePartialFieldSet() throws Exception {
+      Writable w = new Text("{\"missing\":\"whocares\",\"one\":true,\"three\":[\"red\",\"yellow\",[\"blue\",\"azure\",\"cobalt\",\"teal\"],\"orange\"],\"two\":19.5,\"four\":\"poop\"}");
+      Object expResult = null;
+      JSONObject result = (JSONObject) instance.deserialize(w);
+      assertEquals(result.get("four"),"poop");
+
+      assertTrue( result.get("three") instanceof JSONArray);
+
+      assertTrue( ((JSONArray)result.get("three")).get(0) instanceof String );
+      assertEquals( ((JSONArray)result.get("three")).get(0),"red");
     }
 
     /**
