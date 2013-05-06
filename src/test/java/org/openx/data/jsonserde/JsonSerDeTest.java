@@ -90,16 +90,10 @@ public class JsonSerDeTest {
         JSONObject result = (JSONObject) instance.deserialize(w);
         assertEquals(result.get("four"),"poop");
         
-        assertTrue(result.get("three") instanceof JSONArray);
+        assertTrue( result.get("three") instanceof JSONArray);
         
         assertTrue( ((JSONArray)result.get("three")).get(0) instanceof String );
         assertEquals( ((JSONArray)result.get("three")).get(0),"red");
-    }
-
-        assertTrue(result.get("three") instanceof JSONArray);
-
-        assertTrue(((JSONArray) result.get("three")).get(0) instanceof String);
-        assertEquals(((JSONArray) result.get("three")).get(0), "red");
     }
 
     //   {"one":true,"three":["red","yellow",["blue","azure","cobalt","teal"],"orange"],"two":19.5,"four":"poop"}

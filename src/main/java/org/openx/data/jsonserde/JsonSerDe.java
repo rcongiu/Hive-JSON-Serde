@@ -20,8 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hive.serde.Constants;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.SerDeException;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
@@ -55,6 +53,9 @@ import org.openx.data.jsonserde.objectinspector.JsonObjectInspectorFactory;
 import org.openx.data.jsonserde.objectinspector.JsonStructOIOptions;
 
 import javax.print.attribute.standard.DateTimeAtCompleted;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hive.serde.Constants;
+import org.apache.hadoop.hive.serde2.typeinfo.PrimitiveTypeInfo;
 
 /**
  * Properties:
@@ -173,8 +174,23 @@ public class JsonSerDe implements SerDe {
                 public JSONObject put(String key, Object value) throws JSONException {
 
                     try {
-                        if (columnNames.contains(key) && rowTypeInfo.getStructFieldTypeInfo(key).getTypeName().equalsIgnoreCase("timestamp")) {
-                            value = Timestamp.valueOf((String)value);
+                        if (columnNames.contains(key) && 
+                                rowTypeInfo.getStructFieldTypeInfo(key).getCategory().equals(PrimitiveObjectInspector.Category.PRIMITIVE) &&
+                                ((PrimitiveTypeInfo) rowTypeInfo.getStructFieldTypeInfo(key))
+                                    .getPrimitiveCategory().equals(PrimitiveObjectInspector.PrimitiveCategory.TIMESTAMP) ) {
+                                    if(value instanceof String) {
+                                        value = Timestamp.valueOf((String)value);
+                                    } else if (value instanceof Float ) {
+                                        value = new Timestamp( (long) (((Float)value).floatValue() * 1000));
+                                    } else if ( value instanceof Integer) {
+                                        value = new Timestamp( ((Integer)value).longValue() * 1000);
+                                    } else  if ( value instanceof Long) {
+                                        value = new Timestamp( ((Long)value).longValue() * 1000);
+                                    } else  if ( value instanceof Double) {
+                                        value = new Timestamp( ((Double)value).longValue() * 1000);
+                                    } else {
+                                        throw new JSONException("I don't know how to conver to timestamp a field of type " + value.getClass()) ; 
+                                    }
                         }
                     } catch (IllegalArgumentException e) {
                         throw new JSONException("Timestamp " + value + "improperly formatted.");
@@ -444,5 +460,7 @@ public class JsonSerDe implements SerDe {
         }
         return mps;
     }
+
+
     
 }
