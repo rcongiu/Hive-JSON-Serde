@@ -13,9 +13,9 @@ package org.openx.data.jsonserde.objectinspector;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StandardStructObjectInspector;
+import static org.apache.hadoop.hive.serde2.objectinspector.StandardStructObjectInspector.LOG;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.openx.data.jsonserde.json.JSONException;
 import org.openx.data.jsonserde.json.JSONObject;
@@ -54,15 +54,42 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
         if (data == null) {
             return null;
         }
-        JSONObject obj = (JSONObject) data;
+        JSONObject obj = null ;
+        
+        if( data instanceof JSONObject) {
+            return getStructFieldDataFromJsonObject((JSONObject) data, fieldRef );
+        } if (data instanceof List) {
+            // somehow we have the object parsed already
+            return getStructFieldDataFromList((List) data, fieldRef );
+        } else {
+            throw new Error("Data is not JSONObject  but " + data.getClass().getCanonicalName() +
+                    " with value " + data.toString()) ;
+        }
+        
+    }
+    
+    public Object getStructFieldDataFromList(List data, StructField fieldRef ) {
+       int idx = fields.indexOf(fieldRef);
+       if(idx <0 || idx >= data.size()) {
+           return null;
+       } else {
+           return data.get(idx);
+       }
+    }
+    
+    public Object getStructFieldDataFromJsonObject(JSONObject data, StructField fieldRef ) {
+        if (data == null) {
+            return null;
+        }
+        
         MyField f = (MyField) fieldRef;
 
         int fieldID = f.getFieldID();
         assert (fieldID >= 0 && fieldID < fields.size());
 
         try {
-            if (obj.has(getJsonField(fieldRef))) {
-               return obj.get(getJsonField(fieldRef));
+            if (data.has(getJsonField(fieldRef))) {
+               return data.get(getJsonField(fieldRef));
             } else {
                return null;
             }
@@ -71,6 +98,8 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
             return null;
         }
     }
+    
+    
     static List<Object> values = new ArrayList<Object>();
     
     /**

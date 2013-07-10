@@ -4,7 +4,7 @@
 
     <groupId>org.openx.data</groupId>
     <artifactId>json-serde</artifactId>
-    <version>1.1.6-SNAPSHOT</version>
+    <version>1.1.6</version>
     <packaging>jar</packaging>
 
     <name>openx-json-serde</name>
@@ -13,7 +13,7 @@
       <!-- Replace the connection below with your project connection -->
       <connection>scm:git:git@github.com:rcongiu/Hive-JSON-Serde.git</connection>
       <developerConnection>scm:git:git@github.com:rcongiu/Hive-JSON-Serde.git</developerConnection>
-      <url>scm:git:git@github.com:juven/git-demo.git</url>
+      <url>scm:git:git@github.com:rcongiu/Hive-JSON-Serde.git</url>
      
       <tag>HEAD</tag>
   </scm>
