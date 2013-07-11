@@ -134,6 +134,7 @@ Versions:
 1.1.2 (2012/07/26): Fixed issue with columns that are not mapped into JSON, reported by Michael Phung
 1.1.4 (2012/10/04): Fixed issue #13, problem with floats, Reported by Chuck Connell
 1.1.6 (2013/07/10): Fixed issue #28, error after 'alter table add columns'
+1.1.7 (TBD)       : Fixed issue #25, timestamp support
 
 
 
