@@ -327,12 +327,12 @@ public class JsonSerDe implements SerDe {
                         result = (((ByteObjectInspector)poi).get(obj));
                         break;
                     case DOUBLE:
-						try {
-							result = (((DoubleObjectInspector)poi).get(obj));
-						} catch (ClassCastException e) {
-							/* If the double cast fails, set to zero */
-							result = 0.0;
-						}
+			try {
+			    result = (((DoubleObjectInspector)poi).get(obj));
+			} catch (ClassCastException e) {
+			    /* If the double cast fails, set to zero */
+			    result = 0.0;
+			}
                         break;
                     case FLOAT:
                         result = (((FloatObjectInspector)poi).get(obj));
@@ -341,7 +341,15 @@ public class JsonSerDe implements SerDe {
                         result = (((IntObjectInspector)poi).get(obj));
                         break;
                     case LONG:
-                        result = (((LongObjectInspector)poi).get(obj));
+			try {
+			    result = (((LongObjectInspector)poi).get(obj));
+			} catch (ClassCastException e) {
+			    try {
+				result = (((IntObjectInspector)poi).get(obj));
+			    } catch (ClassCastException f) {
+				result = (long)0;
+			    }
+			}
                         break;
                     case SHORT:
                         result = (((ShortObjectInspector)poi).get(obj));
