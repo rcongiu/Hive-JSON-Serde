@@ -386,7 +386,7 @@ public class JSONObject {
 // Shave off trailing zeros and decimal point, if possible.
 
         String string = Double.toString(d);
-        if (string.indexOf('.') > 0 && string.indexOf('e') < 0 && 
+        if (string.indexOf('.') > 0 && string.indexOf('e') < 0 &&
         		string.indexOf('E') < 0) {
             while (string.endsWith("0")) {
                 string = string.substring(0, string.length() - 1);
@@ -1219,7 +1219,7 @@ public class JSONObject {
                 }
             }
             try {
-                if (string.indexOf('.') > -1 || 
+                if (string.indexOf('.') > -1 ||
                         string.indexOf('e') > -1 || string.indexOf('E') > -1) {
                     return Double.valueOf(string);
                 } else {
@@ -1247,12 +1247,12 @@ public class JSONObject {
             if (o instanceof Double) {
                 if (((Double)o).isInfinite() || ((Double)o).isNaN()) {
                     throw new JSONException(
-                        "JSON does not allow non-finite numbers.");
+                        "JSON does not allow non-finite numbers: " + o);
                 }
             } else if (o instanceof Float) {
                 if (((Float)o).isInfinite() || ((Float)o).isNaN()) {
                     throw new JSONException(
-                        "JSON does not allow non-finite numbers.");
+                        "JSON does not allow non-finite numbers: " + o);
                 }
             }
         }

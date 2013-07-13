@@ -324,7 +324,11 @@ public class JsonSerDe implements SerDe {
                                             Boolean.FALSE);
                         break;
                     case BYTE:
-                        result = (((ByteObjectInspector)poi).get(obj));
+			try {
+			    result = (((ByteObjectInspector)poi).get(obj));
+			} catch (ClassCastException e) {
+			    result = null;
+			}
                         break;
                     case DOUBLE:
 			try {
