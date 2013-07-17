@@ -44,53 +44,53 @@ public class JsonObjectInspectorFactory {
     public static ObjectInspector getJsonObjectInspectorFromTypeInfo(
             TypeInfo typeInfo, JsonStructOIOptions options) {
         ObjectInspector result = cachedJsonObjectInspector.get(typeInfo);
-        if (result == null) {
-            switch (typeInfo.getCategory()) {
-                case PRIMITIVE: {
-		    PrimitiveTypeInfo pti = (PrimitiveTypeInfo) typeInfo;
-		    
-                    result = 
-                            getPrimitiveJavaObjectInspector( 
-                                pti.getPrimitiveCategory().equals(PrimitiveCategory.FLOAT) ?
-                                    PrimitiveCategory.DOUBLE : pti.getPrimitiveCategory() );
-                    break;
-                }
-                case LIST: {
-                    ObjectInspector elementObjectInspector = 
-                            getJsonObjectInspectorFromTypeInfo(
-                            ((ListTypeInfo) typeInfo).getListElementTypeInfo(), 
-                                options);
-                    result = JsonObjectInspectorFactory.getJsonListObjectInspector(elementObjectInspector);
-                    break;
-                }
-                case MAP: {
-                    MapTypeInfo mapTypeInfo = (MapTypeInfo) typeInfo;
-                    ObjectInspector keyObjectInspector = getJsonObjectInspectorFromTypeInfo(mapTypeInfo.getMapKeyTypeInfo(), options);
-                    ObjectInspector valueObjectInspector = getJsonObjectInspectorFromTypeInfo(mapTypeInfo.getMapValueTypeInfo(), options);
-                    result = JsonObjectInspectorFactory.getJsonMapObjectInspector(keyObjectInspector,
-                            valueObjectInspector);
-                    break;
-                }
-                case STRUCT: {
-                    StructTypeInfo structTypeInfo = (StructTypeInfo) typeInfo;
-                    List<String> fieldNames = structTypeInfo.getAllStructFieldNames();
-                    List<TypeInfo> fieldTypeInfos = structTypeInfo.getAllStructFieldTypeInfos();
-                    List<ObjectInspector> fieldObjectInspectors = new ArrayList<ObjectInspector>(
-                            fieldTypeInfos.size());
-                    for (int i = 0; i < fieldTypeInfos.size(); i++) {
-                        fieldObjectInspectors.add(getJsonObjectInspectorFromTypeInfo(
-                                fieldTypeInfos.get(i), options));
-                    }
-                    result = JsonObjectInspectorFactory.getJsonStructObjectInspector(fieldNames,
-                            fieldObjectInspectors, options);
-                    break;
-                }
-                default: {
-                    result = null;
-                }
-            }
-            cachedJsonObjectInspector.put(typeInfo, result);
-        } 
+		if (result == null) {
+			switch (typeInfo.getCategory()) {
+				case PRIMITIVE: {
+									PrimitiveTypeInfo pti = (PrimitiveTypeInfo) typeInfo;
+
+									result = 
+										getPrimitiveJavaObjectInspector( 
+												pti.getPrimitiveCategory().equals(PrimitiveCategory.FLOAT) ?
+												PrimitiveCategory.DOUBLE : pti.getPrimitiveCategory() );
+									break;
+				}
+				case LIST: {
+							   ObjectInspector elementObjectInspector = 
+								   getJsonObjectInspectorFromTypeInfo(
+										   ((ListTypeInfo) typeInfo).getListElementTypeInfo(), 
+										   options);
+							   result = JsonObjectInspectorFactory.getJsonListObjectInspector(elementObjectInspector);
+							   break;
+				}
+				case MAP: {
+							  MapTypeInfo mapTypeInfo = (MapTypeInfo) typeInfo;
+							  ObjectInspector keyObjectInspector = getJsonObjectInspectorFromTypeInfo(mapTypeInfo.getMapKeyTypeInfo(), options);
+							  ObjectInspector valueObjectInspector = getJsonObjectInspectorFromTypeInfo(mapTypeInfo.getMapValueTypeInfo(), options);
+							  result = JsonObjectInspectorFactory.getJsonMapObjectInspector(keyObjectInspector,
+									  valueObjectInspector);
+							  break;
+				}
+				case STRUCT: {
+								 StructTypeInfo structTypeInfo = (StructTypeInfo) typeInfo;
+								 List<String> fieldNames = structTypeInfo.getAllStructFieldNames();
+								 List<TypeInfo> fieldTypeInfos = structTypeInfo.getAllStructFieldTypeInfos();
+								 List<ObjectInspector> fieldObjectInspectors = new ArrayList<ObjectInspector>(
+										 fieldTypeInfos.size());
+								 for (int i = 0; i < fieldTypeInfos.size(); i++) {
+									 fieldObjectInspectors.add(getJsonObjectInspectorFromTypeInfo(
+												 fieldTypeInfos.get(i), options));
+								 }
+								 result = JsonObjectInspectorFactory.getJsonStructObjectInspector(fieldNames,
+										 fieldObjectInspectors, options);
+								 break;
+				}
+				default: {
+							 result = null;
+				}
+			}
+			cachedJsonObjectInspector.put(typeInfo, result);
+		} 
         return result;
     }
     

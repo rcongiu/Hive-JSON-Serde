@@ -83,7 +83,7 @@ public class JsonSerDe implements SerDe {
     boolean ignoreMalformedJson = false;
     public static final String PROP_IGNORE_MALFORMED_JSON = "ignore.malformed.json";
 
-   JsonStructOIOptions options;
+	JsonStructOIOptions options;
 
     /**
      * Initializes the SerDe.
@@ -311,76 +311,67 @@ public class JsonSerDe implements SerDe {
         if(obj == null) {return null;}
 
         Object result = null;
-        switch(oi.getCategory()) {
-            case PRIMITIVE:
-                PrimitiveObjectInspector poi = (PrimitiveObjectInspector)oi;
-                switch(poi.getPrimitiveCategory()) {
-                    case VOID:
-                        result = null;
-                        break;
-                    case BOOLEAN:
-                        result = (((BooleanObjectInspector)poi).get(obj)?
-                                            Boolean.TRUE:
-                                            Boolean.FALSE);
-                        break;
-                    case BYTE:
-			try {
-			    result = (((ByteObjectInspector)poi).get(obj));
-			} catch (ClassCastException e) {
-			    result = null;
+		try {
+			switch(oi.getCategory()) {
+				case PRIMITIVE:
+					PrimitiveObjectInspector poi = (PrimitiveObjectInspector)oi;
+					switch(poi.getPrimitiveCategory()) {
+						case VOID:
+							result = null;
+							break;
+						case BOOLEAN:
+							result = (((BooleanObjectInspector)poi).get(obj)?
+									Boolean.TRUE:
+									Boolean.FALSE);
+							break;
+						case BYTE:
+							result = (((ByteObjectInspector)poi).get(obj));
+							break;
+						case DOUBLE:
+							result = (((DoubleObjectInspector)poi).get(obj));
+							break;
+						case FLOAT:
+							result = (((FloatObjectInspector)poi).get(obj));
+							break;
+						case INT:
+							result = (((IntObjectInspector)poi).get(obj));
+							break;
+						case LONG:
+							try {
+								result = (((LongObjectInspector)poi).get(obj));
+							} catch (ClassCastException f) {
+								result = (long)(((IntObjectInspector)poi).get(obj));
+							}
+							break;
+						case SHORT:
+							result = (((ShortObjectInspector)poi).get(obj));
+							break;
+						case STRING:
+							result = (((StringObjectInspector)poi).getPrimitiveJavaObject(obj));
+							break;
+						case TIMESTAMP:
+							result = (((TimestampObjectInspector)poi).getPrimitiveJavaObject(obj));
+							break;
+						case BINARY:
+							result = (((BinaryObjectInspector)poi).getPrimitiveJavaObject(obj));
+							break;
+						case UNKNOWN:
+							throw new RuntimeException("Unknown primitive");
+					}
+					break;
+				case MAP:
+					result = serializeMap(obj, (MapObjectInspector) oi);
+					break;
+				case LIST:
+					result = serializeList(obj, (ListObjectInspector)oi);
+					break;
+				case STRUCT:
+					result = serializeStruct(obj, (StructObjectInspector)oi, null);
+					break;
 			}
-                        break;
-                    case DOUBLE:
-			try {
-			    result = (((DoubleObjectInspector)poi).get(obj));
-			} catch (ClassCastException e) {
-			    /* If the double cast fails, set to zero */
-			    result = 0.0;
-			}
-                        break;
-                    case FLOAT:
-                        result = (((FloatObjectInspector)poi).get(obj));
-                        break;
-                    case INT:
-                        result = (((IntObjectInspector)poi).get(obj));
-                        break;
-                    case LONG:
-			try {
-			    result = (((LongObjectInspector)poi).get(obj));
-			} catch (ClassCastException e) {
-			    try {
-				result = (((IntObjectInspector)poi).get(obj));
-			    } catch (ClassCastException f) {
-				result = (long)0;
-			    }
-			}
-                        break;
-                    case SHORT:
-                        result = (((ShortObjectInspector)poi).get(obj));
-                        break;
-                    case STRING:
-                        result = (((StringObjectInspector)poi).getPrimitiveJavaObject(obj));
-                        break;
-                    case TIMESTAMP:
-                        result = (((TimestampObjectInspector)poi).getPrimitiveJavaObject(obj));
-                        break;
-                    case BINARY:
-                        result = (((BinaryObjectInspector)poi).getPrimitiveJavaObject(obj));
-                        break;
-                    case UNKNOWN:
-                        throw new RuntimeException("Unknown primitive");
-                }
-                break;
-            case MAP:
-                result = serializeMap(obj, (MapObjectInspector) oi);
-                break;
-            case LIST:
-                result = serializeList(obj, (ListObjectInspector)oi);
-                break;
-            case STRUCT:
-                result = serializeStruct(obj, (StructObjectInspector)oi, null);
-                break;
-        }
+		} catch (ClassCastException e) {
+			// derp
+		}
         return result;
     }
 

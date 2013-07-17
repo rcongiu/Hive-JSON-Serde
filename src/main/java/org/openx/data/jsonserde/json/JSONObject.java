@@ -1243,7 +1243,7 @@ public class JSONObject {
      * @throws JSONException If o is a non-finite number.
      */
     public static void testValidity(Object o) throws JSONException {
-        if (o != null) {
+/*        if (o != null) {
             if (o instanceof Double) {
                 if (((Double)o).isInfinite() || ((Double)o).isNaN()) {
                     throw new JSONException(
@@ -1255,7 +1255,7 @@ public class JSONObject {
                         "JSON does not allow non-finite numbers: " + o);
                 }
             }
-        }
+        }*/
     }
 
 
