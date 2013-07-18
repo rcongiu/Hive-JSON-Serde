@@ -156,7 +156,7 @@ public class JSONObject {
                 key = x.nextValue().toString().toLowerCase();
             }
 
-// The key is followed by ':'. We will also tolerate '=' or '=>'.
+			// The key is followed by ':'. We will also tolerate '=' or '=>'.
 
             c = x.nextClean();
             if (c == '=') {
@@ -168,7 +168,7 @@ public class JSONObject {
             }
             putOnce(key, x.nextValue());
 
-// Pairs are separated by ','. We will also tolerate ';'.
+			// Pairs are separated by ','. We will also tolerate ';'.
 
             switch (x.nextClean()) {
             case ';':

@@ -82,6 +82,7 @@ public class JsonSerDe implements SerDe {
     // if set, will ignore malformed JSON in deserialization
     boolean ignoreMalformedJson = false;
     public static final String PROP_IGNORE_MALFORMED_JSON = "ignore.malformed.json";
+    Map<String,Boolean> columnIsDouble;
 
 	JsonStructOIOptions options;
 
@@ -139,6 +140,19 @@ public class JsonSerDe implements SerDe {
                     columnSortOrder.charAt(i) == '-');
         }
 
+        Boolean[] cid = new Boolean[columnNames.size()];
+		int c = 0;
+		for (TypeInfo t : columnTypes) {
+			cid[c] = t.toString().equals("double") || t.toString().equals("float");
+			c++;
+		}
+		c = 0;
+		columnIsDouble = new HashMap<String, Boolean>();
+		for (String s : columnNames) {
+			columnIsDouble.put(s, cid[c]);
+			c++;
+		}
+
 
         // other configuration
         ignoreMalformedJson = Boolean.parseBoolean(tbl
@@ -155,52 +169,58 @@ public class JsonSerDe implements SerDe {
      * @throws SerDeException
      */
     @Override
-    public Object deserialize(Writable w) throws SerDeException {
-        Text rowText;
-        if (w instanceof BytesWritable) {
-              BytesWritable b = (BytesWritable) w;
-              try {
-                rowText = new Text(Text.decode(b.getBytes(), 0, b.getLength()));
-              } catch (CharacterCodingException e) {
-                throw new SerDeException(e);
-              }
-        } else {
-            rowText = (Text) w;
-        }
-        deserializedDataSize = rowText.getBytes().length;
+	public Object deserialize(Writable w) throws SerDeException {
+		Text rowText;
+		if (w instanceof BytesWritable) {
+			BytesWritable b = (BytesWritable) w;
+			try {
+				rowText = new Text(Text.decode(b.getBytes(), 0, b.getLength()));
+			} catch (CharacterCodingException e) {
+				throw new SerDeException(e);
+			}
+		} else {
+			rowText = (Text) w;
+		}
+		deserializedDataSize = rowText.getBytes().length;
 
-        // Try parsing row into JSON object
-        JSONObject jObj = null;
+		// Try parsing row into JSON object
+		JSONObject jObj = null;
 
-        try {
-            jObj = new JSONObject(rowText.toString()) {
+		try {
+			jObj = new JSONObject(rowText.toString()) {
+				/**
+				 * In Hive column names are case insensitive, so lower-case all
+				 * field names
+				 *
+				 * @see org.json.JSONObject#put(java.lang.String,
+				 *      java.lang.Object)
+				 */
+				@Override
+				public JSONObject put(String key, Object value)
+					throws JSONException {
+					if(columnIsDouble.containsKey(key.toLowerCase()) &&
+							  columnIsDouble.get(key.toLowerCase()) &&
+							  (value instanceof Integer)) {
+						value = new Double(((Integer)value).doubleValue());
+				  }
+				  return super.put(
+							key.toLowerCase(),
+							value);
+				}
+			};
+		} catch (JSONException e) {
+			// If row is not a JSON object, make the whole row NULL
+			onMalformedJson("Row is not a valid JSON Object - JSONException: "
+					+ e.getMessage());
+			try {
+				jObj = new JSONObject("{}");
+			} catch (JSONException ex) {
+				onMalformedJson("Error parsing empty row. This should never happen.");
+			}
+		}
 
-                /**
-                 * In Hive column names are case insensitive, so lower-case all
-                 * field names
-                 *
-                 * @see org.json.JSONObject#put(java.lang.String,
-                 *      java.lang.Object)
-                 */
-                @Override
-                public JSONObject put(String key, Object value)
-                        throws JSONException {
-                    return super.put(key.toLowerCase(), value);
-                }
-            };
-        } catch (JSONException e) {
-            // If row is not a JSON object, make the whole row NULL
-            onMalformedJson("Row is not a valid JSON Object - JSONException: "
-                    + e.getMessage());
-            try {
-                jObj = new JSONObject("{}");
-            } catch (JSONException ex) {
-                onMalformedJson("Error parsing empty row. This should never happen.");
-            }
-        }
-
-        return jObj;
-    }
+		return jObj;
+	}
 
     @Override
     public ObjectInspector getObjectInspector() throws SerDeException {
@@ -242,7 +262,7 @@ public class JsonSerDe implements SerDe {
 
         Text t = new Text(serializer.toString());
 
-	serializedDataSize = t.getBytes().length;
+		serializedDataSize = t.getBytes().length;
         return t;
     }
 
