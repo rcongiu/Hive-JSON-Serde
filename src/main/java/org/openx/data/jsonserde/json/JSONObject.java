@@ -116,7 +116,7 @@ public class JSONObject {
      * Missing keys are ignored.
      * @param jo A JSONObject.
      * @param names An array of strings.
-     * @throws JSONException 
+     * @throws JSONException
      * @exception JSONException If a value is a non-finite number or if a name is duplicated.
      */
     public JSONObject(JSONObject jo, String[] names) {
@@ -383,19 +383,7 @@ public class JSONObject {
             return "null";
         }
 
-// Shave off trailing zeros and decimal point, if possible.
-
-        String string = Double.toString(d);
-        if (string.indexOf('.') > 0 && string.indexOf('e') < 0 &&
-        		string.indexOf('E') < 0) {
-            while (string.endsWith("0")) {
-                string = string.substring(0, string.length() - 1);
-            }
-            if (string.endsWith(".")) {
-                string = string.substring(0, string.length() - 1);
-            }
-        }
-        return string;
+        return Double.toString(d);
     }
 
 
@@ -610,8 +598,8 @@ public class JSONObject {
     public boolean has(String key) {
         return this.map.containsKey(key);
     }
-    
-    
+
+
     /**
      * Increment a property of a JSONObject. If there is no such property,
      * create one with a value of 1. If there is such a property, and if
@@ -628,11 +616,11 @@ public class JSONObject {
         } else if (value instanceof Integer) {
             put(key, ((Integer)value).intValue() + 1);
         } else if (value instanceof Long) {
-            put(key, ((Long)value).longValue() + 1);                
+            put(key, ((Long)value).longValue() + 1);
         } else if (value instanceof Double) {
-            put(key, ((Double)value).doubleValue() + 1);                
+            put(key, ((Double)value).doubleValue() + 1);
         } else if (value instanceof Float) {
-            put(key, ((Float)value).floatValue() + 1);                
+            put(key, ((Float)value).floatValue() + 1);
         } else {
             throw new JSONException("Unable to increment [" + quote(key) + "].");
         }
@@ -700,19 +688,7 @@ public class JSONObject {
         }
         testValidity(number);
 
-// Shave off trailing zeros and decimal point, if possible.
-
-        String string = number.toString();
-        if (string.indexOf('.') > 0 && string.indexOf('e') < 0 && 
-        		string.indexOf('E') < 0) {
-            while (string.endsWith("0")) {
-                string = string.substring(0, string.length() - 1);
-            }
-            if (string.endsWith(".")) {
-                string = string.substring(0, string.length() - 1);
-            }
-        }
-        return string;
+        return number.toString();
     }
 
 
@@ -1201,8 +1177,8 @@ public class JSONObject {
         }
 
         /*
-         * If it might be a number, try converting it. 
-         * We support the non-standard 0x- convention. 
+         * If it might be a number, try converting it.
+         * We support the non-standard 0x- convention.
          * If a number cannot be produced, then the value will just
          * be a string. Note that the 0x-, plus, and implied string
          * conventions are non-standard. A JSON parser may accept
@@ -1501,11 +1477,11 @@ public class JSONObject {
 
 
      /**
-      * Wrap an object, if necessary. If the object is null, return the NULL 
-      * object. If it is an array or collection, wrap it in a JSONArray. If 
-      * it is a map, wrap it in a JSONObject. If it is a standard property 
-      * (Double, String, et al) then it is already wrapped. Otherwise, if it 
-      * comes from one of the java packages, turn it into a string. And if 
+      * Wrap an object, if necessary. If the object is null, return the NULL
+      * object. If it is an array or collection, wrap it in a JSONArray. If
+      * it is a map, wrap it in a JSONObject. If it is a standard property
+      * (Double, String, et al) then it is already wrapped. Otherwise, if it
+      * comes from one of the java packages, turn it into a string. And if
       * it doesn't, try to wrap it in a JSONObject. If the wrapping fails,
       * then null is returned.
       *
@@ -1517,16 +1493,16 @@ public class JSONObject {
              if (object == null) {
                  return NULL;
              }
-             if (object instanceof JSONObject || object instanceof JSONArray  || 
-                     NULL.equals(object)      || object instanceof JSONString || 
+             if (object instanceof JSONObject || object instanceof JSONArray  ||
+                     NULL.equals(object)      || object instanceof JSONString ||
                      object instanceof Byte   || object instanceof Character  ||
                      object instanceof Short  || object instanceof Integer    ||
-                     object instanceof Long   || object instanceof Boolean    || 
+                     object instanceof Long   || object instanceof Boolean    ||
                      object instanceof Float  || object instanceof Double     ||
                      object instanceof String) {
                  return object;
              }
-             
+
              if (object instanceof Collection) {
                  return new JSONArray((Collection)object);
              }
@@ -1537,7 +1513,7 @@ public class JSONObject {
                  return new JSONObject((Map)object);
              }
              Package objectPackage = object.getClass().getPackage();
-             String objectPackageName = objectPackage != null ? 
+             String objectPackageName = objectPackage != null ?
                  objectPackage.getName() : "";
              if (
                  objectPackageName.startsWith("java.") ||
@@ -1552,7 +1528,7 @@ public class JSONObject {
          }
      }
 
-     
+
      /**
       * Write the contents of the JSONObject as JSON text to a writer.
       * For compactness, no whitespace is added.
