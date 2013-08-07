@@ -65,7 +65,9 @@ CREATE TABLE json_nested_test (
 ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
 STORED AS TEXTFILE;
 
--- data : {"country":"Switzerland","languages":["German","French","Italian"],"religions":{"catholic":[10,20],"protestant":[40,50]}}
+-- data : {"country":"Switzerland","languages":["German","French",
+-- "Italian"],"religions":{"catholic":[10,20],"protestant":[40,50]}}
+
 LOAD DATA LOCAL INPATH 'nesteddata.txt' OVERWRITE INTO TABLE  json_nested_test ;
 
 select * from json_nested_test;  -- result: Switzerland	["German","French","Italian"]	{"catholic":[10,20],"protestant":[40,50]}
