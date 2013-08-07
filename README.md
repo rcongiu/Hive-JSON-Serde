@@ -1,4 +1,6 @@
 JsonSerde - a read/write SerDe for JSON Data
+================================================
+
 AUTHOR: Roberto Congiu <rcongiu@yahoo.com>
 
 Serialization/Deserialization module for Apache Hadoop Hive
@@ -12,22 +14,27 @@ Features:
 * nested data structures are also supported. 
 
 COMPILE
+---------
 
 Use maven to compile the serde.
 
+```bash
 $ mvn package
 
-If you want to compile the serde against a different version of the cloudera libs,
-use -D:
-mvn -Dcdh.version=0.9.0-cdh3u4c-SNAPSHOT package
+# If you want to compile the serde against a different 
+# version of the cloudera libs, use -D:
+$ mvn -Dcdh.version=0.9.0-cdh3u4c-SNAPSHOT package
+```
 
 
 EXAMPLES
+------------
 
 Example scripts with simple sample data are in src/test/scripts. Here some excerpts:
 
-* Query with complex fields like arrays
+### Query with complex fields like arrays
 
+```sql
 CREATE TABLE json_test1 (
 	one boolean,
 	three array<string>,
@@ -41,11 +48,14 @@ hive> select three[1] from json_test1;
 
 gold
 yellow
+```
 
 
-* Nested structures
+### Nested structures
 
 You can also define nested structures:
+
+```sql
 add jar ../../../target/json-serde-1.0-SNAPSHOT-jar-with-dependencies.jar;
 
 CREATE TABLE json_nested_test (
@@ -61,8 +71,9 @@ LOAD DATA LOCAL INPATH 'nesteddata.txt' OVERWRITE INTO TABLE  json_nested_test ;
 select * from json_nested_test;  -- result: Switzerland	["German","French","Italian"]	{"catholic":[10,20],"protestant":[40,50]}
 select languages[0] from json_nested_test; -- result: German
 select religions['catholic'][0] from json_nested_test; -- result: 10
+```
 
-* MALFORMED DATA
+### MALFORMED DATA
 
 The default behavior on malformed data is throwing an exception. 
 For example, for malformed json like 
@@ -72,12 +83,14 @@ you get:
 Failed with exception java.io.IOException:org.apache.hadoop.hive.serde2.SerDeException: Row is not a valid JSON Object - JSONException: Expected a ':' after a key at 32 [character 33 line 1]
 
 this may not be desirable if you have a few bad lines you wish to ignore. If so you can do:
+```sql
 ALTER TABLE json_table SET SERDEPROPERTIES ( "ignore.malformed.json" = "true");
+```
 
 it will not make the query fail, and the above record will be returned as
 NULL	null	null
 
-* MAPPING HIVE KEYWORDS
+### MAPPING HIVE KEYWORDS
 
 Sometimes it may happen that JSON data has attributes named like reserved words in hive.
 For instance, you may have a JSON attribute named 'timestamp', which is a reserved word 
@@ -95,7 +108,7 @@ Notice the "mapping.ts", that means: take the column 'ts' and read into it the
 JSON attribute named "timestamp"
 
 
-# ARCHITECTURE
+### ARCHITECTURE
 
 For the JSON encoding/decoding, I am using a modified version of Douglas Crockfords JSON library:
 https://github.com/douglascrockford/JSON-java
@@ -115,12 +128,12 @@ match hive table declaration.
 More detailed explanation on my blog:
 http://www.congiu.com/articles/json_serde
 
-# CONTRIBUTING
+### CONTRIBUTING
 
 I am using gitflow for the release cycle.
 
 
-* THANKS
+### THANKS
  
 Thanks to Douglas Crockford for the liberal license for his JSON library, and thanks to 
 my employer OpenX and my boss Michael Lum for letting me open source the code.
@@ -134,7 +147,8 @@ Versions:
 1.1.2 (2012/07/26): Fixed issue with columns that are not mapped into JSON, reported by Michael Phung
 1.1.4 (2012/10/04): Fixed issue #13, problem with floats, Reported by Chuck Connell
 1.1.6 (2013/07/10): Fixed issue #28, error after 'alter table add columns'
-1.1.7 (TBD)       : Fixed issue #25, timestamp support
+1.1.7 (TBD)       : Fixed issue #25, timestamp support, fix parametrized build,
+		    Fixed issue #31 (static member shouldn't be static)
 
 
 
