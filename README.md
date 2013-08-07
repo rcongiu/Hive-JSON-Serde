@@ -143,13 +143,13 @@ my employer OpenX and my boss Michael Lum for letting me open source the code.
 
 
 Versions:
-1.0: initial release
-1.1: fixed some string issues
-1.1.1 (2012/07/03): fixed Map Adapter (get and put would call themselves...ooops)
-1.1.2 (2012/07/26): Fixed issue with columns that are not mapped into JSON, reported by Michael Phung
-1.1.4 (2012/10/04): Fixed issue #13, problem with floats, Reported by Chuck Connell
-1.1.6 (2013/07/10): Fixed issue #28, error after 'alter table add columns'
-1.1.7 (TBD)       : Fixed issue #25, timestamp support, fix parametrized build,
+* 1.0: initial release
+* 1.1: fixed some string issues
+* 1.1.1 (2012/07/03): fixed Map Adapter (get and put would call themselves...ooops)
+* 1.1.2 (2012/07/26): Fixed issue with columns that are not mapped into JSON, reported by Michael Phung
+* 1.1.4 (2012/10/04): Fixed issue #13, problem with floats, Reported by Chuck Connell
+* 1.1.6 (2013/07/10): Fixed issue #28, error after 'alter table add columns'
+* 1.1.7 (TBD)       : Fixed issue #25, timestamp support, fix parametrized build,
 		    Fixed issue #31 (static member shouldn't be static)
 
 
