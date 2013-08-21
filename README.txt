@@ -94,6 +94,11 @@ STORED AS TEXTFILE;
 Notice the "mapping.ts", that means: take the column 'ts' and read into it the 
 JSON attribute named "timestamp"
 
+-Another workaround (Tested on HIVE 0.9.0) is to add grave accent (`) around the reserved word for example:
+......`schema`:struct<version:int>......
+
+And query this way: SELECT json.`schema`.version from <Table>;
+
 
 # ARCHITECTURE
 
