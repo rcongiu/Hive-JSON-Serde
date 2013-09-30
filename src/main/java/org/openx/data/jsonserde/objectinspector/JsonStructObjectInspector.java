@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StandardStructObjectInspector;
-import static org.apache.hadoop.hive.serde2.objectinspector.StandardStructObjectInspector.LOG;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.openx.data.jsonserde.json.JSONException;
 import org.openx.data.jsonserde.json.JSONObject;
@@ -100,7 +99,7 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
     }
     
     
-    static List<Object> values = new ArrayList<Object>();
+
     
     /**
      * called to map from hive to json
@@ -114,7 +113,8 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
             return fr.getFieldName();
         }
     }
-
+    
+    List<Object> values = new ArrayList<Object>();
     @Override
     public List<Object> getStructFieldsDataAsList(Object o) {
         JSONObject jObj = (JSONObject) o;

@@ -13,14 +13,13 @@
 
 package org.openx.data.jsonserde;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hive.serde.Constants;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.SerDeException;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
@@ -52,6 +51,11 @@ import org.openx.data.jsonserde.json.JSONException;
 import org.openx.data.jsonserde.json.JSONObject;
 import org.openx.data.jsonserde.objectinspector.JsonObjectInspectorFactory;
 import org.openx.data.jsonserde.objectinspector.JsonStructOIOptions;
+
+import javax.print.attribute.standard.DateTimeAtCompleted;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hive.serde.Constants;
+import org.apache.hadoop.hive.serde2.typeinfo.PrimitiveTypeInfo;
 
 /**
  * Properties:
@@ -111,8 +115,8 @@ public class JsonSerDe implements SerDe {
         }
         assert (columnNames.size() == columnTypes.size());
 
-	stats = new SerDeStats();
-	
+        stats = new SerDeStats();
+
         // Create row related objects
         rowTypeInfo = (StructTypeInfo) TypeInfoFactory
                 .getStructTypeInfo(columnNames, columnTypes);
@@ -154,6 +158,7 @@ public class JsonSerDe implements SerDe {
 	
         // Try parsing row into JSON object
         JSONObject jObj = null;
+
         
         try {
             jObj = new JSONObject(rowText.toString()) {
@@ -166,8 +171,31 @@ public class JsonSerDe implements SerDe {
                  *      java.lang.Object)
                  */
                 @Override
-                public JSONObject put(String key, Object value)
-                        throws JSONException {
+                public JSONObject put(String key, Object value) throws JSONException {
+
+                    try {
+                        if (columnNames.contains(key) && 
+                                rowTypeInfo.getStructFieldTypeInfo(key).getCategory().equals(PrimitiveObjectInspector.Category.PRIMITIVE) &&
+                                ((PrimitiveTypeInfo) rowTypeInfo.getStructFieldTypeInfo(key))
+                                    .getPrimitiveCategory().equals(PrimitiveObjectInspector.PrimitiveCategory.TIMESTAMP) ) {
+                                    if(value instanceof String) {
+                                        value = Timestamp.valueOf((String)value);
+                                    } else if (value instanceof Float ) {
+                                        value = new Timestamp( (long) (((Float)value).floatValue() * 1000));
+                                    } else if ( value instanceof Integer) {
+                                        value = new Timestamp( ((Integer)value).longValue() * 1000);
+                                    } else  if ( value instanceof Long) {
+                                        value = new Timestamp( ((Long)value).longValue() * 1000);
+                                    } else  if ( value instanceof Double) {
+                                        value = new Timestamp( ((Double)value).longValue() * 1000);
+                                    } else {
+                                        throw new JSONException("I don't know how to conver to timestamp a field of type " + value.getClass()) ; 
+                                    }
+                        }
+                    } catch (IllegalArgumentException e) {
+                        throw new JSONException("Timestamp " + value + "improperly formatted.");
+                    }
+
                     return super.put(key.toLowerCase(), value);
                 }
             };
@@ -192,7 +220,7 @@ public class JsonSerDe implements SerDe {
 
     /**
      * We serialize to Text 
-     * @return 
+     * @return
      * 
      * @see org.apache.hadoop.io.Text
      */
@@ -225,7 +253,7 @@ public class JsonSerDe implements SerDe {
         
         Text t = new Text(serializer.toString());
         
-	serializedDataSize = t.getBytes().length;
+        serializedDataSize = t.getBytes().length;
         return t;
     }
 
@@ -243,9 +271,6 @@ public class JsonSerDe implements SerDe {
      * Serializing means getting every field, and setting the appropriate 
      * JSONObject field. Actual serialization is done at the end when
      * the whole JSON object is built
-     * @param serializer
-     * @param obj
-     * @param structObjectInspector 
      */
     private JSONObject serializeStruct( Object obj,
             StructObjectInspector soi, List<String> columnNames) {
@@ -405,7 +430,7 @@ public class JsonSerDe implements SerDe {
 
     @Override
     public SerDeStats getSerDeStats() {
-	if(lastOperationSerialize) {
+        if(lastOperationSerialize) {
             stats.setRawDataSize(serializedDataSize);
         } else {
             stats.setRawDataSize(deserializedDataSize);
@@ -435,5 +460,7 @@ public class JsonSerDe implements SerDe {
         }
         return mps;
     }
+
+
     
 }
