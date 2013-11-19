@@ -83,6 +83,7 @@ public class JsonSerDe implements SerDe {
     boolean ignoreMalformedJson = false;
     public static final String PROP_IGNORE_MALFORMED_JSON = "ignore.malformed.json";
     Map<String,Boolean> columnIsDouble;
+    Map<String,Boolean> columnIsLong;
 
 	JsonStructOIOptions options;
 
@@ -143,13 +144,25 @@ public class JsonSerDe implements SerDe {
         Boolean[] cid = new Boolean[columnNames.size()];
 		int c = 0;
 		for (TypeInfo t : columnTypes) {
-			cid[c] = t.toString().equals("double") || t.toString().equals("float");
+			cid[c] = t.toString().toLowerCase().equals("double") || t.toString().toLowerCase().equals("float");
 			c++;
 		}
 		c = 0;
 		columnIsDouble = new HashMap<String, Boolean>();
 		for (String s : columnNames) {
 			columnIsDouble.put(s, cid[c]);
+			c++;
+		}
+
+		c = 0;
+		for (TypeInfo t : columnTypes) {
+			cid[c] = t.toString().toLowerCase().equals("bigint");
+			c++;
+		}
+		c = 0;
+		columnIsLong = new HashMap<String, Boolean>();
+		for (String s : columnNames) {
+			columnIsLong.put(s, cid[c]);
 			c++;
 		}
 
@@ -198,13 +211,16 @@ public class JsonSerDe implements SerDe {
 				@Override
 				public JSONObject put(String key, Object value)
 					throws JSONException {
-					if(columnIsDouble.containsKey(key.toLowerCase()) &&
+					if (columnIsDouble.containsKey(key.toLowerCase()) &&
 							  columnIsDouble.get(key.toLowerCase()) &&
 							  (value instanceof Integer)) {
 						value = new Double(((Integer)value).doubleValue());
-				  }
-				  return super.put(
-							key.toLowerCase(),
+					} else if (columnIsLong.containsKey(key.toLowerCase()) &&
+							  columnIsLong.get(key.toLowerCase()) &&
+							  (value instanceof Integer)) {
+						value = new Long(((Integer)value).longValue());
+					}
+					return super.put(key.toLowerCase(),
 							value);
 				}
 			};
@@ -360,7 +376,7 @@ public class JsonSerDe implements SerDe {
 							try {
 								result = (((LongObjectInspector)poi).get(obj));
 							} catch (ClassCastException f) {
-								result = (long)(((IntObjectInspector)poi).get(obj));
+								result = java.lang.Integer.valueOf((((IntObjectInspector)poi).get(obj))).longValue();
 							}
 							break;
 						case SHORT:

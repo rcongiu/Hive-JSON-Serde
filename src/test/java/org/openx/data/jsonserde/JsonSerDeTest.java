@@ -66,7 +66,7 @@ public class JsonSerDeTest {
     @After
     public void tearDown() {
     }
-    
+
     public void initialize(JsonSerDe instance) throws Exception {
         System.out.println("initialize");
 
@@ -77,7 +77,7 @@ public class JsonSerDeTest {
 
         instance.initialize(conf, tbl);
     }
-    
+
      public void initialize2(JsonSerDe instance) throws Exception {
         System.out.println("initialize");
 
@@ -88,7 +88,7 @@ public class JsonSerDeTest {
 
         instance.initialize(conf, tbl);
     }
-    
+
 
     /**
      * Test of deserialize method, of class JsonSerDe.
@@ -97,7 +97,7 @@ public class JsonSerDeTest {
     public void testDeserialize() throws Exception {
         JsonSerDe instance = new JsonSerDe();
         initialize(instance);
-        
+
         System.out.println("deserialize");
         Writable w = new Text("{\"one\":true,\"three\":[\"red\",\"yellow\",\"orange\"],\"two\":19.5,\"four\":\"poop\"}");
 
@@ -115,7 +115,7 @@ public class JsonSerDeTest {
     public void testDeserialize2() throws Exception {
         JsonSerDe instance = new JsonSerDe();
         initialize(instance);
-        
+
         Writable w = new Text("{\"one\":true,\"three\":[\"red\",\"yellow\",[\"blue\",\"azure\",\"cobalt\",\"teal\"],\"orange\"],\"two\":19.5,\"four\":\"poop\"}");
 
         JSONObject result = (JSONObject) instance.deserialize(w);
@@ -126,12 +126,12 @@ public class JsonSerDeTest {
         assertTrue(((JSONArray) result.get("three")).get(0) instanceof String);
         assertEquals(((JSONArray) result.get("three")).get(0), "red");
     }
-    
+
     @Test
     public void testDeserialize2Initializations() throws Exception {
         JsonSerDe instance = new JsonSerDe();
         initialize(instance);
-        
+
         Writable w = new Text("{\"one\":true,\"three\":[\"red\",\"yellow\",[\"blue\",\"azure\",\"cobalt\",\"teal\"],\"orange\"],\"two\":19.5,\"four\":\"poop\"}");
 
         JSONObject result = (JSONObject) instance.deserialize(w);
@@ -141,10 +141,10 @@ public class JsonSerDeTest {
 
         assertTrue(((JSONArray) result.get("three")).get(0) instanceof String);
         assertEquals(((JSONArray) result.get("three")).get(0), "red");
-        
+
         // second initialization, new column
         initialize2(instance);
-        
+
         result = (JSONObject) instance.deserialize(w);
         assertEquals(result.get("four"), "poop");
 
@@ -153,7 +153,7 @@ public class JsonSerDeTest {
         assertTrue(((JSONArray) result.get("three")).get(0) instanceof String);
         assertEquals(((JSONArray) result.get("three")).get(0), "red");
     }
-    
+
 
     /**
      * Test of getSerializedClass method, of class JsonSerDe.
@@ -162,7 +162,7 @@ public class JsonSerDeTest {
     public void testGetSerializedClass() throws Exception {
         JsonSerDe instance = new JsonSerDe();
         initialize(instance);
-        
+
         System.out.println("getSerializedClass");
         Class expResult = Text.class;
         Class result = instance.getSerializedClass();
@@ -183,15 +183,15 @@ public class JsonSerDeTest {
      Writable result = instance.serialize(o, oi);
      assertEquals(expResult, result);
      }
-     *  
+     *
      */
     // @Test
     public void testSerialize() throws SerDeException, JSONException, Exception {
         System.out.println("serialize");
-        
+
         JsonSerDe instance = new JsonSerDe();
         initialize(instance);
-        
+
         ArrayList row = new ArrayList(5);
 
         List<ObjectInspector> lOi = new LinkedList<ObjectInspector>();
@@ -240,13 +240,13 @@ public class JsonSerDeTest {
         assertEquals(res.get("anumber"), row.get(1));
 
         // after serialization the internal contents of JSONObject are destroyed (overwritten by their string representation
-        // (for map and arrays) 
+        // (for map and arrays)
 
         System.out.println("Serialized to " + result.toString());
 
     }
-    
-    
+
+
     public JsonSerDe getMappedSerde() throws SerDeException {
         System.out.println("testMapping");
         JsonSerDe serde = new JsonSerDe();
@@ -260,80 +260,80 @@ public class JsonSerDeTest {
         serde.initialize(conf, tbl);
         return serde;
     }
-    
+
     @Test
     public void testSerializeWithMapping() throws SerDeException, JSONException {
-        System.out.println("testSerializeWithMapping");  
-        
+        System.out.println("testSerializeWithMapping");
+
         JsonSerDe serde = getMappedSerde();
-        
+
         System.out.println("serialize");
         ArrayList row = new ArrayList(5);
 
         List<ObjectInspector> lOi = new LinkedList<ObjectInspector>();
         List<String> fieldNames = new LinkedList<String>();
-        
+
         row.add(Boolean.TRUE);
         fieldNames.add("one");
         lOi.add(ObjectInspectorFactory.getReflectionObjectInspector(Boolean.class,
                 ObjectInspectorFactory.ObjectInspectorOptions.JAVA));
-        
+
         row.add(new Float(43.2));
         fieldNames.add("two");
         lOi.add(ObjectInspectorFactory.getReflectionObjectInspector(Float.class,
                 ObjectInspectorFactory.ObjectInspectorOptions.JAVA));
-        
+
         List<String> lst = new LinkedList<String>();
         row.add(lst);
         fieldNames.add("three");
         lOi.add(ObjectInspectorFactory.getStandardListObjectInspector(ObjectInspectorFactory
                 .getReflectionObjectInspector(String.class, ObjectInspectorFactory.ObjectInspectorOptions.JAVA)));
-        
+
         row.add("value1");
         fieldNames.add("four");
         lOi.add(ObjectInspectorFactory.getReflectionObjectInspector(String.class,
                 ObjectInspectorFactory.ObjectInspectorOptions.JAVA));
-        
+
         row.add(new Integer(7898));
         fieldNames.add("ts");
         lOi.add(ObjectInspectorFactory.getReflectionObjectInspector(Integer.class,
                 ObjectInspectorFactory.ObjectInspectorOptions.JAVA));
-        
+
         StructObjectInspector soi = ObjectInspectorFactory.getStandardStructObjectInspector(fieldNames, lOi);
-        
+
         Object obj = serde.serialize(row, soi);
-        
+
         assertTrue(obj instanceof Text);
         assertEquals("{\"timestamp\":7898,\"two\":43.2,\"one\":true,\"three\":[],\"four\":\"value1\"}", obj.toString());
-        
+
         System.out.println("Output object " + obj.toString());
     }
-    
+
     // {"one":true, "timestamp":1234567, "three":["red","yellow",["blue","azure","cobalt","teal"],"orange"],"two":19.5,"four":"poop"}
     @Test
     public void testMapping() throws SerDeException, IOException {
         System.out.println("testMapping");
         JsonSerDe serde = getMappedSerde();
-        
+
         InputStream is = this.getClass().getResourceAsStream("/testkeyword.txt");
-        
+
         LineNumberReader lnr = new LineNumberReader(new InputStreamReader(is));
-        
+
         StructObjectInspector soi = (StructObjectInspector) serde.getObjectInspector();
         StructField sf = soi.getStructFieldRef("ts");
-        
+
         String line;
         while( (line = lnr.readLine()) != null ) {
             Text t = new Text(line);
-            
-            Object res = serde.deserialize(t);   
+
+            Object res = serde.deserialize(t);
             assertEquals(1234567, soi.getStructFieldData(res, sf)  );
-            
+
         }
-        
+
         try {
             is.close();
         } catch (Exception ex){}
     }
-    
+
 }
