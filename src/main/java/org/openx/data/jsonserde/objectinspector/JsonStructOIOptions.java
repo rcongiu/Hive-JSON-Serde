@@ -37,7 +37,7 @@ public  class JsonStructOIOptions {
         
         @Override
         public boolean equals(Object obj) {
-            if(!(obj instanceof JsonStructOIOptions) || obj == null) {
+            if(obj == null || !(obj instanceof JsonStructOIOptions) ) {
                 return false ;
             } else {
                 JsonStructOIOptions oio = (JsonStructOIOptions) obj;
