@@ -275,6 +275,29 @@ public class JsonSerDeTest {
         return serde;
     }
     
+    public JsonSerDe getNumericSerde() throws SerDeException {
+        System.out.println("testMapping");
+        JsonSerDe serde = new JsonSerDe();
+        Configuration conf = null;
+        Properties tbl = new Properties();
+        tbl.setProperty(Constants.LIST_COLUMNS, "cboolean,ctinyint,csmallint,cint,cbigint,cfloat,cdouble");
+        tbl.setProperty(Constants.LIST_COLUMN_TYPES, "boolean,tinyint,smallint,int,bigint,float,double");
+     
+        serde.initialize(conf, tbl);
+        return serde;
+    }
+    
+    @Test
+    public void testNumbers() throws SerDeException {
+        System.out.println("testNumbers");
+        
+        JsonSerDe serde = getNumericSerde();
+        Text line = new Text("{ cboolean:true, ctinyint:1, csmallint:200}");
+        
+        
+    }
+    
+    
     @Test
     public void testSerializeWithMapping() throws SerDeException, JSONException {
         System.out.println("testSerializeWithMapping");  
