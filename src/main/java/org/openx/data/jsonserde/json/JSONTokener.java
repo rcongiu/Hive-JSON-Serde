@@ -384,8 +384,7 @@ public class JSONTokener {
         if (string.equals("")) {
             throw syntaxError("Missing value");
         }
-        //return JSONObject.stringToValue(string);
-	return string; // we let the SerDe get the right type if numeric
+        return JSONObject.stringToValue(string);
     }
 
 
@@ -439,6 +438,7 @@ public class JSONTokener {
      *
      * @return " at {index} [character {character} line {line}]"
      */
+    @Override
     public String toString() {
         return " at " + index + " [character " + this.character + " line " + 
         	this.line + "]";

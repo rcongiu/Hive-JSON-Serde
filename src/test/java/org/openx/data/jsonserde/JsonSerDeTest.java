@@ -40,6 +40,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.openx.data.jsonserde.objectinspector.primitive.JavaStringIntObjectInspector;
 
 /**
  *
@@ -339,14 +340,17 @@ public class JsonSerDeTest {
         while( (line = lnr.readLine()) != null ) {
             Text t = new Text(line);
             
-            Object res = serde.deserialize(t);   
-            assertEquals(1234567, soi.getStructFieldData(res, sf)  );
+            Object res = serde.deserialize(t); 
             
+            ObjectInspector foi = sf.getFieldObjectInspector();
+            assertTrue( foi instanceof JavaStringIntObjectInspector);
+            JavaStringIntObjectInspector jsioi = (JavaStringIntObjectInspector) foi;
+            assertEquals(1234567,  jsioi.get(soi.getStructFieldData(res, sf))  );   
         }
         
         try {
             is.close();
-        } catch (Exception ex){}
+        } catch (IOException ex){}
     }
     
 }

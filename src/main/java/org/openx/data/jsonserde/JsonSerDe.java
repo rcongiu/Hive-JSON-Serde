@@ -178,21 +178,23 @@ public class JsonSerDe implements SerDe {
                                 rowTypeInfo.getStructFieldTypeInfo(key).getCategory().equals(PrimitiveObjectInspector.Category.PRIMITIVE) &&
                                 ((PrimitiveTypeInfo) rowTypeInfo.getStructFieldTypeInfo(key))
                                     .getPrimitiveCategory().equals(PrimitiveObjectInspector.PrimitiveCategory.TIMESTAMP) ) {
+                            // value is always string. Let's see which kind
+                    
                                     if(value instanceof String) {
-                                        value = Timestamp.valueOf((String)value);
-                                    } else if (value instanceof Float ) {
-                                        value = new Timestamp( (long) (((Float)value).floatValue() * 1000));
-                                    } else if ( value instanceof Integer) {
-                                        value = new Timestamp( ((Integer)value).longValue() * 1000);
-                                    } else  if ( value instanceof Long) {
-                                        value = new Timestamp( ((Long)value).longValue() * 1000);
-                                    } else  if ( value instanceof Double) {
-                                        value = new Timestamp( ((Double)value).longValue() * 1000);
-                                    } else {
-                                        throw new JSONException("I don't know how to conver to timestamp a field of type " + value.getClass()) ; 
-                                    }
+                                        String s = (String) value;
+                                        
+                                        if(s.indexOf(':') > 0) {
+                                            value = Timestamp.valueOf(s);
+                                        } else if(s.indexOf('.') >=0 ) {
+                                            // it's a float
+                                             value = new Timestamp( (long) ((double) (Double.parseDouble(s) * 1000)));
+                                        } else {
+                                            // integer 
+                                            value = new Timestamp( Long.parseLong(s) * 1000);
+                                        }
+                                    } 
                         }
-                    } catch (IllegalArgumentException e) {
+                    } catch (NumberFormatException e) {
                         throw new JSONException("Timestamp " + value + "improperly formatted.");
                     }
 
@@ -396,7 +398,7 @@ public class JsonSerDe implements SerDe {
     }
 
     /**
-     * Serializes a Hive map<> using a JSONObject.
+     * Serializes a Hive map&lt;&gt; using a JSONObject.
      * 
      * @param obj the object to serialize
      * @param moi the object's inspector
