@@ -34,7 +34,7 @@ public class JavaStringShortObjectInspector
         if(o == null) return null;
         
         if(o instanceof String) {
-           return new ShortWritable(Short.parseShort((String)o)); 
+           return new ShortWritable(ParsePrimitiveUtils.parseShort((String)o)); 
         } else {
           return new ShortWritable(((Short) o).shortValue());
         }
@@ -44,7 +44,7 @@ public class JavaStringShortObjectInspector
     public short get(Object o) {
         
         if(o instanceof String) {
-           return Short.parseShort((String)o); 
+           return ParsePrimitiveUtils.parseShort((String)o); 
         } else {
           return (((Short) o).shortValue());
         }

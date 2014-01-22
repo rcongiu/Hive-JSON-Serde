@@ -16,6 +16,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitive
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableByteObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableIntObjectInspector;
+import org.apache.hadoop.io.ByteWritable;
 import org.apache.hadoop.io.IntWritable;
 
 /**
@@ -34,16 +35,16 @@ public class JavaStringByteObjectInspector   extends AbstractPrimitiveJavaObject
         if(o == null) return null;
         
         if(o instanceof String) {
-           return new IntWritable(Integer.parseInt((String)o)); 
+           return new ByteWritable(ParsePrimitiveUtils.parseByte((String)o)); 
         } else {
-           return new IntWritable(((Integer) o).intValue());
+           return new ByteWritable(((Byte) o).byteValue());
         }
     }
 
     @Override
     public byte get(Object o) {
         if(o instanceof String) {
-           return Byte.parseByte((String)o); 
+           return ParsePrimitiveUtils.parseByte((String)o); 
         } else {
            return ((Byte) o).byteValue();
         }

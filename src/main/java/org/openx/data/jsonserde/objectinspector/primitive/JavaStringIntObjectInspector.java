@@ -34,7 +34,7 @@ public class JavaStringIntObjectInspector
         if(o == null) return null;
         
         if(o instanceof String) {
-           return new IntWritable(Integer.parseInt((String)o)); 
+           return new IntWritable(ParsePrimitiveUtils.parseInt((String)o)); 
         } else {
            return new IntWritable(((Integer) o).intValue());
         }
@@ -43,7 +43,7 @@ public class JavaStringIntObjectInspector
     @Override
     public int get(Object o) {
         if(o instanceof String) {
-           return Integer.parseInt((String)o); 
+           return ParsePrimitiveUtils.parseInt((String)o); 
         } else {
            return ((Integer) o).intValue();
         }

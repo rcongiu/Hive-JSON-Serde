@@ -34,7 +34,7 @@ public class JavaStringLongObjectInspector
         if(o == null) return null;
         
         if(o instanceof String) {
-           return new LongWritable(Long.parseLong((String)o)); 
+           return new LongWritable(ParsePrimitiveUtils.parseLong((String)o)); 
         } else {
           return new LongWritable(((Long) o).longValue());
         }
@@ -44,7 +44,7 @@ public class JavaStringLongObjectInspector
     public long get(Object o) {
         
         if(o instanceof String) {
-           return Long.parseLong((String)o); 
+           return ParsePrimitiveUtils.parseLong((String)o); 
         } else {
           return (((Long) o).longValue());
         }
