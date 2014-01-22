@@ -12,21 +12,21 @@
 
 package org.openx.data.jsonserde.objectinspector.primitive;
 
+import org.apache.hadoop.hive.serde2.io.ShortWritable;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableLongObjectInspector;
-import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableShortObjectInspector;
 
 /**
  *
  * @author rcongiu
  */
-public class JavaStringLongObjectInspector
+public class JavaStringShortObjectInspector 
         extends AbstractPrimitiveJavaObjectInspector
-        implements SettableLongObjectInspector {
+        implements SettableShortObjectInspector {
 
-    public JavaStringLongObjectInspector() {
-        super(PrimitiveObjectInspectorUtils.longTypeEntry);
+    public JavaStringShortObjectInspector() {
+        super(PrimitiveObjectInspectorUtils.shortTypeEntry);
     }
 
     @Override
@@ -34,29 +34,29 @@ public class JavaStringLongObjectInspector
         if(o == null) return null;
         
         if(o instanceof String) {
-           return new LongWritable(Long.parseLong((String)o)); 
+           return new ShortWritable(Short.parseShort((String)o)); 
         } else {
-          return new LongWritable(((Long) o).longValue());
+          return new ShortWritable(((Short) o).shortValue());
         }
     }
 
     @Override
-    public long get(Object o) {
+    public short get(Object o) {
         
         if(o instanceof String) {
-           return Long.parseLong((String)o); 
+           return Short.parseShort((String)o); 
         } else {
-          return (((Long) o).longValue());
+          return (((Short) o).shortValue());
         }
     }
 
     @Override
-    public Object create(long value) {
-        return Long.valueOf(value);
+    public Object create(short value) {
+        return Short.valueOf(value);
     }
 
     @Override
-    public Object set(Object o, long value) {
-        return Long.valueOf(value);
+    public Object set(Object o, short value) {
+        return Short.valueOf(value);
     }
 }

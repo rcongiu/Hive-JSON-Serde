@@ -14,18 +14,18 @@ package org.openx.data.jsonserde.objectinspector.primitive;
 
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableLongObjectInspector;
-import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableByteObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableIntObjectInspector;
+import org.apache.hadoop.io.IntWritable;
 
 /**
  *
  * @author rcongiu
  */
-public class JavaStringLongObjectInspector
-        extends AbstractPrimitiveJavaObjectInspector
-        implements SettableLongObjectInspector {
+public class JavaStringByteObjectInspector   extends AbstractPrimitiveJavaObjectInspector
+        implements SettableByteObjectInspector {
 
-    public JavaStringLongObjectInspector() {
+    public JavaStringByteObjectInspector() {
         super(PrimitiveObjectInspectorUtils.longTypeEntry);
     }
 
@@ -34,29 +34,28 @@ public class JavaStringLongObjectInspector
         if(o == null) return null;
         
         if(o instanceof String) {
-           return new LongWritable(Long.parseLong((String)o)); 
+           return new IntWritable(Integer.parseInt((String)o)); 
         } else {
-          return new LongWritable(((Long) o).longValue());
+           return new IntWritable(((Integer) o).intValue());
         }
     }
 
     @Override
-    public long get(Object o) {
-        
+    public byte get(Object o) {
         if(o instanceof String) {
-           return Long.parseLong((String)o); 
+           return Byte.parseByte((String)o); 
         } else {
-          return (((Long) o).longValue());
+           return ((Byte) o).byteValue();
         }
     }
 
     @Override
-    public Object create(long value) {
-        return Long.valueOf(value);
+    public Object create(byte value) {
+        return Byte.valueOf(value);
     }
 
     @Override
-    public Object set(Object o, long value) {
-        return Long.valueOf(value);
+    public Object set(Object o, byte value) {
+        return Byte.valueOf(value);
     }
 }

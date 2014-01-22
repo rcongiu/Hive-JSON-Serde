@@ -26,8 +26,12 @@ import org.apache.hadoop.hive.serde2.typeinfo.MapTypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.PrimitiveTypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.StructTypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
+import org.openx.data.jsonserde.objectinspector.primitive.JavaStringByteObjectInspector;
+import org.openx.data.jsonserde.objectinspector.primitive.JavaStringDoubleObjectInspector;
+import org.openx.data.jsonserde.objectinspector.primitive.JavaStringFloatObjectInspector;
 import org.openx.data.jsonserde.objectinspector.primitive.JavaStringIntObjectInspector;
 import org.openx.data.jsonserde.objectinspector.primitive.JavaStringLongObjectInspector;
+import org.openx.data.jsonserde.objectinspector.primitive.JavaStringShortObjectInspector;
 
 /**
  *
@@ -167,8 +171,12 @@ public class JsonObjectInspectorFactory {
             = new EnumMap<PrimitiveCategory, AbstractPrimitiveJavaObjectInspector>(PrimitiveCategory.class);
 
     static {
+	primitiveOICache.put(PrimitiveCategory.BYTE, new JavaStringByteObjectInspector());
+	primitiveOICache.put(PrimitiveCategory.SHORT, new JavaStringShortObjectInspector());
         primitiveOICache.put(PrimitiveCategory.INT, new JavaStringIntObjectInspector());
         primitiveOICache.put(PrimitiveCategory.LONG, new JavaStringLongObjectInspector());
+	primitiveOICache.put(PrimitiveCategory.FLOAT, new JavaStringFloatObjectInspector());
+	primitiveOICache.put(PrimitiveCategory.DOUBLE, new JavaStringDoubleObjectInspector());
     }
     
     /**

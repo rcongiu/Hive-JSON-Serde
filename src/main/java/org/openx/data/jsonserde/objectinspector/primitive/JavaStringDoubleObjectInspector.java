@@ -14,19 +14,18 @@ package org.openx.data.jsonserde.objectinspector.primitive;
 
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableLongObjectInspector;
-import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableDoubleObjectInspector;
+import org.apache.hadoop.io.DoubleWritable;
 
 /**
  *
  * @author rcongiu
  */
-public class JavaStringLongObjectInspector
-        extends AbstractPrimitiveJavaObjectInspector
-        implements SettableLongObjectInspector {
+public class JavaStringDoubleObjectInspector extends AbstractPrimitiveJavaObjectInspector
+        implements SettableDoubleObjectInspector {
 
-    public JavaStringLongObjectInspector() {
-        super(PrimitiveObjectInspectorUtils.longTypeEntry);
+    public JavaStringDoubleObjectInspector() {
+        super(PrimitiveObjectInspectorUtils.doubleTypeEntry);
     }
 
     @Override
@@ -34,29 +33,30 @@ public class JavaStringLongObjectInspector
         if(o == null) return null;
         
         if(o instanceof String) {
-           return new LongWritable(Long.parseLong((String)o)); 
+           return new DoubleWritable(Double.parseDouble((String)o)); 
         } else {
-          return new LongWritable(((Long) o).longValue());
+          return new DoubleWritable(((Double) o).doubleValue());
         }
     }
 
     @Override
-    public long get(Object o) {
+    public double get(Object o) {
         
         if(o instanceof String) {
-           return Long.parseLong((String)o); 
+           return Double.parseDouble((String)o); 
         } else {
-          return (((Long) o).longValue());
+          return (((Double) o).doubleValue());
         }
     }
 
     @Override
-    public Object create(long value) {
-        return Long.valueOf(value);
+    public Object create(double value) {
+        return Double.valueOf(value);
     }
 
     @Override
-    public Object set(Object o, long value) {
-        return Long.valueOf(value);
+    public Object set(Object o, double value) {
+        return Double.valueOf(value);
     }
+    
 }

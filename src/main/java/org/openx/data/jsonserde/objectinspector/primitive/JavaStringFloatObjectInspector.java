@@ -14,19 +14,18 @@ package org.openx.data.jsonserde.objectinspector.primitive;
 
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableLongObjectInspector;
-import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableFloatObjectInspector;
+import org.apache.hadoop.io.FloatWritable;
 
 /**
  *
  * @author rcongiu
  */
-public class JavaStringLongObjectInspector
-        extends AbstractPrimitiveJavaObjectInspector
-        implements SettableLongObjectInspector {
+public class JavaStringFloatObjectInspector extends AbstractPrimitiveJavaObjectInspector
+        implements SettableFloatObjectInspector {
 
-    public JavaStringLongObjectInspector() {
-        super(PrimitiveObjectInspectorUtils.longTypeEntry);
+    public JavaStringFloatObjectInspector() {
+        super(PrimitiveObjectInspectorUtils.floatTypeEntry);
     }
 
     @Override
@@ -34,29 +33,30 @@ public class JavaStringLongObjectInspector
         if(o == null) return null;
         
         if(o instanceof String) {
-           return new LongWritable(Long.parseLong((String)o)); 
+           return new FloatWritable(Float.parseFloat((String)o)); 
         } else {
-          return new LongWritable(((Long) o).longValue());
+          return new FloatWritable(((Float) o).floatValue());
         }
     }
 
     @Override
-    public long get(Object o) {
+    public float get(Object o) {
         
         if(o instanceof String) {
-           return Long.parseLong((String)o); 
+           return Float.parseFloat((String)o); 
         } else {
-          return (((Long) o).longValue());
+          return (((Float) o).floatValue());
         }
     }
 
     @Override
-    public Object create(long value) {
-        return Long.valueOf(value);
+    public Object create(float value) {
+        return Float.valueOf(value);
     }
 
     @Override
-    public Object set(Object o, long value) {
-        return Long.valueOf(value);
+    public Object set(Object o, float value) {
+        return Float.valueOf(value);
     }
+    
 }

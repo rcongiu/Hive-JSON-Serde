@@ -32,7 +32,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.serde.Constants;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorFactory;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.JavaBooleanObjectInspector;
 import org.apache.hadoop.io.Writable;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -40,7 +40,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.openx.data.jsonserde.objectinspector.primitive.JavaStringByteObjectInspector;
+import org.openx.data.jsonserde.objectinspector.primitive.JavaStringDoubleObjectInspector;
+import org.openx.data.jsonserde.objectinspector.primitive.JavaStringFloatObjectInspector;
 import org.openx.data.jsonserde.objectinspector.primitive.JavaStringIntObjectInspector;
+import org.openx.data.jsonserde.objectinspector.primitive.JavaStringLongObjectInspector;
+import org.openx.data.jsonserde.objectinspector.primitive.JavaStringShortObjectInspector;
 
 /**
  *
@@ -288,15 +293,54 @@ public class JsonSerDeTest {
     }
     
     @Test
-    public void testNumbers() throws SerDeException {
+    public void testNumbers() throws SerDeException, JSONException {
         System.out.println("testNumbers");
         
         JsonSerDe serde = getNumericSerde();
-        Text line = new Text("{ cboolean:true, ctinyint:1, csmallint:200}");
+        Text line = new Text("{ cboolean:true, ctinyint:1, csmallint:200, cint:12345,cbigint:123446767687867, cfloat:3.1415, cdouble:43424234234.4243423}");
         
-        
+	StructObjectInspector soi = (StructObjectInspector) serde.getObjectInspector();
+	
+	JSONObject result = (JSONObject) serde.deserialize(line);
+	
+        StructField sf = soi.getStructFieldRef("cboolean");
+	
+	assertTrue(sf.getFieldObjectInspector() instanceof JavaBooleanObjectInspector);
+        JavaBooleanObjectInspector jboi = (JavaBooleanObjectInspector) sf.getFieldObjectInspector();
+	assertEquals(true, jboi.get(result.get("cboolean")));
+	
+	sf = soi.getStructFieldRef("ctinyint");
+	assertTrue(sf.getFieldObjectInspector() instanceof JavaStringByteObjectInspector);
+        JavaStringByteObjectInspector boi = (JavaStringByteObjectInspector) sf.getFieldObjectInspector();
+	assertEquals(1, boi.get(result.get("ctinyint")));
+	
+	sf = soi.getStructFieldRef("csmallint");
+	assertTrue(sf.getFieldObjectInspector() instanceof JavaStringShortObjectInspector);
+        JavaStringShortObjectInspector shoi = (JavaStringShortObjectInspector) sf.getFieldObjectInspector();
+	assertEquals(200, shoi.get(result.get("csmallint")));
+	
+	
+	sf = soi.getStructFieldRef("cint");
+	assertTrue(sf.getFieldObjectInspector() instanceof JavaStringIntObjectInspector);
+        JavaStringIntObjectInspector oi = (JavaStringIntObjectInspector) sf.getFieldObjectInspector();
+	assertEquals(12345, oi.get(result.get("cint")));
+	
+	sf = soi.getStructFieldRef("cbigint");
+	assertTrue(sf.getFieldObjectInspector() instanceof JavaStringLongObjectInspector);
+        JavaStringLongObjectInspector bioi = (JavaStringLongObjectInspector) sf.getFieldObjectInspector();
+	assertEquals(123446767687867L , bioi.get(result.get("cbigint")));
+
+	sf = soi.getStructFieldRef("cfloat");
+	assertTrue(sf.getFieldObjectInspector() instanceof JavaStringFloatObjectInspector);
+        JavaStringFloatObjectInspector foi = (JavaStringFloatObjectInspector) sf.getFieldObjectInspector();
+	assertEquals(3.1415 , foi.get(result.get("cfloat")),0.001);
+	
+	sf = soi.getStructFieldRef("cdouble");
+	assertTrue(sf.getFieldObjectInspector() instanceof JavaStringDoubleObjectInspector);
+        JavaStringDoubleObjectInspector doi = (JavaStringDoubleObjectInspector) sf.getFieldObjectInspector();
+	assertEquals(43424234234.4243423 , doi.get(result.get("cdouble")),0.001);
     }
-    
+
     
     @Test
     public void testSerializeWithMapping() throws SerDeException, JSONException {
