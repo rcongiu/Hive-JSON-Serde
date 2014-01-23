@@ -4,7 +4,7 @@
 
     <groupId>org.openx.data</groupId>
     <artifactId>json-serde</artifactId>
-    <version>1.1.7</version>
+    <version>1.1.8-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>openx-json-serde</name>
@@ -47,6 +47,19 @@
         	<artifactId>maven-release-plugin</artifactId>
         	<version>2.4</version>
       	    </plugin>
+	    <plugin>
+               <groupId>com.atlassian.maven.plugins</groupId>
+                <artifactId>maven-jgitflow-plugin</artifactId>
+                <version>1.0-alpha20</version>
+                <configuration>
+                    <allowSnapshots>false</allowSnapshots>
+                    <enableFeatureVersions>false</enableFeatureVersions>
+                    <pushFeatures>false</pushFeatures>
+                    <pushReleases>true</pushReleases>
+                    <allowUntracked>true</allowUntracked>
+                </configuration>
+           </plugin>
+
               <!-- Assembly Plugin                              -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
