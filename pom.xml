@@ -20,7 +20,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	<cdh.version>0.8.0-cdh4a1-SNAPSHOT</cdh.version>
+	<cdh.version>0.8.1-cdh4.0.1</cdh.version>
     </properties>
 
 
