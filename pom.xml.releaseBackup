@@ -1,10 +1,11 @@
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.openx.data</groupId>
     <artifactId>json-serde</artifactId>
-    <version>1.1.8</version>
+    <version>1.1.5-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>openx-json-serde</name>
@@ -13,14 +14,13 @@
       <!-- Replace the connection below with your project connection -->
       <connection>scm:git:git@github.com:rcongiu/Hive-JSON-Serde.git</connection>
       <developerConnection>scm:git:git@github.com:rcongiu/Hive-JSON-Serde.git</developerConnection>
-      <url>scm:git:git@github.com:rcongiu/Hive-JSON-Serde.git</url>
+      <url>scm:git:git@github.com:juven/git-demo.git</url>
      
-      <tag>HEAD</tag>
-  </scm>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	<cdh.version>0.8.1-cdh4.0.1</cdh.version>
+	<cdh.version>0.8.0-cdh4a1-SNAPSHOT</cdh.version>
     </properties>
 
 
@@ -47,20 +47,6 @@
         	<artifactId>maven-release-plugin</artifactId>
         	<version>2.4</version>
       	    </plugin>
-	    <plugin>
-               <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-jgitflow-plugin</artifactId>
-                <version>1.0-alpha20</version>
-                <configuration>
-                    <allowSnapshots>false</allowSnapshots>
-                    <enableFeatureVersions>false</enableFeatureVersions>
-                    <pushFeatures>false</pushFeatures>
-                    <pushReleases>true</pushReleases>
-                    <allowUntracked>true</allowUntracked>
-		    <noDeploy>true</noDeploy>
-                </configuration>
-           </plugin>
-
               <!-- Assembly Plugin                              -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -100,13 +86,13 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.hive</groupId>
+            <groupId>org.apache.hadoop.hive</groupId>
             <artifactId>hive-serde</artifactId>
             <version>${cdh.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.hive</groupId>
+            <groupId>org.apache.hadoop.hive</groupId>
             <artifactId>hive-exec</artifactId>
             <version>${cdh.version}</version>
             <scope>provided</scope>

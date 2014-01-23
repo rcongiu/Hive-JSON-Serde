@@ -53,7 +53,6 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
         if (data == null) {
             return null;
         }
-        JSONObject obj = null ;
         
         if( data instanceof JSONObject) {
             return getStructFieldDataFromJsonObject((JSONObject) data, fieldRef );

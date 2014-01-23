@@ -13,7 +13,6 @@ import java.sql.Timestamp;
 import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * User: guyrt
@@ -70,7 +69,7 @@ public class JsonSerDeTimeStampTest {
     Writable w = new Text("{\"one\":true,\"five\":1367801925.123}");
 // 
     JSONObject result = (JSONObject) instance.deserialize(w);
-    assertEquals(result.get("five"), Timestamp.valueOf("2013-05-05 17:58:45.0"));
+    assertEquals(result.get("five"), Timestamp.valueOf("2013-05-05 17:58:45.123"));
   }
 
 

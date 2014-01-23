@@ -167,8 +167,6 @@ public class JSONObject {
      * Missing keys are ignored.
      * @param jo A JSONObject.
      * @param names An array of strings.
-     * @throws JSONException 
-     * @exception JSONException If a value is a non-finite number or if a name is duplicated.
      */
     public JSONObject(JSONObject jo, String[] names) {
         this();
@@ -242,8 +240,7 @@ public class JSONObject {
      * Construct a JSONObject from a Map.
      *
      * @param map A map object that can be used to initialize the contents of
-     *  the JSONObject.
-     * @throws JSONException 
+     *  the JSONObject. 
      */
     public JSONObject(Map map) {
         this.map = new HashMap();
@@ -507,7 +504,7 @@ public class JSONObject {
             return object instanceof Number ?
                 ((Number)object).doubleValue() :
                 Double.parseDouble((String)object);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             throw new JSONException("JSONObject[" + quote(key) +
                 "] is not a number.");
         }
@@ -528,7 +525,7 @@ public class JSONObject {
             return object instanceof Number ?
                 ((Number)object).intValue() :
                 Integer.parseInt((String)object);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             throw new JSONException("JSONObject[" + quote(key) +
                 "] is not an int.");
         }
@@ -595,6 +592,7 @@ public class JSONObject {
     /**
      * Get an array of field names from a JSONObject.
      *
+     * @param jo
      * @return An array of field names, or null if there are no names.
      */
     public static String[] getNames(JSONObject jo) {
@@ -616,6 +614,7 @@ public class JSONObject {
     /**
      * Get an array of field names from an Object.
      *
+     * @param object
      * @return An array of field names, or null if there are no names.
      */
     public static String[] getNames(Object object) {
@@ -802,7 +801,7 @@ public class JSONObject {
     public boolean optBoolean(String key, boolean defaultValue) {
         try {
             return getBoolean(key);
-        } catch (Exception e) {
+        } catch (JSONException e) {
             return defaultValue;
         }
     }
@@ -835,7 +834,7 @@ public class JSONObject {
     public double optDouble(String key, double defaultValue) {
         try {
             return getDouble(key);
-        } catch (Exception e) {
+        } catch (JSONException e) {
             return defaultValue;
         }
     }
@@ -868,7 +867,7 @@ public class JSONObject {
     public int optInt(String key, int defaultValue) {
         try {
             return getInt(key);
-        } catch (Exception e) {
+        } catch (JSONException e) {
             return defaultValue;
         }
     }
@@ -929,7 +928,7 @@ public class JSONObject {
     public long optLong(String key, long defaultValue) {
         try {
             return getLong(key);
-        } catch (Exception e) {
+        } catch (JSONException e) {
             return defaultValue;
         }
     }
@@ -1148,7 +1147,7 @@ public class JSONObject {
      * @return this.
      * @throws JSONException If the value is a non-finite number.
      */
-    public JSONObject putOpt(String key, Object value) throws JSONException {
+    public final JSONObject putOpt(String key, Object value) throws JSONException {
         if (key != null && value != null) {
             put(key, value);
         }
@@ -1251,39 +1250,6 @@ public class JSONObject {
             return JSONObject.NULL;
         }
 
-        /*
-         * If it might be a number, try converting it. 
-         * We support the non-standard 0x- convention. 
-         * If a number cannot be produced, then the value will just
-         * be a string. Note that the 0x-, plus, and implied string
-         * conventions are non-standard. A JSON parser may accept
-         * non-JSON forms as long as it accepts all correct JSON forms.
-         */
-
-        char b = string.charAt(0);
-        if ((b >= '0' && b <= '9') || b == '.' || b == '-' || b == '+') {
-            if (b == '0' && string.length() > 2 &&
-                        (string.charAt(1) == 'x' || string.charAt(1) == 'X')) {
-                try {
-                    return new Integer(Integer.parseInt(string.substring(2), 16));
-                } catch (Exception ignore) {
-                }
-            }
-            try {
-                if (string.indexOf('.') > -1 || 
-                        string.indexOf('e') > -1 || string.indexOf('E') > -1) {
-                    return Double.valueOf(string);
-                } else {
-                    Long myLong = new Long(string);
-                    if (myLong.longValue() == myLong.intValue()) {
-                        return new Integer(myLong.intValue());
-                    } else {
-                        return myLong;
-                    }
-                }
-            }  catch (Exception ignore) {
-            }
-        }
         return string;
     }
 
@@ -1358,7 +1324,7 @@ public class JSONObject {
             }
             sb.append('}');
             return sb.toString();
-        } catch (Exception e) {
+        } catch (JSONException e) {
             return null;
         }
     }
@@ -1460,7 +1426,7 @@ public class JSONObject {
      * @throws JSONException If the value is or contains an invalid number.
      */
     public static String valueToString(Object value) throws JSONException {
-        if (value == null || value.equals(null)) {
+        if (value == null ) {
             return "null";
         }
         if (value instanceof JSONString) {
@@ -1598,7 +1564,7 @@ public class JSONObject {
                  return object.toString();
              }
              return new JSONObject(object);
-         } catch(Exception exception) {
+         } catch(JSONException exception) {
              return null;
          }
      }
@@ -1610,6 +1576,7 @@ public class JSONObject {
       * <p>
       * Warning: This method assumes that the data structure is acyclical.
       *
+     * @param writer
       * @return The writer.
       * @throws JSONException
       */
