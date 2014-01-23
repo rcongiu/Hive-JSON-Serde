@@ -57,6 +57,7 @@
                     <pushFeatures>false</pushFeatures>
                     <pushReleases>true</pushReleases>
                     <allowUntracked>true</allowUntracked>
+		    <noDeploy>true</noDeploy>
                 </configuration>
            </plugin>
 
