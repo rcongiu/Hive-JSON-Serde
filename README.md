@@ -149,8 +149,10 @@ Versions:
 * 1.1.2 (2012/07/26): Fixed issue with columns that are not mapped into JSON, reported by Michael Phung
 * 1.1.4 (2012/10/04): Fixed issue #13, problem with floats, Reported by Chuck Connell
 * 1.1.6 (2013/07/10): Fixed issue #28, error after 'alter table add columns'
-* 1.1.7 (TBD)       : Fixed issue #25, timestamp support, fix parametrized build,
+* 1.1.7 (2013/09/30): Fixed issue #25, timestamp support, fix parametrized build,
 		    Fixed issue #31 (static member shouldn't be static)
+* 1.1.8 (2014/01/22): Rewritten handling of numbers, so their parsing from string is delayed to 
+                      deserialization time. Fixes #39, #45, #34, #29, #26, #22, #13
 
 
 

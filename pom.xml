@@ -4,7 +4,7 @@
 
     <groupId>org.openx.data</groupId>
     <artifactId>json-serde</artifactId>
-    <version>1.1.8-SNAPSHOT</version>
+    <version>1.1.8</version>
     <packaging>jar</packaging>
 
     <name>openx-json-serde</name>
@@ -57,6 +57,7 @@
                     <pushFeatures>false</pushFeatures>
                     <pushReleases>true</pushReleases>
                     <allowUntracked>true</allowUntracked>
+		    <noDeploy>true</noDeploy>
                 </configuration>
            </plugin>
 
