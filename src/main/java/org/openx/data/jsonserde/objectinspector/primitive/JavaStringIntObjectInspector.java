@@ -26,7 +26,7 @@ public class JavaStringIntObjectInspector
         implements SettableIntObjectInspector {
 
     public JavaStringIntObjectInspector() {
-        super(PrimitiveObjectInspectorUtils.longTypeEntry);
+        super(PrimitiveObjectInspectorUtils.intTypeEntry);
     }
 
     @Override
