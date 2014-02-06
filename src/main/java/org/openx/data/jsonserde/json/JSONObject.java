@@ -173,7 +173,7 @@ public class JSONObject {
         for (int i = 0; i < names.length; i += 1) {
             try {
                 putOnce(names[i].toLowerCase(), jo.opt(names[i]));
-            } catch (Exception ignore) {
+            } catch (JSONException ignore) {
             }
         }
     }
