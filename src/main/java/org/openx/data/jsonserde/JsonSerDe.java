@@ -187,7 +187,9 @@ public class JsonSerDe implements SerDe {
                                             value = Timestamp.valueOf(s);
                                         } else if(s.indexOf('.') >=0 ) {
                                             // it's a float
-                                             value = new Timestamp( (long) ((double) (Double.parseDouble(s) * 1000)));
+                                             value = new Timestamp( 
+						     (long) ((double) 
+							     (Double.parseDouble(s) * 1000)));
                                         } else {
                                             // integer 
                                             value = new Timestamp( Long.parseLong(s) * 1000);

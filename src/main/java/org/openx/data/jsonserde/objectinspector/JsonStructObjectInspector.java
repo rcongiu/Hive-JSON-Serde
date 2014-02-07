@@ -62,10 +62,15 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
         } else {
             throw new Error("Data is not JSONObject  but " + data.getClass().getCanonicalName() +
                     " with value " + data.toString()) ;
-        }
-        
+        } 
     }
     
+    /**
+     * retrieves data assuming it's in a list, usually during serialization
+     * @param data
+     * @param fieldRef
+     * @return 
+     */
     public Object getStructFieldDataFromList(List data, StructField fieldRef ) {
        int idx = fields.indexOf(fieldRef);
        if(idx <0 || idx >= data.size()) {
