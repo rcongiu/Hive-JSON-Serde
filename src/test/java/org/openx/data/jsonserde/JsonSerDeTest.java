@@ -108,11 +108,12 @@ public class JsonSerDeTest {
         Writable w = new Text("{\"one\":true,\"three\":[\"red\",\"yellow\",\"orange\"],\"two\":19.5,\"four\":\"poop\"}");
 
         JSONObject result = (JSONObject) instance.deserialize(w);
-        assertEquals(result.get("four"), "poop");
+        assertEquals("poop",result.get("four"));
         assertTrue(result.get("three") instanceof JSONArray);
         
         assertTrue( ((JSONArray)result.get("three")).get(0) instanceof String );
-        assertEquals( ((JSONArray)result.get("three")).get(0),"red");
+        assertEquals("red", ((JSONArray)result.get("three")).get(0));
+        
     }
 
     //   {"one":true,"three":["red","yellow",["blue","azure","cobalt","teal"],"orange"],"two":19.5,"four":"poop"}
@@ -124,12 +125,33 @@ public class JsonSerDeTest {
         Writable w = new Text("{\"one\":true,\"three\":[\"red\",\"yellow\",[\"blue\",\"azure\",\"cobalt\",\"teal\"],\"orange\"],\"two\":19.5,\"four\":\"poop\"}");
 
         JSONObject result = (JSONObject) instance.deserialize(w);
-        assertEquals(result.get("four"), "poop");
+        assertEquals("poop", result.get("four"));
 
         assertTrue(result.get("three") instanceof JSONArray);
 
         assertTrue(((JSONArray) result.get("three")).get(0) instanceof String);
-        assertEquals(((JSONArray) result.get("three")).get(0), "red");
+        assertEquals("red", ((JSONArray) result.get("three")).get(0));
+    }
+    
+    
+        /**
+     * Test of deserialize method, of class JsonSerDe.
+     */
+    @Test
+    public void testDeserializeNull() throws Exception {
+        JsonSerDe instance = new JsonSerDe();
+        initialize(instance);
+        
+        System.out.println("deserializeNull");
+        Writable w = new Text("{\"one\":true,\"three\":[\"red\",\"yellow\",\"orange\"],\"two\":19.5,\"four\":null}");
+
+        StructObjectInspector soi = (StructObjectInspector) instance.getObjectInspector();
+        JSONObject result = (JSONObject) instance.deserialize(w);
+        assertTrue(JSONObject.NULL == result.get("four"));
+        
+        assertEquals(null, soi.getStructFieldData(result, soi.getStructFieldRef("four")));
+       
+        
     }
     
     @Test

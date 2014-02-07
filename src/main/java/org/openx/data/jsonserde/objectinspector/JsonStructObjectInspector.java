@@ -90,16 +90,17 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
         int fieldID = f.getFieldID();
         assert (fieldID >= 0 && fieldID < fields.size());
 
+        Object fieldData = null;
+        
         try {
             if (data.has(getJsonField(fieldRef))) {
-               return data.get(getJsonField(fieldRef));
-            } else {
-               return null;
-            }
+               fieldData = data.get(getJsonField(fieldRef));
+               if (fieldData == JSONObject.NULL) fieldData = null;
+            } 
         } catch (JSONException ex) {
             // if key does not exist
-            return null;
         }
+        return fieldData;
     }
     
     
