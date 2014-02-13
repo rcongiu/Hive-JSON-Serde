@@ -78,8 +78,11 @@ public class JsonSerDe implements SerDe {
     long serializedDataSize;
     // if set, will ignore malformed JSON in deserialization
     boolean ignoreMalformedJson = false;
+    // if set, will add column that contains raw json string
+    String rawJsonColumn = null;
     public static final String PROP_IGNORE_MALFORMED_JSON = "ignore.malformed.json";
-    
+    public static final String PROP_ADD_RAW_JSON_COLUMN = "add.raw.json.column";
+
    JsonStructOIOptions options;
 
     /**
@@ -114,6 +117,15 @@ public class JsonSerDe implements SerDe {
             columnTypes = TypeInfoUtils.getTypeInfosFromTypeString(columnTypeProperty);
         }
         assert (columnNames.size() == columnTypes.size());
+
+        // add field with raw json string
+        rawJsonColumn = tbl.getProperty(PROP_ADD_RAW_JSON_COLUMN);
+        if (rawJsonColumn != null) {
+            columnNames = new ArrayList<String>(columnNames);
+            columnTypes = new ArrayList<TypeInfo>(columnTypes);
+            columnNames.add(rawJsonColumn);
+            columnTypes.add(TypeInfoFactory.stringTypeInfo);
+        }
 
         stats = new SerDeStats();
 
@@ -201,6 +213,9 @@ public class JsonSerDe implements SerDe {
                     return super.put(key.toLowerCase(), value);
                 }
             };
+            if (rawJsonColumn != null) {
+                jObj.put(rawJsonColumn, rowText.toString());
+            }
         } catch (JSONException e) {
             // If row is not a JSON object, make the whole row NULL
             onMalformedJson("Row is not a valid JSON Object - JSONException: "
@@ -287,6 +302,9 @@ public class JsonSerDe implements SerDe {
         
         for (int i =0; i< fields.size(); i++) {
             StructField sf = fields.get(i);
+            if (sf.getFieldName().equals(rawJsonColumn)) {
+                continue;
+            }
             Object data = soi.getStructFieldData(obj, sf);
 
             if (null != data) {
