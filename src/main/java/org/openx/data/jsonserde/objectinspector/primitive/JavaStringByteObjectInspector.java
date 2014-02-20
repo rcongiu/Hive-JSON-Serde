@@ -25,7 +25,7 @@ public class JavaStringByteObjectInspector   extends AbstractPrimitiveJavaObject
         implements SettableByteObjectInspector {
 
     public JavaStringByteObjectInspector() {
-        super(PrimitiveObjectInspectorUtils.longTypeEntry);
+        super(PrimitiveObjectInspectorUtils.byteTypeEntry);
     }
 
     @Override

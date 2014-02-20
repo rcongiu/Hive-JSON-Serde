@@ -130,6 +130,13 @@ match hive table declaration.
 More detailed explanation on my blog:
 http://www.congiu.com/articles/json_serde
 
+### Notes
+
+#### Timestamp support
+note that timestamp support will use the systems default timezone
+to convert timestamps.
+
+
 ### CONTRIBUTING
 
 I am using gitflow for the release cycle.

@@ -23,7 +23,12 @@ import org.openx.data.jsonserde.json.JSONArray;
 import org.openx.data.jsonserde.json.JSONObject;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import static org.junit.Assert.assertEquals;
 
@@ -55,7 +60,7 @@ public class JsonSerDeTimeStampTest {
     Writable w = new Text("{\"one\":true,\"five\":\"2013-03-27 23:18:40\"}");
 
     JSONObject result = (JSONObject) instance.deserialize(w);
-    assertEquals(result.get("five"), Timestamp.valueOf("2013-03-27 23:18:40.0"));
+    assertEquals(Timestamp.valueOf("2013-03-27 23:18:40.0"), result.get("five"));
   }
 
   @Test
@@ -64,7 +69,7 @@ public class JsonSerDeTimeStampTest {
     Writable w = new Text("{\"one\":true,\"five\":\"2013-03-27 23:18:40.123456\"}");
 
     JSONObject result = (JSONObject) instance.deserialize(w);
-    assertEquals(result.get("five"), Timestamp.valueOf("2013-03-27 23:18:40.123456"));
+    assertEquals( Timestamp.valueOf("2013-03-27 23:18:40.123456"), result.get("five"));
   }
   
    @Test
@@ -72,8 +77,9 @@ public class JsonSerDeTimeStampTest {
     // Test that timestamp object can be deserialized
     Writable w = new Text("{\"one\":true,\"five\":1367801925}");
 
+    
     JSONObject result = (JSONObject) instance.deserialize(w);
-    assertEquals(result.get("five"),  Timestamp.valueOf("2013-05-05 17:58:45.0") );
+    assertEquals(getDate("2013-05-05 17:58:45.0" ), result.get("five")   );
   }
 
   @Test
@@ -82,7 +88,25 @@ public class JsonSerDeTimeStampTest {
     Writable w = new Text("{\"one\":true,\"five\":1367801925.123}");
 // 
     JSONObject result = (JSONObject) instance.deserialize(w);
-    assertEquals(result.get("five"), Timestamp.valueOf("2013-05-05 17:58:45.123"));
+    
+    assertEquals(getDate("2013-05-05 17:58:45.123"), result.get("five") );
+  }
+  
+  /** 
+   * for tests, if time zone not specified, make sure that it's in the correct
+   * timezone
+   */
+  static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS zzz");
+  public static Timestamp getDate(String s) throws ParseException {
+      
+      s = s + " PDT";
+      
+      Date dt = sdf.parse(s);
+      Calendar cal = Calendar.getInstance();
+      cal.setTime(dt);
+      Timestamp ts = new Timestamp(cal.getTimeInMillis());
+      return ts;
+      
   }
 
 
