@@ -168,6 +168,11 @@ public class JsonSerDeTest {
 	StringObjectInspector elOi = (StringObjectInspector) loi.getListElementObjectInspector();
 	String sres = elOi.getPrimitiveJavaObject(el);
 	assertNull(sres);
+        
+        List all = loi.getList(res);
+        assertEquals(4, all.size());
+        assertNull(all.get(3));
+        assertEquals("red", all.get(0));
 	
     }
     
@@ -230,6 +235,8 @@ public class JsonSerDeTest {
 
     /**
      * Test of serialize method, of class JsonSerDe.
+     * @throws org.apache.hadoop.hive.serde2.SerDeException
+     * @throws org.openx.data.jsonserde.json.JSONException
      */
     /*    @Test
      public void testSerialize() throws Exception {
