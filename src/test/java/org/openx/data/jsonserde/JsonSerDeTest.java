@@ -30,9 +30,11 @@ import org.openx.data.jsonserde.json.JSONObject;
 import java.util.Properties;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.serde.Constants;
+import org.apache.hadoop.hive.serde2.objectinspector.ListObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.JavaBooleanObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.StringObjectInspector;
 import org.apache.hadoop.io.Writable;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -131,6 +133,7 @@ public class JsonSerDeTest {
 
         assertTrue(((JSONArray) result.get("three")).get(0) instanceof String);
         assertEquals("red", ((JSONArray) result.get("three")).get(0));
+	
     }
     
     
@@ -143,15 +146,29 @@ public class JsonSerDeTest {
         initialize(instance);
         
         System.out.println("deserializeNull");
-        Writable w = new Text("{\"one\":true,\"three\":[\"red\",\"yellow\",\"orange\"],\"two\":19.5,\"four\":null}");
+        Writable w = new Text("{\"one\":true,\"three\":[\"red\",\"yellow\",\"orange\", null],\"two\":null,\"four\":null}");
 
         StructObjectInspector soi = (StructObjectInspector) instance.getObjectInspector();
         JSONObject result = (JSONObject) instance.deserialize(w);
         assertTrue(JSONObject.NULL == result.get("four"));
         
         assertEquals(null, soi.getStructFieldData(result, soi.getStructFieldRef("four")));
+	
+	// same on number
+	Object res = soi.getStructFieldData(result, soi.getStructFieldRef("two"));
+	
+	assertNull(res);
        
+	// get the array
+	res = soi.getStructFieldData(result, soi.getStructFieldRef("three"));
+	ListObjectInspector loi = (ListObjectInspector) soi.getStructFieldRef("three").getFieldObjectInspector();
         
+	// get the 4th element
+	Object el = loi.getListElement(res, 3);
+	StringObjectInspector elOi = (StringObjectInspector) loi.getListElementObjectInspector();
+	String sres = elOi.getPrimitiveJavaObject(el);
+	assertNull(sres);
+	
     }
     
     @Test
