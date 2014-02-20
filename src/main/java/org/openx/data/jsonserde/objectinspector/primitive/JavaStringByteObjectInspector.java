@@ -15,9 +15,7 @@ package org.openx.data.jsonserde.objectinspector.primitive;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableByteObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableIntObjectInspector;
 import org.apache.hadoop.io.ByteWritable;
-import org.apache.hadoop.io.IntWritable;
 
 /**
  *
