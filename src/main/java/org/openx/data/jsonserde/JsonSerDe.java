@@ -157,11 +157,15 @@ public class JsonSerDe implements SerDe {
         deserializedDataSize = rowText.getBytes().length;
 	
         // Try parsing row into JSON object
-        JSONObject jObj = null;
+        Object jObj = null;
 
         
         try {
-            jObj = new JSONObject(rowText.toString()) {
+            String txt = rowText.toString().trim();
+            
+            if(txt.startsWith("{")) {
+             
+            jObj = new JSONObject(txt) {
 
                 /**
                  * In Hive column names are case insensitive, so lower-case all
@@ -203,6 +207,9 @@ public class JsonSerDe implements SerDe {
                     return super.put(key.toLowerCase(), value);
                 }
             };
+            } else if (txt.startsWith("[")){
+                jObj = new JSONArray(txt);
+            }
         } catch (JSONException e) {
             // If row is not a JSON object, make the whole row NULL
             onMalformedJson("Row is not a valid JSON Object - JSONException: "

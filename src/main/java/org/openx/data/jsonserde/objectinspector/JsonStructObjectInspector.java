@@ -16,6 +16,7 @@ import java.util.List;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StandardStructObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
+import org.openx.data.jsonserde.json.JSONArray;
 import org.openx.data.jsonserde.json.JSONException;
 import org.openx.data.jsonserde.json.JSONObject;
 
@@ -59,6 +60,8 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
         } if (data instanceof List) {
             // somehow we have the object parsed already
             return getStructFieldDataFromList((List) data, fieldRef );
+        } else if (data instanceof JSONArray) {
+            return getStructFieldDataFromList(((JSONArray) data).getAsArrayList(), fieldRef );
         } else {
             throw new Error("Data is not JSONObject  but " + data.getClass().getCanonicalName() +
                     " with value " + data.toString()) ;
@@ -79,6 +82,8 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
            return data.get(idx);
        }
     }
+    
+
     
     public Object getStructFieldDataFromJsonObject(JSONObject data, StructField fieldRef ) {
         if (data == null) {

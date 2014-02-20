@@ -75,6 +75,31 @@ select languages[0] from json_nested_test; -- result: German
 select religions['catholic'][0] from json_nested_test; -- result: 10
 ```
 
+### SUPPORT FOR ARRAYS
+You could have JSON arrays, in that case the SerDe would still work, 
+and it will expect data in the JSON arrays ordered just like the hive
+columns, like you'd see in the regular text/csv serdes.
+For instance, if you do
+```sql
+CREATE TABLE people ( name string, age int)
+```
+your data should look like
+```javascript
+["John", 26 ]
+["Mary", 23 ]
+```
+Arrays can still be nested, so you could have
+```sql
+CREATE TABLE complex_array ( 
+	name string, address struct<street:string,city:string>) ...
+-- data:
+["John", { street:"10 green street", city:"Paris" } .. ]
+```
+
+
+```
+
+
 ### MALFORMED DATA
 
 The default behavior on malformed data is throwing an exception. 

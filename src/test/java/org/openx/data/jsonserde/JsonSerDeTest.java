@@ -100,6 +100,38 @@ public class JsonSerDeTest {
 
     /**
      * Test of deserialize method, of class JsonSerDe.
+     * expects  "one,two,three,four"
+     *    "boolean,float,array&lt;string&gt;,string");
+     */
+    @Test
+    public void testDeserializeArray() throws Exception {
+        JsonSerDe instance = new JsonSerDe();
+        initialize(instance);
+        
+        System.out.println("deserialize");
+        Writable w = new Text("[true,19.5, [\"red\",\"yellow\",\"orange\"],\"poop\"]");
+
+        Object result =  instance.deserialize(w);
+        assertTrue(result instanceof JSONArray);
+        
+        StructObjectInspector soi = (StructObjectInspector)instance.getObjectInspector();
+        
+        assertEquals(Boolean.TRUE, soi.getStructFieldData(result, soi.getStructFieldRef("one")));
+        
+        JavaStringFloatObjectInspector jsfOi = (JavaStringFloatObjectInspector) soi.getStructFieldRef("two").getFieldObjectInspector();
+        assertTrue(19.5 == jsfOi.get(soi.getStructFieldData(result, soi.getStructFieldRef("two"))));
+        
+        Object ar = soi.getStructFieldData(result, soi.getStructFieldRef("three"));
+        assertTrue(ar instanceof JSONArray);
+        
+        JSONArray jar = (JSONArray)ar;
+        assertTrue( jar.get(0) instanceof String );
+        assertEquals("red", jar.get(0));
+        
+    }
+    
+     /**
+     * Test of deserialize method, but passing an array.
      */
     @Test
     public void testDeserialize() throws Exception {
