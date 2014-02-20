@@ -189,6 +189,7 @@ Versions:
 * next release	    : fixed issue with { field = null } , #50
 		      support for array records
 		      fixed handling of null in arrays, #54
+		      refactored Timestamp Handling
 
 
 

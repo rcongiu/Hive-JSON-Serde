@@ -164,49 +164,7 @@ public class JsonSerDe implements SerDe {
             String txt = rowText.toString().trim();
             
             if(txt.startsWith("{")) {
-             
-            jObj = new JSONObject(txt) {
-
-                /**
-                 * In Hive column names are case insensitive, so lower-case all
-                 * field names
-                 * 
-                 * @see org.json.JSONObject#put(java.lang.String,
-                 *      java.lang.Object)
-                 */
-                @Override
-                public JSONObject put(String key, Object value) throws JSONException {
-
-                    try {
-                        if (columnNames.contains(key) && 
-                                rowTypeInfo.getStructFieldTypeInfo(key).getCategory().equals(PrimitiveObjectInspector.Category.PRIMITIVE) &&
-                                ((PrimitiveTypeInfo) rowTypeInfo.getStructFieldTypeInfo(key))
-                                    .getPrimitiveCategory().equals(PrimitiveObjectInspector.PrimitiveCategory.TIMESTAMP) ) {
-                            // value is always string. Let's see which kind
-                    
-                                    if(value instanceof String) {
-                                        String s = (String) value;
-                                        
-                                        if(s.indexOf(':') > 0) {
-                                            value = Timestamp.valueOf(s);
-                                        } else if(s.indexOf('.') >=0 ) {
-                                            // it's a float
-                                             value = new Timestamp( 
-						     (long) ((double) 
-							     (Double.parseDouble(s) * 1000)));
-                                        } else {
-                                            // integer 
-                                            value = new Timestamp( Long.parseLong(s) * 1000);
-                                        }
-                                    } 
-                        }
-                    } catch (NumberFormatException e) {
-                        throw new JSONException("Timestamp " + value + "improperly formatted.");
-                    }
-
-                    return super.put(key.toLowerCase(), value);
-                }
-            };
+                jObj = new JSONObject(txt);
             } else if (txt.startsWith("[")){
                 jObj = new JSONArray(txt);
             }
