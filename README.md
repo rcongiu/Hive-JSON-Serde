@@ -97,9 +97,6 @@ CREATE TABLE complex_array (
 ```
 
 
-```
-
-
 ### MALFORMED DATA
 
 The default behavior on malformed data is throwing an exception. 
