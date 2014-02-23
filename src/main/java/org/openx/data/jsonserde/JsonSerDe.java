@@ -38,6 +38,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector.Category;
 import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.BooleanObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.ByteObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.DoubleObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.FloatObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.IntObjectInspector;
@@ -301,7 +302,7 @@ public class JsonSerDe implements SerDe {
                                             Boolean.FALSE);
                         break;
                     case BYTE:
-                        result = (((ShortObjectInspector)poi).get(obj));
+                        result = (((ByteObjectInspector)poi).get(obj));
                         break;
                     case DOUBLE:
                         result = (((DoubleObjectInspector)poi).get(obj));
