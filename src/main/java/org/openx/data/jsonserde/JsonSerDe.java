@@ -38,6 +38,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector.Category;
 import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.BooleanObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.ByteObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.DoubleObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.FloatObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.IntObjectInspector;
@@ -157,50 +158,17 @@ public class JsonSerDe implements SerDe {
         deserializedDataSize = rowText.getBytes().length;
 	
         // Try parsing row into JSON object
-        JSONObject jObj = null;
+        Object jObj = null;
 
         
         try {
-            jObj = new JSONObject(rowText.toString()) {
-
-                /**
-                 * In Hive column names are case insensitive, so lower-case all
-                 * field names
-                 * 
-                 * @see org.json.JSONObject#put(java.lang.String,
-                 *      java.lang.Object)
-                 */
-                @Override
-                public JSONObject put(String key, Object value) throws JSONException {
-
-                    try {
-                        if (columnNames.contains(key) && 
-                                rowTypeInfo.getStructFieldTypeInfo(key).getCategory().equals(PrimitiveObjectInspector.Category.PRIMITIVE) &&
-                                ((PrimitiveTypeInfo) rowTypeInfo.getStructFieldTypeInfo(key))
-                                    .getPrimitiveCategory().equals(PrimitiveObjectInspector.PrimitiveCategory.TIMESTAMP) ) {
-                            // value is always string. Let's see which kind
-                    
-                                    if(value instanceof String) {
-                                        String s = (String) value;
-                                        
-                                        if(s.indexOf(':') > 0) {
-                                            value = Timestamp.valueOf(s);
-                                        } else if(s.indexOf('.') >=0 ) {
-                                            // it's a float
-                                             value = new Timestamp( (long) ((double) (Double.parseDouble(s) * 1000)));
-                                        } else {
-                                            // integer 
-                                            value = new Timestamp( Long.parseLong(s) * 1000);
-                                        }
-                                    } 
-                        }
-                    } catch (NumberFormatException e) {
-                        throw new JSONException("Timestamp " + value + "improperly formatted.");
-                    }
-
-                    return super.put(key.toLowerCase(), value);
-                }
-            };
+            String txt = rowText.toString().trim();
+            
+            if(txt.startsWith("{")) {
+                jObj = new JSONObject(txt);
+            } else if (txt.startsWith("[")){
+                jObj = new JSONArray(txt);
+            }
         } catch (JSONException e) {
             // If row is not a JSON object, make the whole row NULL
             onMalformedJson("Row is not a valid JSON Object - JSONException: "
@@ -334,7 +302,7 @@ public class JsonSerDe implements SerDe {
                                             Boolean.FALSE);
                         break;
                     case BYTE:
-                        result = (((ShortObjectInspector)poi).get(obj));
+                        result = (((ByteObjectInspector)poi).get(obj));
                         break;
                     case DOUBLE:
                         result = (((DoubleObjectInspector)poi).get(obj));

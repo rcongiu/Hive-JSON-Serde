@@ -12,6 +12,7 @@
 
 package org.openx.data.jsonserde.objectinspector;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StandardListObjectInspector;
@@ -35,7 +36,11 @@ public class JsonListObjectInspector extends StandardListObjectInspector {
       return null;
     }
     JSONArray array = (JSONArray) data;
-    return array.getAsArrayList();
+    List al = new ArrayList(array.length());
+    for(int i =0; i< array.length(); i++) {
+	al.add(getListElement(data,i));
+    }
+    return al;
   }
 
   @Override
@@ -45,7 +50,12 @@ public class JsonListObjectInspector extends StandardListObjectInspector {
     }
     JSONArray array = (JSONArray) data;
     try {
-        return array.get(index);
+        Object obj =  array.get(index);
+	if(JSONObject.NULL == obj) {
+	    return null;
+	} else {
+	    return obj;
+	}
     } catch(JSONException ex) {
         return null;
     }

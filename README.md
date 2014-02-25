@@ -75,6 +75,28 @@ select languages[0] from json_nested_test; -- result: German
 select religions['catholic'][0] from json_nested_test; -- result: 10
 ```
 
+### SUPPORT FOR ARRAYS
+You could have JSON arrays, in that case the SerDe would still work, 
+and it will expect data in the JSON arrays ordered just like the hive
+columns, like you'd see in the regular text/csv serdes.
+For instance, if you do
+```sql
+CREATE TABLE people ( name string, age int)
+```
+your data should look like
+```javascript
+["John", 26 ]
+["Mary", 23 ]
+```
+Arrays can still be nested, so you could have
+```sql
+CREATE TABLE complex_array ( 
+	name string, address struct<street:string,city:string>) ...
+-- data:
+["John", { street:"10 green street", city:"Paris" } .. ]
+```
+
+
 ### MALFORMED DATA
 
 The default behavior on malformed data is throwing an exception. 
@@ -130,6 +152,13 @@ match hive table declaration.
 More detailed explanation on my blog:
 http://www.congiu.com/articles/json_serde
 
+### Notes
+
+#### Timestamp support
+note that timestamp support will use the systems default timezone
+to convert timestamps.
+
+
 ### CONTRIBUTING
 
 I am using gitflow for the release cycle.
@@ -154,6 +183,11 @@ Versions:
 * 1.1.8 (2014/01/22): Rewritten handling of numbers, so their parsing from string is delayed to 
                       deserialization time. Fixes #39, #45, #34, #29, #26, #22, #13
 * 1.1.9.1 (2014/02/02) fixed some bugs
+* 1.1.9.2 (2014/02/25)	fixed issue with { field = null }  #50,
+		      	support for array records,
+		      	fixed handling of null in arrays #54,
+		      	refactored Timestamp Handling
+
 
 
 

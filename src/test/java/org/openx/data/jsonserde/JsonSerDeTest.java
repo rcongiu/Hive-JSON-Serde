@@ -30,9 +30,11 @@ import org.openx.data.jsonserde.json.JSONObject;
 import java.util.Properties;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.serde.Constants;
+import org.apache.hadoop.hive.serde2.objectinspector.ListObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.JavaBooleanObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.StringObjectInspector;
 import org.apache.hadoop.io.Writable;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -98,6 +100,38 @@ public class JsonSerDeTest {
 
     /**
      * Test of deserialize method, of class JsonSerDe.
+     * expects  "one,two,three,four"
+     *    "boolean,float,array&lt;string&gt;,string");
+     */
+    @Test
+    public void testDeserializeArray() throws Exception {
+        JsonSerDe instance = new JsonSerDe();
+        initialize(instance);
+        
+        System.out.println("deserialize");
+        Writable w = new Text("[true,19.5, [\"red\",\"yellow\",\"orange\"],\"poop\"]");
+
+        Object result =  instance.deserialize(w);
+        assertTrue(result instanceof JSONArray);
+        
+        StructObjectInspector soi = (StructObjectInspector)instance.getObjectInspector();
+        
+        assertEquals(Boolean.TRUE, soi.getStructFieldData(result, soi.getStructFieldRef("one")));
+        
+        JavaStringFloatObjectInspector jsfOi = (JavaStringFloatObjectInspector) soi.getStructFieldRef("two").getFieldObjectInspector();
+        assertTrue(19.5 == jsfOi.get(soi.getStructFieldData(result, soi.getStructFieldRef("two"))));
+        
+        Object ar = soi.getStructFieldData(result, soi.getStructFieldRef("three"));
+        assertTrue(ar instanceof JSONArray);
+        
+        JSONArray jar = (JSONArray)ar;
+        assertTrue( jar.get(0) instanceof String );
+        assertEquals("red", jar.get(0));
+        
+    }
+    
+     /**
+     * Test of deserialize method, but passing an array.
      */
     @Test
     public void testDeserialize() throws Exception {
@@ -108,11 +142,12 @@ public class JsonSerDeTest {
         Writable w = new Text("{\"one\":true,\"three\":[\"red\",\"yellow\",\"orange\"],\"two\":19.5,\"four\":\"poop\"}");
 
         JSONObject result = (JSONObject) instance.deserialize(w);
-        assertEquals(result.get("four"), "poop");
+        assertEquals("poop",result.get("four"));
         assertTrue(result.get("three") instanceof JSONArray);
         
         assertTrue( ((JSONArray)result.get("three")).get(0) instanceof String );
-        assertEquals( ((JSONArray)result.get("three")).get(0),"red");
+        assertEquals("red", ((JSONArray)result.get("three")).get(0));
+        
     }
 
     //   {"one":true,"three":["red","yellow",["blue","azure","cobalt","teal"],"orange"],"two":19.5,"four":"poop"}
@@ -124,12 +159,53 @@ public class JsonSerDeTest {
         Writable w = new Text("{\"one\":true,\"three\":[\"red\",\"yellow\",[\"blue\",\"azure\",\"cobalt\",\"teal\"],\"orange\"],\"two\":19.5,\"four\":\"poop\"}");
 
         JSONObject result = (JSONObject) instance.deserialize(w);
-        assertEquals(result.get("four"), "poop");
+        assertEquals("poop", result.get("four"));
 
         assertTrue(result.get("three") instanceof JSONArray);
 
         assertTrue(((JSONArray) result.get("three")).get(0) instanceof String);
-        assertEquals(((JSONArray) result.get("three")).get(0), "red");
+        assertEquals("red", ((JSONArray) result.get("three")).get(0));
+	
+    }
+    
+    
+        /**
+     * Test of deserialize method, of class JsonSerDe.
+     */
+    @Test
+    public void testDeserializeNull() throws Exception {
+        JsonSerDe instance = new JsonSerDe();
+        initialize(instance);
+        
+        System.out.println("deserializeNull");
+        Writable w = new Text("{\"one\":true,\"three\":[\"red\",\"yellow\",\"orange\", null],\"two\":null,\"four\":null}");
+
+        StructObjectInspector soi = (StructObjectInspector) instance.getObjectInspector();
+        JSONObject result = (JSONObject) instance.deserialize(w);
+        assertTrue(JSONObject.NULL == result.get("four"));
+        
+        assertEquals(null, soi.getStructFieldData(result, soi.getStructFieldRef("four")));
+	
+	// same on number
+	Object res = soi.getStructFieldData(result, soi.getStructFieldRef("two"));
+	
+	assertNull(res);
+       
+	// get the array
+	res = soi.getStructFieldData(result, soi.getStructFieldRef("three"));
+	ListObjectInspector loi = (ListObjectInspector) soi.getStructFieldRef("three").getFieldObjectInspector();
+        
+	// get the 4th element
+	Object el = loi.getListElement(res, 3);
+	StringObjectInspector elOi = (StringObjectInspector) loi.getListElementObjectInspector();
+	String sres = elOi.getPrimitiveJavaObject(el);
+	assertNull(sres);
+        
+        List all = loi.getList(res);
+        assertEquals(4, all.size());
+        assertNull(all.get(3));
+        assertEquals("red", all.get(0));
+	
     }
     
     @Test
@@ -191,6 +267,8 @@ public class JsonSerDeTest {
 
     /**
      * Test of serialize method, of class JsonSerDe.
+     * @throws org.apache.hadoop.hive.serde2.SerDeException
+     * @throws org.openx.data.jsonserde.json.JSONException
      */
     /*    @Test
      public void testSerialize() throws Exception {

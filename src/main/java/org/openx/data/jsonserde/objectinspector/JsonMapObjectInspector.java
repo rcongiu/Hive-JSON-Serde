@@ -67,7 +67,12 @@ public class JsonMapObjectInspector extends StandardMapObjectInspector {
 
      JSONObject jObj = (JSONObject) data;
         try {
-            return jObj.get(key.toString());
+            Object obj = jObj.get(key.toString());
+            if(JSONObject.NULL == obj) {
+                return null;
+            } else {
+                return obj;
+            }
         } catch (JSONException ex) {
             // key does not exists -> like null
             return null;

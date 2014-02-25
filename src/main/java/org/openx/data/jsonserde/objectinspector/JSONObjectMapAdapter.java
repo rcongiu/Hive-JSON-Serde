@@ -74,12 +74,28 @@ public class JSONObjectMapAdapter implements Map {
         for(Iterator<String> i = jsonObject.keys(); i.hasNext(); ) {
             String o = i.next();
             try {
-                cache.put(o, jsonObject.get(o));
+                cache.put(o, safeGet(o));
             } catch (JSONException ex) {
                 // if key does not exist - should not happen
                 throw new RuntimeException("Non existent key - should never happen!");
             }
         }
+    }
+    
+    /**
+     * sanitize all the JSONObject.NULL converting them to nulls.
+     * @param s
+     * @return
+     * @throws JSONException 
+     */
+    private Object safeGet(String s) throws JSONException {
+	if(s == null) return null;
+	Object obj = jsonObject.get(s);
+	if(JSONObject.NULL.equals(obj)) {
+	    return null;
+	} else {
+	    return obj;
+	}
     }
 
     @Override
