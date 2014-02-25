@@ -183,10 +183,10 @@ Versions:
 * 1.1.8 (2014/01/22): Rewritten handling of numbers, so their parsing from string is delayed to 
                       deserialization time. Fixes #39, #45, #34, #29, #26, #22, #13
 * 1.1.9.1 (2014/02/02) fixed some bugs
-* next release	    : fixed issue with { field = null }  #50,
-		      support for array records,
-		      fixed handling of null in arrays #54,
-		      refactored Timestamp Handling
+* 1.1.9.2 (2014/02/25)	fixed issue with { field = null }  #50,
+		      	support for array records,
+		      	fixed handling of null in arrays #54,
+		      	refactored Timestamp Handling
 
 
 
