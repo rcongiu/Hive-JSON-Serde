@@ -20,8 +20,27 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	<cdh.version>0.8.1-cdh4.0.1</cdh.version>
     </properties>
+
+    <profiles>
+	<profile>
+	   <id>cdh4</id>
+	   <activation>
+              <activeByDefault>true</activeByDefault>
+           </activation>
+	   <properties>
+              <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+              <cdh.version>0.8.1-cdh4.0.1</cdh.version>
+           </properties>
+	</profile>
+	<profile>
+	   <id>cdh5</id>
+	   <properties>
+              <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+ 	      <cdh.version>0.12.0-cdh5.0.0-beta-2</cdh.version>
+           </properties>
+	</profile>
+    </profiles>
 
 
     <build>
