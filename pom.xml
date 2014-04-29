@@ -9,100 +9,107 @@
 
     <name>openx-json-serde</name>
     <url>https://github.com/rcongiu/Hive-JSON-Serde</url>
-     <scm>
-      <!-- Replace the connection below with your project connection -->
-      <connection>scm:git:git@github.com:rcongiu/Hive-JSON-Serde.git</connection>
-      <developerConnection>scm:git:git@github.com:rcongiu/Hive-JSON-Serde.git</developerConnection>
-      <url>scm:git:git@github.com:rcongiu/Hive-JSON-Serde.git</url>
+    <scm>
+	<!-- Replace the connection below with your project connection -->
+	<connection>scm:git:git@github.com:rcongiu/Hive-JSON-Serde.git</connection>
+	<developerConnection>scm:git:git@github.com:rcongiu/Hive-JSON-Serde.git</developerConnection>
+	<url>scm:git:git@github.com:rcongiu/Hive-JSON-Serde.git</url>
      
-      <tag>HEAD</tag>
-  </scm>
+	<tag>HEAD</tag>
+    </scm>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <profiles>
 	<profile>
-	   <id>cdh4</id>
-	   <activation>
-              <activeByDefault>true</activeByDefault>
-           </activation>
-	   <properties>
-              <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-              <cdh.version>0.8.1-cdh4.0.1</cdh.version>
-           </properties>
+	    <id>cdh4</id>
+	    <activation>
+		<activeByDefault>true</activeByDefault>
+	    </activation>
+	    <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<cdh.version>4.6.0</cdh.version>
+		<cdh.hive.version>0.10.0-cdh${cdh.version}</cdh.hive.version>
+		<cdh.hadoop.version>2.0.0-cdh${cdh.version}</cdh.hadoop.version>
+		<cdh.shim>cdh4</cdh.shim>
+	    </properties>
 	</profile>
 	<profile>
-	   <id>cdh5</id>
-	   <properties>
-              <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
- 	      <cdh.version>0.12.0-cdh5.0.0-beta-2</cdh.version>
-           </properties>
+	    <id>cdh5</id>
+	    <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<cdh.version>0.12.0-cdh5.0.0-beta-2</cdh.version>
+		<cdh.shim>cdh4</cdh.shim>
+	    </properties>
 	</profile>
     </profiles>
 
 
-    <build>
-	 <!-- wagon-ssh-external extension is necessary for deploying with scpexe -->
-    	<extensions>
-      		<extension>
-        		<groupId>org.apache.maven.wagon</groupId>
-        		<artifactId>wagon-ssh-external</artifactId>
-        		<version>2.2</version>
-      		</extension>
-    	</extensions>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
+    <build>	
+	<!-- wagon-ssh-external extension is necessary for deploying with scpexe -->
+	<extensions>
+	    <extension>
+		<groupId>org.apache.maven.wagon</groupId>
+		<artifactId>wagon-ssh-external</artifactId>
+		<version>2.2</version>
+	    </extension>
+	</extensions>
+	<plugins>
 	    <plugin>
-        	<groupId>org.apache.maven.plugins</groupId>
-        	<artifactId>maven-release-plugin</artifactId>
-        	<version>2.4</version>
-      	    </plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-compiler-plugin</artifactId>
+		<version>3.1</version>
+		<configuration>
+		    <source>1.6</source>
+		    <target>1.6</target>
+		</configuration>
+	    </plugin>
+	    
 	    <plugin>
-               <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-jgitflow-plugin</artifactId>
-                <version>1.0-alpha20</version>
-                <configuration>
-                    <allowSnapshots>false</allowSnapshots>
-                    <enableFeatureVersions>false</enableFeatureVersions>
-                    <pushFeatures>false</pushFeatures>
-                    <pushReleases>true</pushReleases>
-                    <allowUntracked>true</allowUntracked>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-release-plugin</artifactId>
+		<version>2.4</version>
+	    </plugin>
+	    <plugin>
+		<groupId>com.atlassian.maven.plugins</groupId>
+		<artifactId>maven-jgitflow-plugin</artifactId>
+		<version>1.0-alpha20</version>
+		<configuration>
+		    <allowSnapshots>false</allowSnapshots>
+		    <enableFeatureVersions>false</enableFeatureVersions>
+		    <pushFeatures>false</pushFeatures>
+		    <pushReleases>true</pushReleases>
+		    <allowUntracked>true</allowUntracked>
 		    <noDeploy>true</noDeploy>
-                </configuration>
-           </plugin>
+		</configuration>
+	    </plugin>
 
-              <!-- Assembly Plugin                              -->
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <archive>
-                        <manifest>
+	    <!-- Assembly Plugin                              -->
+	    <plugin>
+		<artifactId>maven-assembly-plugin</artifactId>
+		<configuration>
+		    <descriptorRefs>
+			<descriptorRef>jar-with-dependencies</descriptorRef>
+		    </descriptorRefs>
+		    <archive>
+			<manifest>
                            
-                        </manifest>
-                    </archive>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
+			</manifest>
+		    </archive>
+		</configuration>
+		<executions>
+		    <execution>
+			<phase>package</phase>
+			<goals>
+			    <goal>single</goal>
+			</goals>
+		    </execution>
+		</executions>
+	    </plugin>
+	
+	</plugins>
     </build>
     <repositories>
 	<repository>
@@ -112,30 +119,31 @@
 	</repository>
     </repositories>
     <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.10</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.hive</groupId>
-            <artifactId>hive-serde</artifactId>
-            <version>${cdh.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.hive</groupId>
-            <artifactId>hive-exec</artifactId>
-            <version>${cdh.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-core</artifactId>
-            <version>0.20.2</version>
-            <scope>provided</scope>
-        </dependency>
+	<dependency>
+	    <groupId>junit</groupId>
+	    <artifactId>junit</artifactId>
+	    <version>4.10</version>
+	    <scope>test</scope>
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.hive</groupId>
+	    <artifactId>hive-serde</artifactId>
+	    <version>${cdh.hive.version}</version>
+	    <scope>provided</scope>
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.hive</groupId>
+	    <artifactId>hive-exec</artifactId>
+	    <version>${cdh.hive.version}</version>
+	    <scope>provided</scope>
+	</dependency>
+
+	<dependency>
+	    <groupId>org.apache.hadoop</groupId>
+	    <artifactId>hadoop-common</artifactId>
+	    <version>${cdh.hadoop.version}</version>
+	    <scope>provided</scope>
+	</dependency>
     </dependencies>
 </project>
 
