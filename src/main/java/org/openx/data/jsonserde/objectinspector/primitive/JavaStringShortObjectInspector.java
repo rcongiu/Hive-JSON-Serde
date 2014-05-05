@@ -41,6 +41,11 @@ public class JavaStringShortObjectInspector
     }
 
     @Override
+    public Object getPrimitiveJavaObject(Object o) {
+        return o == null ? null : get(o);
+    }
+
+    @Override
     public short get(Object o) {
         
         if(o instanceof String) {
