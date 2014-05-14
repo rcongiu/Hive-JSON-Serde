@@ -13,8 +13,8 @@
 package org.openx.data.jsonserde.objectinspector.primitive;
 
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableByteObjectInspector;
+import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
 import org.apache.hadoop.io.ByteWritable;
 
 /**
@@ -25,7 +25,7 @@ public class JavaStringByteObjectInspector   extends AbstractPrimitiveJavaObject
         implements SettableByteObjectInspector {
 
     public JavaStringByteObjectInspector() {
-        super(PrimitiveObjectInspectorUtils.byteTypeEntry);
+        super(TypeInfoFactory.byteTypeInfo);
     }
 
     @Override

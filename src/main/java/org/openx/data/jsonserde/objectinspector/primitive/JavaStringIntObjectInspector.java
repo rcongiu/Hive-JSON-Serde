@@ -13,8 +13,8 @@
 package org.openx.data.jsonserde.objectinspector.primitive;
 
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableIntObjectInspector;
+import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
 import org.apache.hadoop.io.IntWritable;
 
 /**
@@ -26,7 +26,7 @@ public class JavaStringIntObjectInspector
         implements SettableIntObjectInspector {
 
     public JavaStringIntObjectInspector() {
-        super(PrimitiveObjectInspectorUtils.intTypeEntry);
+        super(TypeInfoFactory.intTypeInfo);
     }
 
     @Override
