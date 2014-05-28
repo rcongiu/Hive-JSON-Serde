@@ -12,8 +12,6 @@
 
 package org.openx.data.jsonserde.objectinspector.primitive;
 
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableByteObjectInspector;
 import org.apache.hadoop.io.ByteWritable;
 
@@ -21,12 +19,9 @@ import org.apache.hadoop.io.ByteWritable;
  *
  * @author rcongiu
  */
-public class JavaStringByteObjectInspector   extends AbstractPrimitiveJavaObjectInspector
+public class JavaStringByteObjectInspector  
         implements SettableByteObjectInspector {
 
-    public JavaStringByteObjectInspector() {
-        super(PrimitiveObjectInspectorUtils.stringTypeEntry);
-    }
 
     @Override
     public Object getPrimitiveWritableObject(Object o) {
@@ -57,4 +52,45 @@ public class JavaStringByteObjectInspector   extends AbstractPrimitiveJavaObject
     public Object set(Object o, byte value) {
         return Byte.valueOf(value);
     }
+
+    @Override
+    public PrimitiveCategory getPrimitiveCategory() {
+	return PrimitiveCategory.BYTE;
+    }
+
+    @Override
+    public Class<?> getPrimitiveWritableClass() {
+	return ByteWritable.class;
+    }
+
+    @Override
+    public Class<?> getJavaPrimitiveClass() {
+	
+    }
+
+    @Override
+    public Object getPrimitiveJavaObject(Object o) {
+	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object copyObject(Object o) {
+	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean preferWritable() {
+	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getTypeName() {
+	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Category getCategory() {
+	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
