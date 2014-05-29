@@ -13,7 +13,7 @@
     <artifactId>json-serde-main</artifactId>
     <packaging>jar</packaging>
 
-    <name>openx-json-serde</name>
+    <name>json-serde-main</name>
 
 
     <build>	
@@ -80,6 +80,14 @@
 	</dependency>
 
 	<dependency>
+                <groupId>org.openx.data</groupId>
+                <artifactId>json</artifactId>
+                <version>${project.version}</version>
+                <scope>compile</scope>
+        </dependency>
+
+
+	<dependency>
 	    <groupId>org.apache.hive</groupId>
 	    <artifactId>hive-serde</artifactId>
 	    <version>${cdh.hive.version}</version>
@@ -98,6 +106,7 @@
 	    <version>${cdh.hadoop.version}</version>
 	    <scope>provided</scope>
 	</dependency>
+
     </dependencies>
 </project>
 
