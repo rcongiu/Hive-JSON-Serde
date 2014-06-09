@@ -18,13 +18,11 @@ public class JavaStringJsonObjectInspector extends AbstractPrimitiveJavaObjectIn
 
     @Override
     public Text getPrimitiveWritableObject(Object o) {
-        logger.info("primitive writable object" + o);
         return o == null ? null : new Text(((String) o.toString()));
     }
 
     @Override
     public String getPrimitiveJavaObject(Object o) {
-        logger.info("primitive Java object" + o);
         return o == null ? null : o.toString();
     }
 
