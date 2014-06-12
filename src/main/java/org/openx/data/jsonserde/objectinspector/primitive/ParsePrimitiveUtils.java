@@ -6,7 +6,6 @@
 package org.openx.data.jsonserde.objectinspector.primitive;
 
 import java.sql.Timestamp;
-import org.apache.hadoop.hive.serde2.io.TimestampWritable;
 
 /**
  *
@@ -52,7 +51,11 @@ public class ParsePrimitiveUtils {
 
     public static Timestamp parseTimestamp(String s) {
         Timestamp value;
-        if (s.indexOf(':') > 0) {
+        //DateISO8601 Format Acceptance
+        if(s.contains("T")) {
+            value = new Timestamp(javax.xml.bind.DatatypeConverter.parseDateTime(s).getTimeInMillis());
+        }
+        else if (s.indexOf(':') > 0) {
             value = Timestamp.valueOf(s);
         } else if (s.indexOf('.') >= 0) {
             // it's a float
