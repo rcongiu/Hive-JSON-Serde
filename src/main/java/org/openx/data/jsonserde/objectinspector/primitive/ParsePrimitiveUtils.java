@@ -52,12 +52,18 @@ public class ParsePrimitiveUtils {
     public static Timestamp parseTimestamp(String s) {
         Timestamp value;
         //DateISO8601 Format Acceptance
+        String datePattern = "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]";
+
         if(s.contains("T")) {
             value = new Timestamp(javax.xml.bind.DatatypeConverter.parseDateTime(s).getTimeInMillis());
         }
         else if (s.indexOf(':') > 0) {
             value = Timestamp.valueOf(s);
-        } else if (s.indexOf('.') >= 0) {
+        }
+        else if(s.matches(datePattern)){
+            value = new Timestamp(javax.xml.bind.DatatypeConverter.parseDate(s).getTimeInMillis());
+        }
+        else if (s.indexOf('.') >= 0) {
             // it's a float
             value = new Timestamp(
                     (long) ((double) (Double.parseDouble(s) * 1000)));
