@@ -12,6 +12,8 @@
 
 package org.openx.data.jsonserde.objectinspector.primitive;
 
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableByteObjectInspector;
 import org.apache.hadoop.io.ByteWritable;
 
@@ -19,10 +21,13 @@ import org.apache.hadoop.io.ByteWritable;
  *
  * @author rcongiu
  */
-public class JavaStringByteObjectInspector  
+public class JavaStringByteObjectInspector extends AbstractPrimitiveJavaObjectInspector
         implements SettableByteObjectInspector {
 
-
+    public JavaStringByteObjectInspector() {
+        super(PrimitiveObjectInspectorUtils.byteTypeEntry);
+    }
+    
     @Override
     public Object getPrimitiveWritableObject(Object o) {
         if(o == null) return null;
@@ -30,7 +35,7 @@ public class JavaStringByteObjectInspector
         if(o instanceof String) {
            return new ByteWritable(ParsePrimitiveUtils.parseByte((String)o)); 
         } else {
-           return new ByteWritable(((Byte) o).byteValue());
+           return new ByteWritable((Byte) o);
         }
     }
 
@@ -39,18 +44,23 @@ public class JavaStringByteObjectInspector
         if(o instanceof String) {
            return ParsePrimitiveUtils.parseByte((String)o); 
         } else {
-           return ((Byte) o).byteValue();
+           return ((Byte) o);
         }
     }
 
     @Override
     public Object create(byte value) {
-        return Byte.valueOf(value);
+        return (value);
     }
 
     @Override
     public Object set(Object o, byte value) {
-        return Byte.valueOf(value);
+        if(o instanceof ByteWritable) {
+            ((ByteWritable)o).set(value);
+        } else {
+            throw new RuntimeException("Can't set a " + o.getClass().getName());
+        }
+        return value;
     }
 
     @Override
@@ -58,39 +68,5 @@ public class JavaStringByteObjectInspector
 	return PrimitiveCategory.BYTE;
     }
 
-    @Override
-    public Class<?> getPrimitiveWritableClass() {
-	return ByteWritable.class;
-    }
-
-    @Override
-    public Class<?> getJavaPrimitiveClass() {
-	
-    }
-
-    @Override
-    public Object getPrimitiveJavaObject(Object o) {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object copyObject(Object o) {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean preferWritable() {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String getTypeName() {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Category getCategory() {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
 }

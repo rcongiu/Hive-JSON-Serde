@@ -35,7 +35,7 @@ public class JavaStringDoubleObjectInspector extends AbstractPrimitiveJavaObject
         if(o instanceof String) {
            return new DoubleWritable(Double.parseDouble((String)o)); 
         } else {
-          return new DoubleWritable(((Double) o).doubleValue());
+          return new DoubleWritable(((Double) o));
         }
     }
 
@@ -45,18 +45,22 @@ public class JavaStringDoubleObjectInspector extends AbstractPrimitiveJavaObject
         if(o instanceof String) {
            return Double.parseDouble((String)o); 
         } else {
-          return (((Double) o).doubleValue());
+          return (((Double) o));
         }
     }
 
     @Override
     public Object create(double value) {
-        return Double.valueOf(value);
+        return value;
     }
 
     @Override
     public Object set(Object o, double value) {
-        return Double.valueOf(value);
+        if(o instanceof DoubleWritable) {
+        return value;
+        } else { 
+            throw new RuntimeException("Can't set a " + o.getClass().getName());
+        }
     }
     
 }
