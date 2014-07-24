@@ -10,11 +10,11 @@
  * limitations under the License. See accompanying LICENSE file.        *
  *======================================================================*/
 
-package org.openx.data.jsonserde.objectinspector;
+package org.openx.data.jsonserde.objectinspector.primitive;
 
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableStringObjectInspector;
+import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
 import org.apache.hadoop.io.Text;
 
 /**
@@ -27,7 +27,7 @@ public class JsonStringJavaObjectInspector extends
     SettableStringObjectInspector {
 
   JsonStringJavaObjectInspector() {
-    super(PrimitiveObjectInspectorUtils.stringTypeEntry);
+    super(TypeInfoFactory.stringTypeInfo);
   }
 
   @Override

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.openx.data</groupId>
-    <artifactId>json-serde</artifactId>
+    <artifactId>json-serde-parent</artifactId>
     <version>1.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -72,7 +72,7 @@
 	<module>json</module>
 	<module>json-serde-cdh4-shim</module>
 	<module>json-serde-cdh5-shim</module>
-	<module>json-serde-main</module>
+	<module>json-serde</module>
     </modules>
 
 

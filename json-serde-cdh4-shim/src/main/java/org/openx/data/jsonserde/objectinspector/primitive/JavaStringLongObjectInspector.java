@@ -46,17 +46,17 @@ public class JavaStringLongObjectInspector
         if(o instanceof String) {
            return ParsePrimitiveUtils.parseLong((String)o); 
         } else {
-          return (((Long) o).longValue());
+          return ((Long) o);
         }
     }
 
     @Override
     public Object create(long value) {
-        return Long.valueOf(value);
+        return value;
     }
 
     @Override
     public Object set(Object o, long value) {
-        return Long.valueOf(value);
+        return value;
     }
 }

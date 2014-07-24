@@ -56,11 +56,7 @@ public class JavaStringDoubleObjectInspector extends AbstractPrimitiveJavaObject
 
     @Override
     public Object set(Object o, double value) {
-        if(o instanceof DoubleWritable) {
         return value;
-        } else { 
-            throw new RuntimeException("Can't set a " + o.getClass().getName());
-        }
     }
     
 }

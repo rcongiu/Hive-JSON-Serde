@@ -34,9 +34,9 @@ public class JavaStringShortObjectInspector
         if(o == null) return null;
         
         if(o instanceof String) {
-           return new ShortWritable(ParsePrimitiveUtils.parseShort((String)o)); 
+          return new ShortWritable(ParsePrimitiveUtils.parseShort((String)o)); 
         } else {
-          return new ShortWritable(((Short) o).shortValue());
+          return new ShortWritable((Short) o);
         }
     }
 
@@ -46,17 +46,17 @@ public class JavaStringShortObjectInspector
         if(o instanceof String) {
            return ParsePrimitiveUtils.parseShort((String)o); 
         } else {
-          return (((Short) o).shortValue());
+          return ((Short) o);
         }
     }
 
     @Override
     public Object create(short value) {
-        return Short.valueOf(value);
+        return value;
     }
 
     @Override
     public Object set(Object o, short value) {
-        return Short.valueOf(value);
+        return value;
     }
 }

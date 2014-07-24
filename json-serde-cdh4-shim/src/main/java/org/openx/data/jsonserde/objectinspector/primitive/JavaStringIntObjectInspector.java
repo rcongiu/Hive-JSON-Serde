@@ -36,7 +36,7 @@ public class JavaStringIntObjectInspector
         if(o instanceof String) {
            return new IntWritable(ParsePrimitiveUtils.parseInt((String)o)); 
         } else {
-           return new IntWritable(((Integer) o).intValue());
+           return new IntWritable((Integer) o);
         }
     }
 
@@ -45,17 +45,17 @@ public class JavaStringIntObjectInspector
         if(o instanceof String) {
            return ParsePrimitiveUtils.parseInt((String)o); 
         } else {
-           return ((Integer) o).intValue();
+           return ((Integer) o);
         }
     }
 
     @Override
     public Object create(int value) {
-        return Integer.valueOf(value);
+        return value;
     }
 
     @Override
     public Object set(Object o, int value) {
-        return Integer.valueOf(value);
+        return value;
     }
 }

@@ -55,18 +55,10 @@ public class JavaStringByteObjectInspector extends AbstractPrimitiveJavaObjectIn
 
     @Override
     public Object set(Object o, byte value) {
-        if(o instanceof ByteWritable) {
-            ((ByteWritable)o).set(value);
-        } else {
-            throw new RuntimeException("Can't set a " + o.getClass().getName());
-        }
         return value;
     }
 
-    @Override
-    public PrimitiveCategory getPrimitiveCategory() {
-	return PrimitiveCategory.BYTE;
-    }
+ 
 
 
 }
