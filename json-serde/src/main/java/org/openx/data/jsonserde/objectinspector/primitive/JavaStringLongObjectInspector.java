@@ -14,7 +14,6 @@ package org.openx.data.jsonserde.objectinspector.primitive;
 
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableLongObjectInspector;
-import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
 import org.apache.hadoop.io.LongWritable;
 
 /**
@@ -26,7 +25,7 @@ public class JavaStringLongObjectInspector
         implements SettableLongObjectInspector {
 
     public JavaStringLongObjectInspector() {
-        super(TypeInfoFactory.longTypeInfo);
+        super(TypeEntryShim.longType);
     }
 
     @Override
@@ -46,17 +45,17 @@ public class JavaStringLongObjectInspector
         if(o instanceof String) {
            return ParsePrimitiveUtils.parseLong((String)o); 
         } else {
-          return (((Long) o).longValue());
+          return ((Long) o);
         }
     }
 
     @Override
     public Object create(long value) {
-        return Long.valueOf(value);
+        return value;
     }
 
     @Override
     public Object set(Object o, long value) {
-        return Long.valueOf(value);
+        return value;
     }
 }

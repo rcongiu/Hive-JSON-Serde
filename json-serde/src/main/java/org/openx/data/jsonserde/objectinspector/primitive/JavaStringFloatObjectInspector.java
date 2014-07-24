@@ -13,7 +13,6 @@
 package org.openx.data.jsonserde.objectinspector.primitive;
 
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableFloatObjectInspector;
 import org.apache.hadoop.io.FloatWritable;
 
@@ -25,7 +24,7 @@ public class JavaStringFloatObjectInspector extends AbstractPrimitiveJavaObjectI
         implements SettableFloatObjectInspector {
 
     public JavaStringFloatObjectInspector() {
-        super(PrimitiveObjectInspectorUtils.floatTypeEntry);
+        super(TypeEntryShim.floatType);
     }
 
     @Override

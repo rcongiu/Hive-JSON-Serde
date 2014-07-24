@@ -13,50 +13,48 @@
 package org.openx.data.jsonserde.objectinspector.primitive;
 
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableFloatObjectInspector;
-import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
-import org.apache.hadoop.io.FloatWritable;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableByteObjectInspector;
+import org.apache.hadoop.io.ByteWritable;
 
 /**
  *
  * @author rcongiu
  */
-public class JavaStringFloatObjectInspector extends AbstractPrimitiveJavaObjectInspector
-        implements SettableFloatObjectInspector {
+public  class JavaStringByteObjectInspector 
+    extends AbstractPrimitiveJavaObjectInspector
+        implements SettableByteObjectInspector {
 
-    public JavaStringFloatObjectInspector() {
-        super(TypeInfoFactory.floatTypeInfo);
+    public  JavaStringByteObjectInspector() {
+        super(TypeEntryShim.byteType);
     }
-
+    
     @Override
     public Object getPrimitiveWritableObject(Object o) {
         if(o == null) return null;
         
         if(o instanceof String) {
-           return new FloatWritable(Float.parseFloat((String)o)); 
+           return new ByteWritable(ParsePrimitiveUtils.parseByte((String)o)); 
         } else {
-          return new FloatWritable(((Float) o).floatValue());
+           return new ByteWritable((Byte) o);
         }
     }
 
     @Override
-    public float get(Object o) {
-        
+    public byte get(Object o) {
         if(o instanceof String) {
-           return Float.parseFloat((String)o); 
+           return ParsePrimitiveUtils.parseByte((String)o); 
         } else {
-          return (((Float) o).floatValue());
+           return ((Byte) o);
         }
     }
 
     @Override
-    public Object create(float value) {
-        return Float.valueOf(value);
+    public Object create(byte value) {
+        return (value);
     }
 
     @Override
-    public Object set(Object o, float value) {
-        return Float.valueOf(value);
+    public Object set(Object o, byte value) {
+        return value;
     }
-    
 }

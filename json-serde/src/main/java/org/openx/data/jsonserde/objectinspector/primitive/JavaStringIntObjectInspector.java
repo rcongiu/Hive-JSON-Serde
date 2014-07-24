@@ -13,52 +13,48 @@
 package org.openx.data.jsonserde.objectinspector.primitive;
 
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableByteObjectInspector;
-import org.apache.hadoop.io.ByteWritable;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableIntObjectInspector;
+import org.apache.hadoop.io.IntWritable;
 
 /**
  *
  * @author rcongiu
  */
-public class JavaStringByteObjectInspector extends AbstractPrimitiveJavaObjectInspector
-        implements SettableByteObjectInspector {
+public class JavaStringIntObjectInspector 
+    extends AbstractPrimitiveJavaObjectInspector
+        implements SettableIntObjectInspector {
 
-    public JavaStringByteObjectInspector() {
-        super(PrimitiveObjectInspectorUtils.byteTypeEntry);
+    public JavaStringIntObjectInspector() {
+        super(TypeEntryShim.intType);
     }
-    
+
     @Override
     public Object getPrimitiveWritableObject(Object o) {
         if(o == null) return null;
         
         if(o instanceof String) {
-           return new ByteWritable(ParsePrimitiveUtils.parseByte((String)o)); 
+           return new IntWritable(ParsePrimitiveUtils.parseInt((String)o)); 
         } else {
-           return new ByteWritable((Byte) o);
+           return new IntWritable((Integer) o);
         }
     }
 
     @Override
-    public byte get(Object o) {
+    public int get(Object o) {
         if(o instanceof String) {
-           return ParsePrimitiveUtils.parseByte((String)o); 
+           return ParsePrimitiveUtils.parseInt((String)o); 
         } else {
-           return ((Byte) o);
+           return ((Integer) o);
         }
     }
 
     @Override
-    public Object create(byte value) {
-        return (value);
-    }
-
-    @Override
-    public Object set(Object o, byte value) {
+    public Object create(int value) {
         return value;
     }
 
- 
-
-
+    @Override
+    public Object set(Object o, int value) {
+        return value;
+    }
 }
