@@ -13,19 +13,19 @@
 package org.openx.data.jsonserde.objectinspector.primitive;
 
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableByteObjectInspector;
-import org.apache.hadoop.io.ByteWritable;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableLongObjectInspector;
+import org.apache.hadoop.io.LongWritable;
 
 /**
  *
  * @author rcongiu
  */
-public class JavaStringByteObjectInspector   extends AbstractPrimitiveJavaObjectInspector
-        implements SettableByteObjectInspector {
+public class JavaStringLongObjectInspector
+        extends AbstractPrimitiveJavaObjectInspector
+        implements SettableLongObjectInspector {
 
-    public JavaStringByteObjectInspector() {
-        super(PrimitiveObjectInspectorUtils.byteTypeEntry);
+    public JavaStringLongObjectInspector() {
+        super(TypeEntryShim.longType);
     }
 
     @Override
@@ -33,28 +33,29 @@ public class JavaStringByteObjectInspector   extends AbstractPrimitiveJavaObject
         if(o == null) return null;
         
         if(o instanceof String) {
-           return new ByteWritable(ParsePrimitiveUtils.parseByte((String)o)); 
+           return new LongWritable(ParsePrimitiveUtils.parseLong((String)o)); 
         } else {
-           return new ByteWritable(((Byte) o).byteValue());
+          return new LongWritable(((Long) o).longValue());
         }
     }
 
     @Override
-    public byte get(Object o) {
+    public long get(Object o) {
+        
         if(o instanceof String) {
-           return ParsePrimitiveUtils.parseByte((String)o); 
+           return ParsePrimitiveUtils.parseLong((String)o); 
         } else {
-           return ((Byte) o).byteValue();
+          return ((Long) o);
         }
     }
 
     @Override
-    public Object create(byte value) {
-        return Byte.valueOf(value);
+    public Object create(long value) {
+        return value;
     }
 
     @Override
-    public Object set(Object o, byte value) {
-        return Byte.valueOf(value);
+    public Object set(Object o, long value) {
+        return value;
     }
 }

@@ -13,49 +13,48 @@
 package org.openx.data.jsonserde.objectinspector.primitive;
 
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableIntObjectInspector;
-import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableByteObjectInspector;
+import org.apache.hadoop.io.ByteWritable;
 
 /**
  *
  * @author rcongiu
  */
-public class JavaStringIntObjectInspector 
+public  class JavaStringByteObjectInspector 
     extends AbstractPrimitiveJavaObjectInspector
-        implements SettableIntObjectInspector {
+        implements SettableByteObjectInspector {
 
-    public JavaStringIntObjectInspector() {
-        super(PrimitiveObjectInspectorUtils.intTypeEntry);
+    public  JavaStringByteObjectInspector() {
+        super(TypeEntryShim.byteType);
     }
-
+    
     @Override
     public Object getPrimitiveWritableObject(Object o) {
         if(o == null) return null;
         
         if(o instanceof String) {
-           return new IntWritable(ParsePrimitiveUtils.parseInt((String)o)); 
+           return new ByteWritable(ParsePrimitiveUtils.parseByte((String)o)); 
         } else {
-           return new IntWritable(((Integer) o).intValue());
+           return new ByteWritable((Byte) o);
         }
     }
 
     @Override
-    public int get(Object o) {
+    public byte get(Object o) {
         if(o instanceof String) {
-           return ParsePrimitiveUtils.parseInt((String)o); 
+           return ParsePrimitiveUtils.parseByte((String)o); 
         } else {
-           return ((Integer) o).intValue();
+           return ((Byte) o);
         }
     }
 
     @Override
-    public Object create(int value) {
-        return Integer.valueOf(value);
+    public Object create(byte value) {
+        return (value);
     }
 
     @Override
-    public Object set(Object o, int value) {
-        return Integer.valueOf(value);
+    public Object set(Object o, byte value) {
+        return value;
     }
 }

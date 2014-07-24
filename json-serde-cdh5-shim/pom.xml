@@ -1,0 +1,59 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+	<groupId>org.openx.data</groupId>
+	<artifactId>json-serde-parent</artifactId>
+	<relativePath>../pom.xml</relativePath>
+	<version>1.2</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.openx.data</groupId>
+    <artifactId>json-serde-cdh5-shim</artifactId>
+    <packaging>jar</packaging>
+
+    <name>json-cdh5-shim</name>
+
+<build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+    <dependencies>
+	 <dependency>
+                <groupId>org.openx.data</groupId>
+                <artifactId>json</artifactId>
+                <version>${project.version}</version>
+                <scope>compile</scope>
+        </dependency>
+
+
+	<dependency>
+	    <groupId>org.apache.hive</groupId>
+	    <artifactId>hive-serde</artifactId>
+	    <version>${cdh5.hive.version}</version>
+	    <scope>provided</scope>
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.hive</groupId>
+	    <artifactId>hive-exec</artifactId>
+	    <version>${cdh5.hive.version}</version>
+	    <scope>provided</scope>
+	</dependency>
+
+	<dependency>
+	    <groupId>org.apache.hadoop</groupId>
+	    <artifactId>hadoop-common</artifactId>
+	    <version>${cdh5.hadoop.version}</version>
+	    <scope>provided</scope>
+	</dependency>
+    </dependencies>
+</project>
+
+
+

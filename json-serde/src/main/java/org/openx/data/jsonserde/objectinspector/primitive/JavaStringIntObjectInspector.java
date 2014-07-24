@@ -13,19 +13,19 @@
 package org.openx.data.jsonserde.objectinspector.primitive;
 
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableFloatObjectInspector;
-import org.apache.hadoop.io.FloatWritable;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableIntObjectInspector;
+import org.apache.hadoop.io.IntWritable;
 
 /**
  *
  * @author rcongiu
  */
-public class JavaStringFloatObjectInspector extends AbstractPrimitiveJavaObjectInspector
-        implements SettableFloatObjectInspector {
+public class JavaStringIntObjectInspector 
+    extends AbstractPrimitiveJavaObjectInspector
+        implements SettableIntObjectInspector {
 
-    public JavaStringFloatObjectInspector() {
-        super(PrimitiveObjectInspectorUtils.floatTypeEntry);
+    public JavaStringIntObjectInspector() {
+        super(TypeEntryShim.intType);
     }
 
     @Override
@@ -33,30 +33,28 @@ public class JavaStringFloatObjectInspector extends AbstractPrimitiveJavaObjectI
         if(o == null) return null;
         
         if(o instanceof String) {
-           return new FloatWritable(Float.parseFloat((String)o)); 
+           return new IntWritable(ParsePrimitiveUtils.parseInt((String)o)); 
         } else {
-          return new FloatWritable(((Float) o).floatValue());
+           return new IntWritable((Integer) o);
         }
     }
 
     @Override
-    public float get(Object o) {
-        
+    public int get(Object o) {
         if(o instanceof String) {
-           return Float.parseFloat((String)o); 
+           return ParsePrimitiveUtils.parseInt((String)o); 
         } else {
-          return (((Float) o).floatValue());
+           return ((Integer) o);
         }
     }
 
     @Override
-    public Object create(float value) {
-        return Float.valueOf(value);
+    public Object create(int value) {
+        return value;
     }
 
     @Override
-    public Object set(Object o, float value) {
-        return Float.valueOf(value);
+    public Object set(Object o, int value) {
+        return value;
     }
-    
 }

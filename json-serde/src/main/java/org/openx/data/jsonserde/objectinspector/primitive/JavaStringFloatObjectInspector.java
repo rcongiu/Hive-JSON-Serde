@@ -13,19 +13,18 @@
 package org.openx.data.jsonserde.objectinspector.primitive;
 
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableDoubleObjectInspector;
-import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableFloatObjectInspector;
+import org.apache.hadoop.io.FloatWritable;
 
 /**
  *
  * @author rcongiu
  */
-public class JavaStringDoubleObjectInspector extends AbstractPrimitiveJavaObjectInspector
-        implements SettableDoubleObjectInspector {
+public class JavaStringFloatObjectInspector extends AbstractPrimitiveJavaObjectInspector
+        implements SettableFloatObjectInspector {
 
-    public JavaStringDoubleObjectInspector() {
-        super(PrimitiveObjectInspectorUtils.doubleTypeEntry);
+    public JavaStringFloatObjectInspector() {
+        super(TypeEntryShim.floatType);
     }
 
     @Override
@@ -33,30 +32,29 @@ public class JavaStringDoubleObjectInspector extends AbstractPrimitiveJavaObject
         if(o == null) return null;
         
         if(o instanceof String) {
-           return new DoubleWritable(Double.parseDouble((String)o)); 
+          return new FloatWritable(Float.parseFloat((String)o)); 
         } else {
-          return new DoubleWritable(((Double) o).doubleValue());
+          return new FloatWritable((Float) o);
         }
     }
 
     @Override
-    public double get(Object o) {
-        
+    public float get(Object o) {  
         if(o instanceof String) {
-           return Double.parseDouble((String)o); 
+          return Float.parseFloat((String)o); 
         } else {
-          return (((Double) o).doubleValue());
+          return ((Float) o);
         }
     }
 
     @Override
-    public Object create(double value) {
-        return Double.valueOf(value);
+    public Object create(float value) {
+        return value;
     }
 
     @Override
-    public Object set(Object o, double value) {
-        return Double.valueOf(value);
+    public Object set(Object o, float value) {
+        return value;
     }
     
 }
