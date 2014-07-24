@@ -40,6 +40,11 @@ public class JavaStringDoubleObjectInspector extends AbstractPrimitiveJavaObject
     }
 
     @Override
+    public Object getPrimitiveJavaObject(Object o) {
+        return o == null ? null : get(o);
+    }
+
+    @Override
     public double get(Object o) {
         
         if(o instanceof String) {

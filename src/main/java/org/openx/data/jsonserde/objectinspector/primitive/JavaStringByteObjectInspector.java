@@ -40,6 +40,11 @@ public class JavaStringByteObjectInspector   extends AbstractPrimitiveJavaObject
     }
 
     @Override
+    public Object getPrimitiveJavaObject(Object o) {
+        return o == null ? null : get(o);
+    }
+
+    @Override
     public byte get(Object o) {
         if(o instanceof String) {
            return ParsePrimitiveUtils.parseByte((String)o); 

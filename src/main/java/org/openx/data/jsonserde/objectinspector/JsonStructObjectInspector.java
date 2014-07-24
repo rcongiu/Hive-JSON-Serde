@@ -127,6 +127,7 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
     List<Object> values = new ArrayList<Object>();
     @Override
     public List<Object> getStructFieldsDataAsList(Object o) {
+	if(o == null) return null;
         JSONObject jObj = (JSONObject) o;
         values.clear();
 
