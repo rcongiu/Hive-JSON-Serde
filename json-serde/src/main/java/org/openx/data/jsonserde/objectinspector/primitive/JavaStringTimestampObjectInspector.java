@@ -15,7 +15,6 @@ package org.openx.data.jsonserde.objectinspector.primitive;
 import java.sql.Timestamp;
 import org.apache.hadoop.hive.serde2.io.TimestampWritable;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableTimestampObjectInspector;
 
 /**
@@ -26,7 +25,7 @@ public class JavaStringTimestampObjectInspector extends AbstractPrimitiveJavaObj
     implements SettableTimestampObjectInspector {
     
     public JavaStringTimestampObjectInspector() {
-        super(PrimitiveObjectInspectorUtils.timestampTypeEntry);
+        super(TypeEntryShim.timestampType);
     }
 
     
@@ -71,7 +70,7 @@ public class JavaStringTimestampObjectInspector extends AbstractPrimitiveJavaObj
          if(o instanceof String) {
            return ParsePrimitiveUtils.parseTimestamp((String)o); 
         } else {
-          return ((Timestamp) o);
+           return ((Timestamp) o);
         }
     }
 
