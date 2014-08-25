@@ -51,7 +51,7 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
        */
     @Override
     public Object getStructFieldData(Object data, StructField fieldRef) {
-        if (data == null) {
+        if (JsonObjectInspectorUtils.checkObject(data) == null) {
             return null;
         }
         
@@ -86,7 +86,7 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
 
     
     public Object getStructFieldDataFromJsonObject(JSONObject data, StructField fieldRef ) {
-        if (data == null) {
+        if (JsonObjectInspectorUtils.checkObject(data) == null) {
             return null;
         }
         
@@ -127,7 +127,9 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
     List<Object> values = new ArrayList<Object>();
     @Override
     public List<Object> getStructFieldsDataAsList(Object o) {
-	if(o == null) return null;
+	if (JsonObjectInspectorUtils.checkObject(o) == null) {
+            return null;
+        }
         JSONObject jObj = (JSONObject) o;
         values.clear();
 

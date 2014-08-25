@@ -33,7 +33,7 @@ public class JsonMapObjectInspector extends StandardMapObjectInspector {
 
   @Override
   public Map<?, ?> getMap(Object data) {
-    if (checkObject(data) == null) {
+    if (JsonObjectInspectorUtils.checkObject(data) == null) {
       return null;
     }
     
@@ -42,22 +42,11 @@ public class JsonMapObjectInspector extends StandardMapObjectInspector {
     return new JSONObjectMapAdapter(jObj);
   }
 
-  protected Object checkObject(Object data) {
-      // just check for null first thing
-      if(data == null) return data;
-      
-      if(data instanceof String ||
-         data instanceof Text) {
-          String str = (data instanceof String ? (String)data : ((Text)data).toString() );
-          if(str.trim().isEmpty())
-            return null;
-      }
-      return data;
-  }
+
   
   @Override
   public int getMapSize(Object data) {
-    if (checkObject(data) == null) {
+    if (JsonObjectInspectorUtils.checkObject(data) == null) {
       return -1;
     }
      JSONObject jObj = (JSONObject) data;
@@ -66,7 +55,7 @@ public class JsonMapObjectInspector extends StandardMapObjectInspector {
 
   @Override
   public Object getMapValueElement(Object data, Object key) {
-    if (checkObject(data) == null) {
+    if (JsonObjectInspectorUtils.checkObject(data) == null) {
       return -1;
     }
     
