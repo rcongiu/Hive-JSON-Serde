@@ -15,6 +15,7 @@ package org.openx.data.jsonserde.objectinspector;
 import java.util.Map;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StandardMapObjectInspector;
+import org.apache.hadoop.io.Text;
 import org.openx.data.jsonserde.json.JSONException;
 import org.openx.data.jsonserde.json.JSONObject;
 
@@ -32,7 +33,7 @@ public class JsonMapObjectInspector extends StandardMapObjectInspector {
 
   @Override
   public Map<?, ?> getMap(Object data) {
-    if (data == null) {
+    if (JsonObjectInspectorUtils.checkObject(data) == null) {
       return null;
     }
     
@@ -41,9 +42,11 @@ public class JsonMapObjectInspector extends StandardMapObjectInspector {
     return new JSONObjectMapAdapter(jObj);
   }
 
+
+  
   @Override
   public int getMapSize(Object data) {
-    if (data == null) {
+    if (JsonObjectInspectorUtils.checkObject(data) == null) {
       return -1;
     }
      JSONObject jObj = (JSONObject) data;
@@ -52,7 +55,7 @@ public class JsonMapObjectInspector extends StandardMapObjectInspector {
 
   @Override
   public Object getMapValueElement(Object data, Object key) {
-    if (data == null) {
+    if (JsonObjectInspectorUtils.checkObject(data) == null) {
       return -1;
     }
     
