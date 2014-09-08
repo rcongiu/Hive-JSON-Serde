@@ -220,6 +220,7 @@ Versions:
 		      	support for array records,
 		      	fixed handling of null in arrays #54,
 		      	refactored Timestamp Handling
+* 1.3     (2014/09/08)  fixed #80, #82, #84, #85
 
 
 
