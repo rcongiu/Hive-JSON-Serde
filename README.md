@@ -31,7 +31,10 @@ To build for CDH5:
 mvn -Pcdh5 clean package
 ```
 
-
+the serde will be in 
+```
+json-serde/target/json-serde-VERSION-jar-with-dependencies.jar
+```
 
 
 

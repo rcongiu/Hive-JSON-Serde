@@ -425,7 +425,7 @@ public class JsonSerDe implements SerDe {
             String s = (String) o;
             
             if(s.startsWith(PFX) ) {
-                mps.put(s.substring(n), tbl.getProperty(s));
+                mps.put(s.substring(n), tbl.getProperty(s).toLowerCase());
             }
         }
         return mps;

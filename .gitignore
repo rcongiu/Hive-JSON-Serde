@@ -1,7 +1,4 @@
-**/target/**
-*.class
-
-# Package Files #
-*.jar
-*.war
-*.ear
+target/
+nb-configuration.xml
+.idea/
+*.iml
