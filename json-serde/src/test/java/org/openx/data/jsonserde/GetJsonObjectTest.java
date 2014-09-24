@@ -17,7 +17,7 @@ import org.openx.data.jsonserde.json.JSONObject;
 /**
  * Tests getJson Object
  *
- * 
+ *
  */
 public class GetJsonObjectTest {
     static JsonSerDe instance;
