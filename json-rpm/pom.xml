@@ -80,7 +80,7 @@
                                 <script>if hdfs dfs -ls ${rpmTargetDirectory}/ > /dev/null 2>&amp;1; then sudo -u hdfs hdfs dfs -rm -r ${rpmTargetDirectory} ; fi</script>
                             </preinstallScriptlet>
                             <postinstallScriptlet>
-                                <script>sudo -u hdfs hdfs dfs -mkdir -p ${rpmTargetDirectory} ; sudo -u hdfs hdfs dfs -chmod 777 ${rpmTargetDirectory} ; sudo -u hdfs hdfs dfs -copyFromLocal ${rpmTargetDirectory} ${rpmTargetDirectory}</script>
+                                <script>sudo -u hdfs hdfs dfs -mkdir -p ${rpmTargetDirectory} ; sudo -u hdfs hdfs dfs -chmod 777 ${rpmTargetDirectory} ; sudo -u hdfs hdfs dfs -copyFromLocal -f ${rpmTargetDirectory}/*.jar ${rpmTargetDirectory}</script>
                             </postinstallScriptlet>
                             <postremoveScriptlet>
                                 <script>if [ $1 -eq 0 ] ; then if hdfs dfs -ls ${rpmTargetDirectory} ; then sudo -u hdfs hdfs dfs -rm -r ${rpmTargetDirectory} ; fi ; fi</script>
