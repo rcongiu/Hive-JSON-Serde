@@ -48,6 +48,12 @@ public class JavaStringFloatObjectInspector extends AbstractPrimitiveJavaObjectI
     }
 
     @Override
+    public Object getPrimitiveJavaObject(Object o)
+    {
+        return get(o);
+    }
+
+    @Override
     public Object create(float value) {
         return value;
     }
