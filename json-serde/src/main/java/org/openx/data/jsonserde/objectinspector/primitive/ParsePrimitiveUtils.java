@@ -27,26 +27,38 @@ public class ParsePrimitiveUtils {
     }
 
     public static int parseInt(String s) {
-        if (isHex(s)) {
-            return Integer.parseInt(s.substring(2), 16);
-        } else {
-            return Integer.parseInt(s);
+        try {
+            if (isHex(s)) {
+                return Integer.parseInt(s.substring(2), 16);
+            } else {
+                return Integer.parseInt(s);
+            }
+        }catch (Exception e){
+            return 0;
         }
     }
 
     public static short parseShort(String s) {
-        if (isHex(s)) {
-            return Short.parseShort(s.substring(2), 16);
-        } else {
-            return Short.parseShort(s);
+        try {
+            if (isHex(s)) {
+                return Short.parseShort(s.substring(2), 16);
+            } else {
+                return Short.parseShort(s);
+            }
+        } catch (Exception e){
+            return 0;
         }
     }
 
     public static long parseLong(String s) {
-        if (isHex(s)) {
-            return Long.parseLong(s.substring(2), 16);
-        } else {
-            return Long.parseLong(s);
+        try {
+            if (isHex(s)) {
+                return Long.parseLong(s.substring(2), 16);
+            } else {
+                return Long.parseLong(s);
+            }
+        }catch (Exception e){
+            return 0;
         }
     }
 

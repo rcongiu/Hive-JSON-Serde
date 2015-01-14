@@ -40,10 +40,14 @@ public class JavaStringFloatObjectInspector extends AbstractPrimitiveJavaObjectI
 
     @Override
     public float get(Object o) {  
-        if(o instanceof String) {
-          return Float.parseFloat((String)o); 
-        } else {
-          return ((Float) o);
+        try {
+            if(o instanceof String) {
+                return Float.parseFloat((String)o);
+            } else {
+                return ((Float) o);
+            }
+        }catch (Exception e){
+            return 0.0f;
         }
     }
 

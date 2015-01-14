@@ -36,7 +36,7 @@ public class JsonStringJavaObjectInspector extends
 
   @Override
   public String getPrimitiveJavaObject(Object o) {
-    return (String) o.toString();
+    return o==null?null:(String) o.toString();
   }
 
   @Override

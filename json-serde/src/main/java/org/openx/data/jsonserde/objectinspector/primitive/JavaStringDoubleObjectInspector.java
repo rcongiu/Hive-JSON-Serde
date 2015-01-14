@@ -14,7 +14,7 @@ package org.openx.data.jsonserde.objectinspector.primitive;
 
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableDoubleObjectInspector;
-import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.hive.serde2.io.DoubleWritable;
 
 /**
  *
@@ -31,20 +31,28 @@ public class JavaStringDoubleObjectInspector extends AbstractPrimitiveJavaObject
     public Object getPrimitiveWritableObject(Object o) {
         if(o == null) return null;
         
-        if(o instanceof String) {
-           return new DoubleWritable(Double.parseDouble((String)o)); 
-        } else {
-          return new DoubleWritable(((Double) o));
+        try {
+            if(o instanceof String) {
+                return new DoubleWritable(Double.parseDouble((String)o));
+            } else {
+                return new DoubleWritable(((Double) o));
+            }
+        }catch (Exception e){
+            return new DoubleWritable(0.0);
         }
     }
 
     @Override
     public double get(Object o) {
         
-        if(o instanceof String) {
-           return Double.parseDouble((String)o); 
-        } else {
-          return (((Double) o));
+        try {
+            if(o instanceof String) {
+                return Double.parseDouble((String)o);
+            } else {
+                return (((Double) o));
+            }
+        }catch (Exception e){
+            return 0.0;
         }
     }
 
