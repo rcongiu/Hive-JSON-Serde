@@ -172,7 +172,7 @@ public class JSONObject {
         this();
         for (int i = 0; i < names.length; i += 1) {
             try {
-                putOnce(names[i].toLowerCase(), jo.opt(names[i]));
+                putOnce(names[i].toLowerCase().replaceAll("[\\.-]", "_").replaceAll("@", "0"), jo.opt(names[i]));
             } catch (JSONException ignore) {
             }
         }
