@@ -48,7 +48,7 @@ the serde will be in
 json-serde/target/json-serde-VERSION-jar-with-dependencies.jar
 ```
 
-Hive 1.0.0
+Hive 0.14.0 and 1.0.0
 -----------
 
 Compile with
