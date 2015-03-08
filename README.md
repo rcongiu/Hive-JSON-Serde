@@ -14,6 +14,18 @@ Features:
 * nested data structures are also supported. 
 * modular to support multiple versions of CDH
 
+BINARIES
+----------
+github used to allow uploading of binaries, but not anymore.
+Many people have been asking me for binaries in private by email
+so I decided to upload binaries here:
+
+http://www.congiu.net/hive-json-serde/
+
+so you don't need to compile your own. There are versions for
+CDH4 and CDH5.
+
+
 COMPILE
 ---------
 
@@ -209,6 +221,7 @@ Versions:
 		      	fixed handling of null in arrays #54,
 		      	refactored Timestamp Handling
 * 1.2     (2014/06)     Refactored to multimodule for CDH5 compatibility
+* 1.3     (2014/09/08)  fixed #80, #82, #84, #85
 
 
 

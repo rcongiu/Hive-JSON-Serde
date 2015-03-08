@@ -31,9 +31,9 @@ public class JavaStringLongObjectInspector
     @Override
     public Object getPrimitiveWritableObject(Object o) {
         if(o == null) return null;
-        
+
         if(o instanceof String) {
-           return new LongWritable(ParsePrimitiveUtils.parseLong((String)o)); 
+           return new LongWritable(ParsePrimitiveUtils.parseLong((String)o));
         } else {
           return new LongWritable(((Long) o).longValue());
         }
@@ -41,12 +41,18 @@ public class JavaStringLongObjectInspector
 
     @Override
     public long get(Object o) {
-        
+
         if(o instanceof String) {
-           return ParsePrimitiveUtils.parseLong((String)o); 
+           return ParsePrimitiveUtils.parseLong((String)o);
         } else {
           return ((Long) o);
         }
+    }
+
+    @Override
+    public Object getPrimitiveJavaObject(Object o)
+    {
+        return get(o);
     }
 
     @Override
