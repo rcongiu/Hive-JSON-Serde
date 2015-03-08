@@ -48,6 +48,15 @@ the serde will be in
 json-serde/target/json-serde-VERSION-jar-with-dependencies.jar
 ```
 
+Hive 1.0.0
+-----------
+
+Compile with
+```
+mvn -Pcdh5 -Dcdh5.hive.version=1.0.0 clean package
+```
+
+
 
 
 
