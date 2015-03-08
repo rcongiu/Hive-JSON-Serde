@@ -48,24 +48,23 @@ the serde will be in
 json-serde/target/json-serde-VERSION-jar-with-dependencies.jar
 ```
 
+
+```bash
+$ mvn package
+
+# If you want to compile the serde against a different
+# version of the cloudera libs, use -D:
+$ mvn -Dcdh.version=0.9.0-cdh3u4c-SNAPSHOT package
+```
+
+
+
 Hive 0.14.0 and 1.0.0
 -----------
 
 Compile with
 ```
 mvn -Pcdh5 -Dcdh5.hive.version=1.0.0 clean package
-```
-
-
-
-
-
-```bash
-$ mvn package
-
-# If you want to compile the serde against a different 
-# version of the cloudera libs, use -D:
-$ mvn -Dcdh.version=0.9.0-cdh3u4c-SNAPSHOT package
 ```
 
 
