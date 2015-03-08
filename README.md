@@ -208,6 +208,7 @@ Versions:
 		      	support for array records,
 		      	fixed handling of null in arrays #54,
 		      	refactored Timestamp Handling
+* 1.2     (2014/06)     Refactored to multimodule for CDH5 compatibility
 
 
 
