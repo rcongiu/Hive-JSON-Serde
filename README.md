@@ -91,6 +91,9 @@ gold
 yellow
 ```
 
+If you have complex json it can become tedious to create the table 
+by hand. I recommend [hive-json-schema)(https://github.com/quux00/hive-json-schema) to build your schema from the data.
+
 
 ### Nested structures
 
