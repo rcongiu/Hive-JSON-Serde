@@ -64,13 +64,15 @@
 		<cdh.shim>cdh5</cdh.shim>
 	    </properties>
 	</profile>
+
     </profiles>
 
     <modules>
-	<module>json</module>
-	<module>json-serde-cdh4-shim</module>
-	<module>json-serde-cdh5-shim</module>
-	<module>json-serde</module>
+	    <module>json</module>
+	    <module>json-serde-cdh4-shim</module>
+	    <module>json-serde-cdh5-shim</module>
+	    <module>json-serde</module>
+        <module>json-rpm</module>
     </modules>
 
     <repositories>
