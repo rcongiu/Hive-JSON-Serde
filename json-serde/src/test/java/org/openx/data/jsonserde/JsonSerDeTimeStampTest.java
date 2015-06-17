@@ -107,7 +107,7 @@ public class JsonSerDeTimeStampTest {
     assertEquals(getDate("2013-05-05 17:58:45.123"), 
             jstOi.getPrimitiveJavaObject(result.get("five")) );
   }
-  
+
   @Test
   public void testIso8601TimestampDeSerialize() throws Exception {
     // Test that timestamp object can be deserialized

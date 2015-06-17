@@ -12,6 +12,7 @@
 
 package org.openx.data.jsonserde.objectinspector.primitive;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableDoubleObjectInspector;
 import org.apache.hadoop.io.DoubleWritable;
@@ -32,7 +33,10 @@ public class JavaStringDoubleObjectInspector extends AbstractPrimitiveJavaObject
         if(o == null) return null;
         
         if(o instanceof String) {
-           return new DoubleWritable(Double.parseDouble((String)o)); 
+          if (StringUtils.isEmpty((String) o)) {
+            return null;
+          }
+          return new DoubleWritable(Double.parseDouble((String)o));
         } else {
           return new DoubleWritable(((Double) o));
         }
@@ -42,7 +46,10 @@ public class JavaStringDoubleObjectInspector extends AbstractPrimitiveJavaObject
     public double get(Object o) {
         
         if(o instanceof String) {
-           return Double.parseDouble((String)o); 
+          if (StringUtils.isEmpty((String) o)) {
+            return 0;
+          }
+          return Double.parseDouble((String)o);
         } else {
           return (((Double) o));
         }

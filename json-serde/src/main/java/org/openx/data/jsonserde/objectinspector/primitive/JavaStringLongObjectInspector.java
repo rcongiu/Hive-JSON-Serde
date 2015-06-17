@@ -12,6 +12,7 @@
 
 package org.openx.data.jsonserde.objectinspector.primitive;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableLongObjectInspector;
 import org.apache.hadoop.io.LongWritable;
@@ -33,6 +34,9 @@ public class JavaStringLongObjectInspector
         if(o == null) return null;
 
         if(o instanceof String) {
+            if (StringUtils.isEmpty((String) o)) {
+                return null;
+            }
            return new LongWritable(ParsePrimitiveUtils.parseLong((String)o));
         } else {
           return new LongWritable(((Long) o).longValue());
@@ -43,7 +47,10 @@ public class JavaStringLongObjectInspector
     public long get(Object o) {
 
         if(o instanceof String) {
-           return ParsePrimitiveUtils.parseLong((String)o);
+          if (StringUtils.isEmpty((String) o)) {
+            return 0;
+          }
+          return ParsePrimitiveUtils.parseLong((String)o);
         } else {
           return ((Long) o);
         }

@@ -12,6 +12,7 @@
 
 package org.openx.data.jsonserde.objectinspector.primitive;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableIntObjectInspector;
 import org.apache.hadoop.io.IntWritable;
@@ -33,6 +34,9 @@ public class JavaStringIntObjectInspector
         if(o == null) return null;
         
         if(o instanceof String) {
+            if (StringUtils.isEmpty((String) o)) {
+                return null;
+            }
            return new IntWritable(ParsePrimitiveUtils.parseInt((String)o)); 
         } else {
            return new IntWritable((Integer) o);
@@ -42,7 +46,10 @@ public class JavaStringIntObjectInspector
     @Override
     public int get(Object o) {
         if(o instanceof String) {
-           return ParsePrimitiveUtils.parseInt((String)o); 
+          if (StringUtils.isEmpty((String) o)) {
+            return 0;
+          }
+          return ParsePrimitiveUtils.parseInt((String)o);
         } else {
            return ((Integer) o);
         }

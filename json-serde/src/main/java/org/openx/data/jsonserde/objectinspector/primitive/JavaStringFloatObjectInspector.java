@@ -12,9 +12,11 @@
 
 package org.openx.data.jsonserde.objectinspector.primitive;
 
+import org.apache.derby.iapi.util.StringUtil;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableFloatObjectInspector;
 import org.apache.hadoop.io.FloatWritable;
+import org.datanucleus.util.StringUtils;
 
 /**
  *
@@ -32,6 +34,9 @@ public class JavaStringFloatObjectInspector extends AbstractPrimitiveJavaObjectI
         if(o == null) return null;
         
         if(o instanceof String) {
+            if (StringUtils.isEmpty((String) o)) {
+                return null;
+            }
           return new FloatWritable(Float.parseFloat((String)o)); 
         } else {
           return new FloatWritable((Float) o);
@@ -41,6 +46,9 @@ public class JavaStringFloatObjectInspector extends AbstractPrimitiveJavaObjectI
     @Override
     public float get(Object o) {  
         if(o instanceof String) {
+          if (StringUtils.isEmpty((String) o)) {
+            return 0;
+          }
           return Float.parseFloat((String)o); 
         } else {
           return ((Float) o);

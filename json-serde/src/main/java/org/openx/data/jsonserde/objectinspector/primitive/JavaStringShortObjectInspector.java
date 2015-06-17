@@ -12,6 +12,7 @@
 
 package org.openx.data.jsonserde.objectinspector.primitive;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.hive.serde2.io.ShortWritable;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableShortObjectInspector;
@@ -33,6 +34,9 @@ public class JavaStringShortObjectInspector
         if(o == null) return null;
         
         if(o instanceof String) {
+            if (StringUtils.isEmpty((String) o)) {
+                return null;
+            }
           return new ShortWritable(ParsePrimitiveUtils.parseShort((String)o)); 
         } else {
           return new ShortWritable((Short) o);
@@ -43,7 +47,10 @@ public class JavaStringShortObjectInspector
     public short get(Object o) {
         
         if(o instanceof String) {
-           return ParsePrimitiveUtils.parseShort((String)o); 
+          if (StringUtils.isEmpty((String) o)) {
+            return 0;
+          }
+          return ParsePrimitiveUtils.parseShort((String)o);
         } else {
           return ((Short) o);
         }
