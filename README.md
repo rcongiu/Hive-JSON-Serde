@@ -57,7 +57,10 @@ $ mvn package
 $ mvn -Dcdh.version=0.9.0-cdh3u4c-SNAPSHOT package
 ```
 
-
+Hive 0.13.1 EMR
+```
+mvn -Pcdh5 -Dcdh5.hive.version=0.13.1 clean package
+```
 
 Hive 0.14.0 and 1.0.0
 -----------
