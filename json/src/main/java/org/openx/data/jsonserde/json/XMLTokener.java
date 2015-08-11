@@ -52,7 +52,7 @@ public class XMLTokener extends JSONTokener {
      * @param s A source string.
      */
     public XMLTokener(String s) {
-        super(s);
+        super(s, false);
     }
 
     /**

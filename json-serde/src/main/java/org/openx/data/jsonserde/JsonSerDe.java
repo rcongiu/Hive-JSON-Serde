@@ -77,9 +77,14 @@ public class JsonSerDe implements SerDe {
     private boolean lastOperationSerialize;
     long deserializedDataSize;
     long serializedDataSize;
+
     // if set, will ignore malformed JSON in deserialization
     boolean ignoreMalformedJson = false;
     public static final String PROP_IGNORE_MALFORMED_JSON = "ignore.malformed.json";
+
+    // Causes the JSON parser not to fail when duplicated object keys are encountered
+    boolean allowDuplicates = false;
+    public static final String PROP_ALLOW_DUPLICATE_KEYS = "allow.duplicate.json.keys";
     
    JsonStructOIOptions options;
 
@@ -141,6 +146,9 @@ public class JsonSerDe implements SerDe {
         // other configuration
         ignoreMalformedJson = Boolean.parseBoolean(tbl
                 .getProperty(PROP_IGNORE_MALFORMED_JSON, "false"));
+
+        allowDuplicates = Boolean.parseBoolean(tbl
+                .getProperty(PROP_ALLOW_DUPLICATE_KEYS, "false"));
         
     }
 
@@ -165,16 +173,16 @@ public class JsonSerDe implements SerDe {
             String txt = rowText.toString().trim();
             
             if(txt.startsWith("{")) {
-                jObj = new JSONObject(txt);
+                jObj = new JSONObject(txt, allowDuplicates);
             } else if (txt.startsWith("[")){
-                jObj = new JSONArray(txt);
+                jObj = new JSONArray(txt, allowDuplicates);
             }
         } catch (JSONException e) {
             // If row is not a JSON object, make the whole row NULL
             onMalformedJson("Row is not a valid JSON Object - JSONException: "
                     + e.getMessage());
             try {
-                jObj = new JSONObject("{}");
+                jObj = new JSONObject("{}", allowDuplicates);
             } catch (JSONException ex) {
                 onMalformedJson("Error parsing empty row. This should never happen.");
             }

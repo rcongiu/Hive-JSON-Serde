@@ -204,7 +204,7 @@ public class JSONWriter {
         }
         if (this.mode == 'k') {
             try {
-                stack[top - 1].putOnce(string, Boolean.TRUE);
+                stack[top - 1].putOnce(string, Boolean.TRUE, false);
                 if (this.comma) {
                     this.writer.write(',');
                 }
