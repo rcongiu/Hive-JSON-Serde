@@ -172,7 +172,7 @@ public class JSONObject {
         this();
         for (int i = 0; i < names.length; i += 1) {
             try {
-                putOnce(names[i].toLowerCase(), jo.opt(names[i]));
+                putOnce(names[i].toLowerCase(), jo.opt(names[i]), false);
             } catch (JSONException ignore) {
             }
         }
@@ -215,7 +215,7 @@ public class JSONObject {
             } else if (c != ':') {
                 throw x.syntaxError("Expected a ':' after a key");
             }
-            putOnce(key, x.nextValue());
+            putOnce(key, x.nextValue(), x.isAllowDuplicates());
 
 // Pairs are separated by ','. We will also tolerate ';'.
 
@@ -315,8 +315,8 @@ public class JSONObject {
      * @exception JSONException If there is a syntax error in the source
      *  string or a duplicated key.
      */
-    public JSONObject(String source) throws JSONException {
-        this(new JSONTokener(source));
+    public JSONObject(String source, boolean allowDuplicates) throws JSONException {
+        this(new JSONTokener(source, allowDuplicates));
     }
 
 
@@ -1126,9 +1126,9 @@ public class JSONObject {
      * @return his.
      * @throws JSONException if the key is a duplicate
      */
-    public final JSONObject putOnce(String key, Object value) throws JSONException {
+    public final JSONObject putOnce(String key, Object value, boolean allowDuplicates) throws JSONException {
         if (key != null && value != null) {
-            if (opt(key) != null) {
+            if (!allowDuplicates && opt(key) != null) {
                 throw new JSONException("Duplicate key \"" + key + "\"");
             }
             put(key, value);

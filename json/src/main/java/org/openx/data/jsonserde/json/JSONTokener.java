@@ -47,6 +47,7 @@ public class JSONTokener {
     private char 	previous;
     private Reader 	reader;
     private boolean usePrevious;
+    private boolean allowDuplicates;
 
 
     /**
@@ -54,7 +55,7 @@ public class JSONTokener {
      *
      * @param reader     A reader.
      */
-    public JSONTokener(Reader reader) {
+    public JSONTokener(Reader reader, boolean allowDuplicates) {
         this.reader = reader.markSupported() ? 
         		reader : new BufferedReader(reader);
         this.eof = false;
@@ -63,6 +64,7 @@ public class JSONTokener {
         this.index = 0;
         this.character = 1;
         this.line = 1;
+        this.allowDuplicates = allowDuplicates;
     }
     
     
@@ -71,8 +73,8 @@ public class JSONTokener {
      * @param inputStream
      * @throws org.openx.data.jsonserde.json.JSONException
      */
-    public JSONTokener(InputStream inputStream) throws JSONException {
-        this(new InputStreamReader(inputStream));    	
+    public JSONTokener(InputStream inputStream, boolean allowDuplicates) throws JSONException {
+        this(new InputStreamReader(inputStream), allowDuplicates);
     }
 
 
@@ -81,10 +83,14 @@ public class JSONTokener {
      *
      * @param s     A source string.
      */
-    public JSONTokener(String s) {
-        this(new StringReader(s));
+    public JSONTokener(String s, boolean allowDuplicates) {
+        this(new StringReader(s), allowDuplicates);
     }
 
+
+    public boolean isAllowDuplicates() {
+        return allowDuplicates;
+    }
 
     /**
      * Back up one character. This provides a sort of lookahead capability,
