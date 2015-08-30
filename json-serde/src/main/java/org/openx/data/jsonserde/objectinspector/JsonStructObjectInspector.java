@@ -61,7 +61,12 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
             // somehow we have the object parsed already
             return getStructFieldDataFromList((List) data, fieldRef );
         } else if (data instanceof JSONArray) {
-            return getStructFieldDataFromList(((JSONArray) data).getAsArrayList(), fieldRef );
+            JSONArray ja = (JSONArray) data;
+            // se #113: some people complain of receving bad JSON,
+            // sometimes getting [] instead of {} for an empty field.
+            // this line should help them
+            if(ja.length() == 0 ) return null;
+            return getStructFieldDataFromList(ja.getAsArrayList(), fieldRef );
         } else {
             throw new Error("Data is not JSONObject  but " + data.getClass().getCanonicalName() +
                     " with value " + data.toString()) ;
