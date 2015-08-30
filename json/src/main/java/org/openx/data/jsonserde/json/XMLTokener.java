@@ -297,6 +297,7 @@ public class XMLTokener extends JSONTokener {
      * If it is not found, we are left at the end of the source with a result of false.
      * @param to A string to skip past.
      * @throws JSONException
+     * @return if false, string not found.
      */
     public boolean skipPast(String to) throws JSONException {
     	boolean b;
