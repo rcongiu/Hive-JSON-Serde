@@ -11,6 +11,7 @@
  *======================================================================*/
 package org.openx.data.jsonserde.objectinspector;
 
+
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -18,14 +19,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
 import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector.PrimitiveCategory;
+import org.apache.hadoop.hive.serde2.objectinspector.UnionObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorFactory;
-import org.apache.hadoop.hive.serde2.typeinfo.ListTypeInfo;
-import org.apache.hadoop.hive.serde2.typeinfo.MapTypeInfo;
-import org.apache.hadoop.hive.serde2.typeinfo.PrimitiveTypeInfo;
-import org.apache.hadoop.hive.serde2.typeinfo.StructTypeInfo;
-import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
+import org.apache.hadoop.hive.serde2.typeinfo.*;
 import org.openx.data.jsonserde.objectinspector.primitive.JavaStringByteObjectInspector;
 import org.openx.data.jsonserde.objectinspector.primitive.JavaStringDoubleObjectInspector;
 import org.openx.data.jsonserde.objectinspector.primitive.JavaStringFloatObjectInspector;
@@ -93,6 +92,17 @@ public class JsonObjectInspectorFactory {
                             fieldObjectInspectors, options);
                     break;
                 }
+                case UNION:{
+                    UnionTypeInfo unionTypeInfo = (UnionTypeInfo) typeInfo;
+
+                    List<ObjectInspector> ois = new LinkedList<ObjectInspector>();
+                    for(  TypeInfo ti : ((UnionTypeInfo) typeInfo).getAllUnionObjectTypeInfos()) {
+                        ois.add(getJsonObjectInspectorFromTypeInfo(ti, options));
+                    }
+                    result = getJsonUnionObjectInspector(ois, options);
+                    break;
+                }
+
                 default: {
                     result = null;
                 }
@@ -102,11 +112,32 @@ public class JsonObjectInspectorFactory {
         return result;
     }
 
+
+    static HashMap<ArrayList<Object>, JsonUnionObjectInspector> cachedJsonUnionObjectInspector
+            = new HashMap<ArrayList<Object>, JsonUnionObjectInspector>();
+
+    public static JsonUnionObjectInspector getJsonUnionObjectInspector(
+            List<ObjectInspector> ois,
+            JsonStructOIOptions options) {
+        ArrayList<Object> signature = new ArrayList<Object>();
+        signature.add(ois);
+        signature.add(options);
+        JsonUnionObjectInspector result = cachedJsonUnionObjectInspector
+                .get(signature);
+        if (result == null) {
+            result = new JsonUnionObjectInspector(ois, options);
+            cachedJsonUnionObjectInspector.put(signature,result);
+
+        }
+        return result;
+    }
+
     /*
      * Caches Struct Object Inspectors
      */
     static HashMap<ArrayList<Object>, JsonStructObjectInspector> cachedStandardStructObjectInspector
             = new HashMap<ArrayList<Object>, JsonStructObjectInspector>();
+
 
     public static JsonStructObjectInspector getJsonStructObjectInspector(
             List<String> structFieldNames,
@@ -173,13 +204,13 @@ public class JsonObjectInspectorFactory {
             = new EnumMap<PrimitiveCategory, AbstractPrimitiveJavaObjectInspector>(PrimitiveCategory.class);
 
     static {
-    primitiveOICache.put(PrimitiveCategory.STRING, new JavaStringJsonObjectInspector());
-	primitiveOICache.put(PrimitiveCategory.BYTE, new JavaStringByteObjectInspector());
-	primitiveOICache.put(PrimitiveCategory.SHORT, new JavaStringShortObjectInspector());
+        primitiveOICache.put(PrimitiveCategory.STRING, new JavaStringJsonObjectInspector());
+        primitiveOICache.put(PrimitiveCategory.BYTE, new JavaStringByteObjectInspector());
+        primitiveOICache.put(PrimitiveCategory.SHORT, new JavaStringShortObjectInspector());
         primitiveOICache.put(PrimitiveCategory.INT, new JavaStringIntObjectInspector());
         primitiveOICache.put(PrimitiveCategory.LONG, new JavaStringLongObjectInspector());
-	primitiveOICache.put(PrimitiveCategory.FLOAT, new JavaStringFloatObjectInspector());
-	primitiveOICache.put(PrimitiveCategory.DOUBLE, new JavaStringDoubleObjectInspector());
+        primitiveOICache.put(PrimitiveCategory.FLOAT, new JavaStringFloatObjectInspector());
+        primitiveOICache.put(PrimitiveCategory.DOUBLE, new JavaStringDoubleObjectInspector());
         primitiveOICache.put(PrimitiveCategory.TIMESTAMP, new JavaStringTimestampObjectInspector());
     }
 

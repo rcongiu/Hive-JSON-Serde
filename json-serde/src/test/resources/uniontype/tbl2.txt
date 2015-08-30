@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS json_test2 ;
+CREATE TABLE json_test2 (
+    one boolean,
+    three array<string>,
+    two uniontype<double,array<int>,struct<a:string,b:string>,string>,
+    four string )
+ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+STORED AS TEXTFILE;
+
+ LOAD DATA LOCAL INPATH '/tmp/test2.txt' OVERWRITE INTO TABLE  json_test2 ;
+

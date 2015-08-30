@@ -14,6 +14,18 @@ Features:
 * nested data structures are also supported. 
 * modular to support multiple versions of CDH
 
+BINARIES
+----------
+github used to allow uploading of binaries, but not anymore.
+Many people have been asking me for binaries in private by email
+so I decided to upload binaries here:
+
+http://www.congiu.net/hive-json-serde/
+
+so you don't need to compile your own. There are versions for
+CDH4 and CDH5.
+
+
 COMPILE
 ---------
 
@@ -37,14 +49,22 @@ json-serde/target/json-serde-VERSION-jar-with-dependencies.jar
 ```
 
 
-
-
 ```bash
 $ mvn package
 
-# If you want to compile the serde against a different 
+# If you want to compile the serde against a different
 # version of the cloudera libs, use -D:
 $ mvn -Dcdh.version=0.9.0-cdh3u4c-SNAPSHOT package
+```
+
+
+
+Hive 0.14.0 and 1.0.0
+-----------
+
+Compile with
+```
+mvn -Pcdh5 -Dcdh5.hive.version=1.0.0 clean package
 ```
 
 
@@ -70,6 +90,9 @@ hive> select three[1] from json_test1;
 gold
 yellow
 ```
+
+If you have complex json it can become tedious to create the table 
+by hand. I recommend [hive-json-schema)(https://github.com/quux00/hive-json-schema) to build your schema from the data.
 
 
 ### Nested structures
@@ -134,6 +157,32 @@ ALTER TABLE json_table SET SERDEPROPERTIES ( "ignore.malformed.json" = "true");
 
 it will not make the query fail, and the above record will be returned as
 NULL	null	null
+
+
+### UNIONTYPE support (PLEASE READ IF YOU USE IT)
+
+A Uniontype is a field that can contain different types, like in C.
+Hive usually stores a 'tag' that is basically the index of the datatype,
+for instance, if you create a uniontype<int,string,float> , tag would be
+0 for int, 1 for string, 2 for float (see https://cwiki.apache.org/confluence/display/Hive/LanguageManual+Types#LanguageManualTypes-UnionTypes).
+
+Now, JSON data does not store anything like that, so the serde will try and
+look what it can do.. that is, check, in order, if the data is compatible
+with any of the given types. So, THE ORDER MATTERS. Let's say you define
+a field f as UNIONTYPE<int,string> and your js has
+```{json}
+{ "f": "123" }  // parsed as int, since int precedes string in definitions,
+                // and "123" can be parsed to a number
+{ "f": "asv" }  // parsed as string
+```
+That is, a number in a string. This will return a tag of 0 and an int rather
+than a string.
+It's worth noticing that complex Union types may not be that efficient, since
+the SerDe may try to parse the same data in several ways; however, several
+people asked me to implement this feature to cope with bad JSON, so..I did.
+
+
+
 
 ### MAPPING HIVE KEYWORDS
 
@@ -208,6 +257,10 @@ Versions:
 		      	support for array records,
 		      	fixed handling of null in arrays #54,
 		      	refactored Timestamp Handling
+* 1.2     (2014/06)     Refactored to multimodule for CDH5 compatibility
+* 1.3     (2014/09/08)  fixed #80, #82, #84, #85
+* 1.3.5   (2015/08/30)   Added UNIONTYPE support (#53), made CDH5 default, handle
+          empty array where an empty object should be (#112)
 
 
 

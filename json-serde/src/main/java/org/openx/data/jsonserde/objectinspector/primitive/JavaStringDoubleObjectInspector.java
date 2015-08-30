@@ -49,6 +49,11 @@ public class JavaStringDoubleObjectInspector extends AbstractPrimitiveJavaObject
     }
 
     @Override
+    public Object getPrimitiveJavaObject(Object o) {
+        return get(o);
+    }
+
+    @Override
     public Object create(double value) {
         return value;
     }

@@ -22,8 +22,7 @@ import java.util.Map;
 import java.util.Properties;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.SerDeException;
-import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.*;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
@@ -32,11 +31,7 @@ import org.apache.hadoop.io.Writable;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.hive.serde2.SerDeStats;
-import org.apache.hadoop.hive.serde2.objectinspector.ListObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.MapObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector.Category;
-import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.BooleanObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.ByteObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.DoubleObjectInspector;
@@ -159,7 +154,6 @@ public class JsonSerDe implements SerDe {
 	
         // Try parsing row into JSON object
         Object jObj = null;
-
         
         try {
             String txt = rowText.toString().trim();
@@ -335,6 +329,8 @@ public class JsonSerDe implements SerDe {
             case STRUCT:
                 result = serializeStruct(obj, (StructObjectInspector)oi, null);
                 break;
+            case UNION:
+                result = serializeUnion(obj, (UnionObjectInspector)oi);
         }
         return result;
     }
@@ -363,6 +359,15 @@ public class JsonSerDe implements SerDe {
             }
         }
         return ar;
+    }
+
+    /**
+     * Serializes a Union
+     */
+    private Object serializeUnion(Object obj, UnionObjectInspector oi) {
+        if(obj == null) return null;
+
+        return serializeField(obj, oi.getObjectInspectors().get(oi.getTag(obj)));
     }
 
     /**
