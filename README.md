@@ -158,6 +158,32 @@ ALTER TABLE json_table SET SERDEPROPERTIES ( "ignore.malformed.json" = "true");
 it will not make the query fail, and the above record will be returned as
 NULL	null	null
 
+
+### UNIONTYPE support (PLEASE READ IF YOU USE IT)
+
+A Uniontype is a field that can contain different types, like in C.
+Hive usually stores a 'tag' that is basically the index of the datatype,
+for instance, if you create a uniontype<int,string,float> , tag would be
+0 for int, 1 for string, 2 for float (see https://cwiki.apache.org/confluence/display/Hive/LanguageManual+Types#LanguageManualTypes-UnionTypes).
+
+Now, JSON data does not store anything like that, so the serde will try and
+look what it can do.. that is, check, in order, if the data is compatible
+with any of the given types. So, THE ORDER MATTERS. Let's say you define
+a field f as UNIONTYPE<int,string> and your js has
+```{json}
+{ "f": "123" }  // parsed as int, since int precedes string in definitions,
+                // and "123" can be parsed to a number
+{ "f": "asv" }  // parsed as string
+```
+That is, a number in a string. This will return a tag of 0 and an int rather
+than a string.
+It's worth noticing that complex Union types may not be that efficient, since
+the SerDe may try to parse the same data in several ways; however, several
+people asked me to implement this feature to cope with bad JSON, so..I did.
+
+
+
+
 ### MAPPING HIVE KEYWORDS
 
 Sometimes it may happen that JSON data has attributes named like reserved words in hive.
@@ -233,6 +259,7 @@ Versions:
 		      	refactored Timestamp Handling
 * 1.2     (2014/06)     Refactored to multimodule for CDH5 compatibility
 * 1.3     (2014/09/08)  fixed #80, #82, #84, #85
+* 1.4     ???? Added UNIONTYPE support (#53), made CDH5 default 
 
 
 

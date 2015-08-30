@@ -15,7 +15,7 @@ package org.openx.data.jsonserde;
 
 import java.util.Properties;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hive.serde.Constants;
+import org.apache.hadoop.hive.serde.serdeConstants;
 import org.apache.hadoop.hive.serde2.objectinspector.MapObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
@@ -46,8 +46,8 @@ public class JsonMapTest {
     Configuration conf = null;
     Properties tbl = new Properties();
     // from google video API
-    tbl.setProperty(Constants.LIST_COLUMNS, "country,languages,religions");
-    tbl.setProperty(Constants.LIST_COLUMN_TYPES, "string,string,map<string,string>".toLowerCase());
+    tbl.setProperty(serdeConstants.LIST_COLUMNS, "country,languages,religions");
+    tbl.setProperty(serdeConstants.LIST_COLUMN_TYPES, "string,string,map<string,string>".toLowerCase());
 
      instance.initialize(conf, tbl);
   }
