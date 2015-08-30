@@ -259,7 +259,7 @@ Versions:
 		      	refactored Timestamp Handling
 * 1.2     (2014/06)     Refactored to multimodule for CDH5 compatibility
 * 1.3     (2014/09/08)  fixed #80, #82, #84, #85
-* 1.4     ???? Added UNIONTYPE support (#53), made CDH5 default, handle
+* 1.3.5   (2015/08/30)   Added UNIONTYPE support (#53), made CDH5 default, handle
           empty array where an empty object should be (#112)
 
 
