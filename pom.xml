@@ -33,9 +33,9 @@
         <cdh4.hive.version>0.10.0-cdh${cdh4.version}</cdh4.hive.version>
         <cdh4.hadoop.version>2.0.0-cdh${cdh4.version}</cdh4.hadoop.version>
         <!-- cdh5 versions -->
-        <cdh5.version>5.0.0</cdh5.version>
-        <cdh5.hive.version>0.12.0-cdh${cdh5.version}</cdh5.hive.version>
-        <cdh5.hadoop.version>2.3.0-cdh${cdh5.version}</cdh5.hadoop.version>
+        <cdh5.version>5.3.0</cdh5.version>
+        <cdh5.hive.version>0.13.1-cdh${cdh5.version}</cdh5.hive.version>
+        <cdh5.hadoop.version>2.5.0-cdh${cdh5.version}</cdh5.hadoop.version>
     </properties>
 
     <profiles>

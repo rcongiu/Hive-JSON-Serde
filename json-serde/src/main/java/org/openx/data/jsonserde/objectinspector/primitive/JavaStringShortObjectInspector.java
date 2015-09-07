@@ -42,10 +42,14 @@ public class JavaStringShortObjectInspector
     @Override
     public short get(Object o) {
         
-        if(o instanceof String) {
-           return ParsePrimitiveUtils.parseShort((String)o); 
-        } else {
-          return ((Short) o);
+        try {
+            if(o instanceof String) {
+                return ParsePrimitiveUtils.parseShort((String)o);
+            } else {
+                return ((Short) o);
+            }
+        }catch (Exception e){
+            return 0;
         }
     }
 

@@ -163,7 +163,7 @@ public class JsonSerDe implements SerDe {
             } else if (txt.startsWith("[")){
                 jObj = new JSONArray(txt);
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             // If row is not a JSON object, make the whole row NULL
             onMalformedJson("Row is not a valid JSON Object - JSONException: "
                     + e.getMessage());

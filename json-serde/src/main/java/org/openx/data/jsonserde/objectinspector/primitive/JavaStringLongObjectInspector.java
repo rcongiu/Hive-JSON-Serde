@@ -42,10 +42,14 @@ public class JavaStringLongObjectInspector
     @Override
     public long get(Object o) {
 
-        if(o instanceof String) {
-           return ParsePrimitiveUtils.parseLong((String)o);
-        } else {
-          return ((Long) o);
+        try {
+            if(o instanceof String) {
+                return ParsePrimitiveUtils.parseLong((String)o);
+            } else {
+                return ((Long) o);
+            }
+        }catch (Exception e){
+            return 0;
         }
     }
 
