@@ -36,6 +36,10 @@
         <cdh5.version>5.0.0</cdh5.version>
         <cdh5.hive.version>0.12.0-cdh${cdh5.version}</cdh5.hive.version>
         <cdh5.hadoop.version>2.3.0-cdh${cdh5.version}</cdh5.hadoop.version>
+        <!-- hdp23 versions -->
+        <hdp23.version>2.3.0</hdp23.version>
+        <hdp23.hive.version>1.2.1</hdp23.hive.version>
+        <hdp23.hadoop.version>2.7.1</hdp23.hadoop.version>
     </properties>
 
     <profiles>
@@ -67,12 +71,27 @@
 		<cdh.shim>cdh5</cdh.shim>
 	    </properties>
 	</profile>
+	<profile>
+	    <id>hdp23</id>
+	     <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+	    <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<serde.shim>json-serde-hdp23-shim</serde.shim>
+		<cdh.version>${hdp23.version}</cdh.version>
+		<cdh.hive.version>${hdp23.hive.version}</cdh.hive.version>
+		<cdh.hadoop.version>${hdp23.hadoop.version}</cdh.hadoop.version>
+		<cdh.shim>hdp23</cdh.shim>
+	    </properties>
+	</profile>
     </profiles>
 
     <modules>
 	<module>json</module>
 	<module>json-serde-cdh4-shim</module>
 	<module>json-serde-cdh5-shim</module>
+	<module>json-serde-hdp23-shim</module>
 	<module>json-serde</module>
     </modules>
 
