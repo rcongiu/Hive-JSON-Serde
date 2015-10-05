@@ -23,7 +23,7 @@ so I decided to upload binaries here:
 http://www.congiu.net/hive-json-serde/
 
 so you don't need to compile your own. There are versions for
-CDH4 and CDH5.
+CDH4, CDH5 and HDP 2.3.
 
 
 COMPILE
@@ -41,6 +41,11 @@ mvn -Pcdh4 clean package
 To build for CDH5:
 ```
 mvn -Pcdh5 clean package
+```
+
+To build for HDP 2.3:
+```
+mvn -Phdp23 clean package
 ```
 
 the serde will be in 
