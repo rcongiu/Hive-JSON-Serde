@@ -78,11 +78,11 @@
             </activation>
 	    <properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<serde.shim>json-serde-hdp23-shim</serde.shim>
+		<serde.shim>json-serde-cdh5-shim</serde.shim>
 		<cdh.version>${hdp23.version}</cdh.version>
 		<cdh.hive.version>${hdp23.hive.version}</cdh.hive.version>
 		<cdh.hadoop.version>${hdp23.hadoop.version}</cdh.hadoop.version>
-		<cdh.shim>hdp23</cdh.shim>
+		<cdh.shim>cdh5</cdh.shim>
 	    </properties>
 	</profile>
     </profiles>
@@ -91,7 +91,6 @@
 	<module>json</module>
 	<module>json-serde-cdh4-shim</module>
 	<module>json-serde-cdh5-shim</module>
-	<module>json-serde-hdp23-shim</module>
 	<module>json-serde</module>
     </modules>
 

@@ -578,9 +578,16 @@ public class JsonSerDeTest {
         Object obj = serde.serialize(row, soi);
         
         assertTrue(obj instanceof Text);
-        assertEquals("{\"timestamp\":7898,\"two\":43.2,\"one\":true,\"three\":[],\"four\":\"value1\"}", obj.toString());
-        
-        System.out.println("Output object " + obj.toString());
+        String objs = obj.toString();
+
+        // this is what we get.. but the order of the elements may vary...
+        String res = "{\"timestamp\":7898,\"two\":43.2,\"one\":true,\"three\":[],\"four\":\"value1\"}";
+        String[] r2 = res.substring(1,res.length() - 1).split(",");
+
+        // they should be the same...let's hope spacing is the same
+        assertEquals(objs.length() , res.length() );
+
+        for(String s: r2) { assertTrue(objs.contains(s)); }
     }
     
     // {"one":true, "timestamp":1234567, "three":["red","yellow",["blue","azure","cobalt","teal"],"orange"],"two":19.5,"four":"poop"}
