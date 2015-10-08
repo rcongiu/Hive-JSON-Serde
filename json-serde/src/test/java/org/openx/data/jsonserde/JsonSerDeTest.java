@@ -42,6 +42,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.openx.data.jsonserde.objectinspector.primitive.JavaStringBooleanObjectInspector;
 import org.openx.data.jsonserde.objectinspector.primitive.JavaStringByteObjectInspector;
 import org.openx.data.jsonserde.objectinspector.primitive.JavaStringDoubleObjectInspector;
 import org.openx.data.jsonserde.objectinspector.primitive.JavaStringFloatObjectInspector;
@@ -383,8 +384,8 @@ public class JsonSerDeTest {
 	
         StructField sf = soi.getStructFieldRef("cboolean");
 	
-	assertTrue(sf.getFieldObjectInspector() instanceof JavaBooleanObjectInspector);
-        JavaBooleanObjectInspector jboi = (JavaBooleanObjectInspector) sf.getFieldObjectInspector();
+	assertTrue(sf.getFieldObjectInspector() instanceof JavaStringBooleanObjectInspector);
+        JavaStringBooleanObjectInspector jboi = (JavaStringBooleanObjectInspector) sf.getFieldObjectInspector();
 	assertEquals(true, jboi.get(result.get("cboolean")));
 	
 	sf = soi.getStructFieldRef("ctinyint");
@@ -432,8 +433,8 @@ public class JsonSerDeTest {
 	
         StructField sf = soi.getStructFieldRef("cboolean");
 	
-	assertTrue(sf.getFieldObjectInspector() instanceof JavaBooleanObjectInspector);
-        JavaBooleanObjectInspector jboi = (JavaBooleanObjectInspector) sf.getFieldObjectInspector();
+	assertTrue(sf.getFieldObjectInspector() instanceof JavaStringBooleanObjectInspector);
+        JavaStringBooleanObjectInspector jboi = (JavaStringBooleanObjectInspector) sf.getFieldObjectInspector();
 	assertEquals(true, jboi.get(result.get("cboolean")));
 	
 	sf = soi.getStructFieldRef("ctinyint");
