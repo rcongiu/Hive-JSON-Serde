@@ -33,6 +33,7 @@ import org.openx.data.jsonserde.objectinspector.primitive.JavaStringJsonObjectIn
 import org.openx.data.jsonserde.objectinspector.primitive.JavaStringLongObjectInspector;
 import org.openx.data.jsonserde.objectinspector.primitive.JavaStringShortObjectInspector;
 import org.openx.data.jsonserde.objectinspector.primitive.JavaStringTimestampObjectInspector;
+import org.openx.data.jsonserde.objectinspector.primitive.JavaStringBooleanObjectInspector;
 
 /**
  *
@@ -212,6 +213,7 @@ public class JsonObjectInspectorFactory {
         primitiveOICache.put(PrimitiveCategory.FLOAT, new JavaStringFloatObjectInspector());
         primitiveOICache.put(PrimitiveCategory.DOUBLE, new JavaStringDoubleObjectInspector());
         primitiveOICache.put(PrimitiveCategory.TIMESTAMP, new JavaStringTimestampObjectInspector());
+        primitiveOICache.put(PrimitiveCategory.BOOLEAN, new JavaStringBooleanObjectInspector());
     }
 
     /**

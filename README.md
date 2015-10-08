@@ -14,6 +14,24 @@ Features:
 * nested data structures are also supported. 
 * modular to support multiple versions of CDH
 
+IMPORTANT!!! READ THIS BELOW!!
+Json records must be _one per line_, that is, the serde
+WILL NOT WORK with multiline Json. Why ? Because the way hadoop
+works with files, they have to be _splittable_, for instance, 
+hadoop will split text files at end of line..but in order to split
+a text file with json at a certain point, we would have to parse
+everything up to that point. See below
+```
+// this will work
+{ "key' : 10 }
+
+// this will not work
+{
+  "key" : 10 
+}
+```
+
+
 BINARIES
 ----------
 github used to allow uploading of binaries, but not anymore.
@@ -23,7 +41,7 @@ so I decided to upload binaries here:
 http://www.congiu.net/hive-json-serde/
 
 so you don't need to compile your own. There are versions for
-CDH4 and CDH5.
+CDH4, CDH5 and HDP 2.3.
 
 
 COMPILE
@@ -41,6 +59,11 @@ mvn -Pcdh4 clean package
 To build for CDH5:
 ```
 mvn -Pcdh5 clean package
+```
+
+To build for HDP 2.3:
+```
+mvn -Phdp23 clean package
 ```
 
 the serde will be in 
@@ -261,6 +284,9 @@ Versions:
 * 1.3     (2014/09/08)  fixed #80, #82, #84, #85
 * 1.3.5   (2015/08/30)   Added UNIONTYPE support (#53), made CDH5 default, handle
           empty array where an empty object should be (#112)
+* 1.3.6   (2015/10/08)   Added support for string boolean (#118) Updated docs (#116)
+			 Added support for HDP 2.3. 
+
 
 
 

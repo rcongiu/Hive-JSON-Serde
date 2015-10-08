@@ -10,11 +10,8 @@
  * limitations under the License. See accompanying LICENSE file.        *
  *======================================================================*/
 
-
 package org.openx.data.jsonserde.objectinspector.primitive;
 
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils.PrimitiveTypeEntry;
 import org.apache.hadoop.hive.serde2.typeinfo.PrimitiveTypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
 
@@ -23,14 +20,12 @@ import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
  * @author Roberto Congiu <rcongiu@yahoo.com>
  */
 public class TypeEntryShim {
-    public static PrimitiveTypeEntry byteType = PrimitiveObjectInspectorUtils.byteTypeEntry;
-    public static PrimitiveTypeEntry doubleType = PrimitiveObjectInspectorUtils.doubleTypeEntry;
-    public static PrimitiveTypeEntry floatType = PrimitiveObjectInspectorUtils.floatTypeEntry;
-    public static PrimitiveTypeEntry intType = PrimitiveObjectInspectorUtils.intTypeEntry;
-    public static PrimitiveTypeEntry longType = PrimitiveObjectInspectorUtils.longTypeEntry;
-    public static PrimitiveTypeEntry shortType = PrimitiveObjectInspectorUtils.shortTypeEntry;
-    public static PrimitiveTypeEntry timestampType = PrimitiveObjectInspectorUtils.timestampTypeEntry;
-    public static PrimitiveTypeEntry stringType = PrimitiveObjectInspectorUtils.stringTypeEntry;
-    public static PrimitiveTypeEntry booleanType = PrimitiveObjectInspectorUtils.booleanTypeEntry;
-    
+    public static PrimitiveTypeInfo byteType   = TypeInfoFactory.byteTypeInfo;
+    public static PrimitiveTypeInfo doubleType = TypeInfoFactory.doubleTypeInfo;
+    public static PrimitiveTypeInfo floatType = TypeInfoFactory.floatTypeInfo;
+    public static PrimitiveTypeInfo intType = TypeInfoFactory.intTypeInfo;
+    public static PrimitiveTypeInfo longType = TypeInfoFactory.longTypeInfo;
+    public static PrimitiveTypeInfo shortType = TypeInfoFactory.shortTypeInfo;
+    public static PrimitiveTypeInfo timestampType = TypeInfoFactory.timestampTypeInfo;
+    public static PrimitiveTypeInfo stringType = TypeInfoFactory.stringTypeInfo;
 }
