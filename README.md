@@ -284,6 +284,8 @@ Versions:
 * 1.3     (2014/09/08)  fixed #80, #82, #84, #85
 * 1.3.5   (2015/08/30)   Added UNIONTYPE support (#53), made CDH5 default, handle
           empty array where an empty object should be (#112)
+* 1.3.6   (2015/10/08)   Added support for string boolean (#118) Updated docs (#116)
+			 Added support for HDP 2.3. 
 
 
 
