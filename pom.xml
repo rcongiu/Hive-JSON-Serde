@@ -203,7 +203,7 @@
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-jgitflow-plugin</artifactId>
-                <version>1.0-alpha20</version>
+                <version>1.0-m5.1</version>
                 <configuration>
                     <allowSnapshots>false</allowSnapshots>
                     <enableFeatureVersions>false</enableFeatureVersions>
