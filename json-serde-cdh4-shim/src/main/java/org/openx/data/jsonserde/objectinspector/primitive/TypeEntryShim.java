@@ -15,6 +15,8 @@ package org.openx.data.jsonserde.objectinspector.primitive;
 
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils.PrimitiveTypeEntry;
+import org.apache.hadoop.hive.serde2.typeinfo.PrimitiveTypeInfo;
+import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
 
 /**
  *
@@ -29,5 +31,6 @@ public class TypeEntryShim {
     public static PrimitiveTypeEntry shortType = PrimitiveObjectInspectorUtils.shortTypeEntry;
     public static PrimitiveTypeEntry timestampType = PrimitiveObjectInspectorUtils.timestampTypeEntry;
     public static PrimitiveTypeEntry stringType = PrimitiveObjectInspectorUtils.stringTypeEntry;
+    public static PrimitiveTypeEntry booleanType = PrimitiveObjectInspectorUtils.booleanTypeEntry;
     
 }
