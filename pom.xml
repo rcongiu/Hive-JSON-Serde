@@ -189,6 +189,7 @@
                     <pushReleases>true</pushReleases>
                     <allowUntracked>true</allowUntracked>
                     <noDeploy>true</noDeploy>
+		    <useReleaseProfile>false</useReleaseProfile>
                 </configuration>
             </plugin>
 
