@@ -6,13 +6,18 @@
 package org.openx.data.jsonserde.objectinspector.primitive;
 
 import java.sql.Timestamp;
-import org.apache.hadoop.hive.serde2.io.TimestampWritable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  *
  * @author rcongiu
  */
 public class ParsePrimitiveUtils {
+
+    private static DateFormat UTC_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    private static DateFormat NON_UTC_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public static boolean isHex(String s) {
         return s.startsWith("0x") || s.startsWith("0X");
@@ -53,7 +58,7 @@ public class ParsePrimitiveUtils {
     public static Timestamp parseTimestamp(String s) {
         Timestamp value;
         if (s.indexOf(':') > 0) {
-            value = Timestamp.valueOf(s);
+            value = Timestamp.valueOf(nonUTCFormat(s));
         } else if (s.indexOf('.') >= 0) {
             // it's a float
             value = new Timestamp(
@@ -63,6 +68,17 @@ public class ParsePrimitiveUtils {
             value = new Timestamp(Long.parseLong(s) * 1000);
         }
         return value;
+    }
+
+    public static String nonUTCFormat(String s) {
+        if(s.endsWith("Z")) {
+            try {
+                return NON_UTC_FORMAT.format(UTC_FORMAT.parse(s));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return s;
     }
 
 }
