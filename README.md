@@ -286,6 +286,7 @@ Versions:
           empty array where an empty object should be (#112)
 * 1.3.6   (2015/10/08)   Added support for string boolean (#118) Updated docs (#116)
 			 Added support for HDP 2.3. 
+* 1.3.7   (2015/12/10)   Added support for DATE type (hive 1.2.0 and higher)
 
 
 
