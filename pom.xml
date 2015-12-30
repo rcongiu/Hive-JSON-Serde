@@ -108,6 +108,16 @@
             <version>4.10</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.calcite</groupId>
+            <artifactId>calcite-avatica</artifactId>
+            <version>1.0.0-incubating</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.calcite</groupId>
+            <artifactId>calcite-core</artifactId>
+            <version>1.0.0-incubating</version>
+        </dependency>
     </dependencies>
 
     <reporting>
