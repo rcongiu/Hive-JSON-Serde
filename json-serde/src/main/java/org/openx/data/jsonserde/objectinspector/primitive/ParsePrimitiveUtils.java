@@ -19,50 +19,70 @@ public class ParsePrimitiveUtils {
     }
 
     public static byte parseByte(String s) {
-        if (isHex(s)) {
-            return Byte.parseByte(s.substring(2), 16);
-        } else {
-            return Byte.parseByte(s);
+        try {
+            if (isHex(s)) {
+                return Byte.parseByte(s.substring(2), 16);
+            } else {
+                return Byte.parseByte(s);
+            }
+        } catch (NumberFormatException e) {
+            return 0;
         }
     }
 
     public static int parseInt(String s) {
-        if (isHex(s)) {
-            return Integer.parseInt(s.substring(2), 16);
-        } else {
-            return Integer.parseInt(s);
+        try {
+            if (isHex(s)) {
+                return Integer.parseInt(s.substring(2), 16);
+            } else {
+                return Integer.parseInt(s);
+            }
+        } catch (NumberFormatException e) {
+            return 0;
         }
     }
 
     public static short parseShort(String s) {
-        if (isHex(s)) {
-            return Short.parseShort(s.substring(2), 16);
-        } else {
-            return Short.parseShort(s);
+        try {
+            if (isHex(s)) {
+                return Short.parseShort(s.substring(2), 16);
+            } else {
+                return Short.parseShort(s);
+            }
+        } catch (NumberFormatException e) {
+            return 0;
         }
     }
 
     public static long parseLong(String s) {
-        if (isHex(s)) {
-            return Long.parseLong(s.substring(2), 16);
-        } else {
-            return Long.parseLong(s);
+        try {
+            if (isHex(s)) {
+                return Long.parseLong(s.substring(2), 16);
+            } else {
+                return Long.parseLong(s);
+            }
+        } catch (NumberFormatException e) {
+            return 0l;
         }
     }
 
     public static Timestamp parseTimestamp(String s) {
-        Timestamp value;
-        if (s.indexOf(':') > 0) {
-            value = Timestamp.valueOf(s);
-        } else if (s.indexOf('.') >= 0) {
-            // it's a float
-            value = new Timestamp(
-                    (long) ((double) (Double.parseDouble(s) * 1000)));
-        } else {
-            // integer 
-            value = new Timestamp(Long.parseLong(s) * 1000);
+        try {
+            Timestamp value;
+            if (s.indexOf(':') > 0) {
+                value = Timestamp.valueOf(s);
+            } else if (s.indexOf('.') >= 0) {
+                // it's a float
+                value = new Timestamp(
+                        (long) ((double) (Double.parseDouble(s) * 1000)));
+            } else {
+                // integer
+                value = new Timestamp(Long.parseLong(s) * 1000);
+            }
+            return value;
+        } catch (NumberFormatException e) {
+            return new Timestamp(0l);
         }
-        return value;
     }
 
 }
