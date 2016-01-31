@@ -309,7 +309,7 @@ Versions:
 * 1.3.6   (2015/10/08)   Added support for string boolean (#118) Updated docs (#116)
 			 Added support for HDP 2.3. 
 * 1.3.7   (2015/12/10)   Added support for DATE type (hive 1.2.0 and higher)
-* 1.3.8   (2016/01/30)   Added JSON UDF
+          (2016/01/30)   Added JSON UDF
 
 
 
