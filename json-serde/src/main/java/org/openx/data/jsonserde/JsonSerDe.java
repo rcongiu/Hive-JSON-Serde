@@ -278,7 +278,7 @@ public class JsonSerDe implements SerDe {
      * @param oi  The field's objec inspector
      * @return  the serialized object
      */  
-    Object serializeField(Object obj,
+    public Object serializeField(Object obj,
             ObjectInspector oi ){
         if(obj == null) {return null;}
         

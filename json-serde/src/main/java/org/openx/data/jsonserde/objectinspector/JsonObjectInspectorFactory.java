@@ -21,15 +21,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.UnionObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorFactory;
 import org.apache.hadoop.hive.serde2.typeinfo.*;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringByteObjectInspector;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringDoubleObjectInspector;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringFloatObjectInspector;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringIntObjectInspector;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringJsonObjectInspector;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringLongObjectInspector;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringShortObjectInspector;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringTimestampObjectInspector;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringBooleanObjectInspector;
+import org.openx.data.jsonserde.objectinspector.primitive.*;
 
 /**
  *
@@ -210,6 +202,8 @@ public class JsonObjectInspectorFactory {
         primitiveOICache.put(PrimitiveCategory.DOUBLE, new JavaStringDoubleObjectInspector());
         primitiveOICache.put(PrimitiveCategory.TIMESTAMP, new JavaStringTimestampObjectInspector());
         primitiveOICache.put(PrimitiveCategory.BOOLEAN, new JavaStringBooleanObjectInspector());
+        // add the OIs that were introduced in different versions of hive
+        TypeEntryShim.addObjectInspectors(primitiveOICache);
     }
 
     /**
