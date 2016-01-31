@@ -4,6 +4,7 @@ JsonSerde - a read/write SerDe for JSON Data
 AUTHOR: Roberto Congiu <rcongiu@yahoo.com>
 
 Serialization/Deserialization module for Apache Hadoop Hive
+JSON conversion UDF
 
 This module allows hive to read and write in JSON format (see http://json.org for more info).
 
@@ -245,6 +246,27 @@ match hive table declaration.
 More detailed explanation on my blog:
 http://www.congiu.com/articles/json_serde
 
+
+### UDF
+
+As a bonus, I added a UDF that can turn anything into a JSON string.
+So, if you want to convert anything (arrays, structs..) into 
+a string containing their JSON representation, you can do that.
+
+Example:
+
+```
+add jar json-udf-1.3.8-jar-with-dependencies.jar;
+create temporary function tjson as 'org.openx.data.udf.JsonUDF';
+
+hive> select tjson(named_struct("name",name)) from mytest1;
+OK
+{"name":"roberto"}
+
+
+```
+
+
 ### Notes
 
 #### Timestamp support
@@ -287,6 +309,7 @@ Versions:
 * 1.3.6   (2015/10/08)   Added support for string boolean (#118) Updated docs (#116)
 			 Added support for HDP 2.3. 
 * 1.3.7   (2015/12/10)   Added support for DATE type (hive 1.2.0 and higher)
+* 1.3.8   (2016/01/30)   Added JSON UDF
 
 
 
