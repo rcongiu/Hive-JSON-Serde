@@ -13,7 +13,6 @@ import org.apache.hadoop.hive.serde2.io.TimestampWritable;
  * @author rcongiu
  */
 public class ParsePrimitiveUtils {
-
     public static boolean isHex(String s) {
         return s.startsWith("0x") || s.startsWith("0X");
     }
@@ -51,6 +50,8 @@ public class ParsePrimitiveUtils {
     }
 
     public static Timestamp parseTimestamp(String s) {
+        final String sampleUnixTimestampInMs = "1454612111000";
+
         Timestamp value;
         if (s.indexOf(':') > 0) {
             value = Timestamp.valueOf(s);
@@ -60,7 +61,13 @@ public class ParsePrimitiveUtils {
                     (long) ((double) (Double.parseDouble(s) * 1000)));
         } else {
             // integer 
-            value = new Timestamp(Long.parseLong(s) * 1000);
+            Long timestampValue = Long.parseLong(s);
+            Boolean isTimestampInMs = s.length() >= sampleUnixTimestampInMs.length();
+            if(isTimestampInMs) {
+                value = new Timestamp(timestampValue);
+            } else {
+                value = new Timestamp(timestampValue * 1000);
+            }            
         }
         return value;
     }
