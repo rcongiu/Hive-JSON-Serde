@@ -35,7 +35,7 @@ public class JavaStringBooleanObjectInspector extends AbstractPrimitiveJavaObjec
     if(o instanceof String) {
       return new BooleanWritable(Boolean.parseBoolean((String) o));
     } else {
-      return new BooleanWritable(((Boolean) o));
+      return new BooleanWritable((Boolean) o);
     }
   }
 
@@ -45,7 +45,7 @@ public class JavaStringBooleanObjectInspector extends AbstractPrimitiveJavaObjec
     if(o instanceof String) {
       return Boolean.parseBoolean((String) o);
     } else {
-      return (((Boolean) o));
+      return (Boolean) o;
     }
   }
 

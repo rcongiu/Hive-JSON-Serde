@@ -44,7 +44,7 @@ public class JavaStringDateObjectInspector  extends AbstractPrimitiveJavaObjectI
         if(o instanceof String) {
             return new DateWritable(parse((String)o));
         } else {
-            return new DateWritable(((Date) o));
+            return new DateWritable((Date) o);
         }
     }
 
@@ -53,7 +53,7 @@ public class JavaStringDateObjectInspector  extends AbstractPrimitiveJavaObjectI
         if(o instanceof String) {
            parse((String)o);
         } else {
-            if (o instanceof Date) return ((Date) o);
+            if (o instanceof Date) return (Date) o;
         }
         return null;
     }

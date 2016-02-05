@@ -45,7 +45,7 @@ public class JavaStringShortObjectInspector
         if(o instanceof String) {
            return ParsePrimitiveUtils.parseShort((String)o); 
         } else {
-          return ((Short) o);
+          return (Short) o;
         }
     }
 

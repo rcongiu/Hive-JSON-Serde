@@ -31,7 +31,7 @@ public class JsonStringJavaObjectInspector extends
 
   @Override
   public Text getPrimitiveWritableObject(Object o) {
-    return o == null ? null : new Text(((String) o.toString()));
+    return o == null ? null : new Text((String) o.toString());
   }
 
   @Override

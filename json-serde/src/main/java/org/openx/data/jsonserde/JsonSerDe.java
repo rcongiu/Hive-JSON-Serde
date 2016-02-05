@@ -109,7 +109,7 @@ public class JsonSerDe implements SerDe {
         } else {
             columnTypes = TypeInfoUtils.getTypeInfosFromTypeString(columnTypeProperty);
         }
-        assert (columnNames.size() == columnTypes.size());
+        assert columnNames.size() == columnTypes.size();
 
         stats = new SerDeStats();
 
@@ -128,8 +128,8 @@ public class JsonSerDe implements SerDe {
         String columnSortOrder = tbl.getProperty(Constants.SERIALIZATION_SORT_ORDER);
         columnSortOrderIsDesc = new boolean[columnNames.size()];
         for (int i = 0; i < columnSortOrderIsDesc.length; i++) {
-            columnSortOrderIsDesc[i] = (columnSortOrder != null && 
-                    columnSortOrder.charAt(i) == '-');
+            columnSortOrderIsDesc[i] = columnSortOrder != null && 
+                    columnSortOrder.charAt(i) == '-';
         }
         
         
@@ -222,7 +222,7 @@ public class JsonSerDe implements SerDe {
     }
 
     private String getSerializedFieldName( List<String> columnNames, int pos, StructField sf) {
-        String n = (columnNames==null? sf.getFieldName(): columnNames.get(pos));
+        String n = columnNames==null? sf.getFieldName(): columnNames.get(pos);
         
         if(options.getMappings().containsKey(n)) {
             return options.getMappings().get(n);
@@ -291,30 +291,30 @@ public class JsonSerDe implements SerDe {
                         result = null;
                         break;
                     case BOOLEAN:
-                        result = (((BooleanObjectInspector)poi).get(obj)?
+                        result = ((BooleanObjectInspector)poi).get(obj)?
                                             Boolean.TRUE:
-                                            Boolean.FALSE);
+                                            Boolean.FALSE;
                         break;
                     case BYTE:
-                        result = (((ByteObjectInspector)poi).get(obj));
+                        result = ((ByteObjectInspector)poi).get(obj);
                         break;
                     case DOUBLE:
-                        result = (((DoubleObjectInspector)poi).get(obj));
+                        result = ((DoubleObjectInspector)poi).get(obj);
                         break;
                     case FLOAT:
-                        result = (((FloatObjectInspector)poi).get(obj));
+                        result = ((FloatObjectInspector)poi).get(obj);
                         break;
                     case INT:
-                        result = (((IntObjectInspector)poi).get(obj));
+                        result = ((IntObjectInspector)poi).get(obj);
                         break;
                     case LONG:
-                        result = (((LongObjectInspector)poi).get(obj));
+                        result = ((LongObjectInspector)poi).get(obj);
                         break;
                     case SHORT:
-                        result = (((ShortObjectInspector)poi).get(obj));
+                        result = ((ShortObjectInspector)poi).get(obj);
                         break;
                     case STRING:
-                        result = (((StringObjectInspector)poi).getPrimitiveJavaObject(obj));
+                        result = ((StringObjectInspector)poi).getPrimitiveJavaObject(obj);
                         break;
                     case UNKNOWN:
                         throw new RuntimeException("Unknown primitive");

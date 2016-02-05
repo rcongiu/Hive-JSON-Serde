@@ -66,7 +66,7 @@ public class JsonUDF extends GenericUDF {
 
     @Override
     public String getDisplayString(String[] children) {
-        assert (children.length > 0);
+        assert children.length > 0;
 
         StringBuilder sb = new StringBuilder();
         sb.append("JsonUDF(");
