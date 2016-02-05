@@ -131,7 +131,7 @@ public class XML {
                                  String name) throws JSONException {
         char       c;
         int        i;
-        JSONObject jsonobject = null;
+        JSONObject jsonobject;
         String     string;
         String     tagName;
         Object     token;
@@ -420,11 +420,6 @@ public class XML {
                 value = jo.opt(key);
                 if (value == null) {
                 	value = "";
-                }
-                if (value instanceof String) {
-                    string = (String)value;
-                } else {
-                    string = null;
                 }
 
 // Emit content in body

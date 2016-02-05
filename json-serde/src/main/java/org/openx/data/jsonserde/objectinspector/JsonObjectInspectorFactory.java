@@ -82,8 +82,6 @@ public class JsonObjectInspectorFactory {
                     break;
                 }
                 case UNION:{
-                    UnionTypeInfo unionTypeInfo = (UnionTypeInfo) typeInfo;
-
                     List<ObjectInspector> ois = new LinkedList<ObjectInspector>();
                     for(  TypeInfo ti : ((UnionTypeInfo) typeInfo).getAllUnionObjectTypeInfos()) {
                         ois.add(getJsonObjectInspectorFromTypeInfo(ti, options));
