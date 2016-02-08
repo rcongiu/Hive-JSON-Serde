@@ -330,7 +330,7 @@ public class XML {
 	        if (initial == '0' && string.charAt(negative ? 2 : 1) == '0') {
 	        	return string;
 	        }
-	        if ((initial >= '0' && initial <= '9')) {
+	        if (initial >= '0' && initial <= '9') {
                 if (string.indexOf('.') >= 0) {
                     return Double.valueOf(string);
                 } else if (string.indexOf('e') < 0 && string.indexOf('E') < 0) {

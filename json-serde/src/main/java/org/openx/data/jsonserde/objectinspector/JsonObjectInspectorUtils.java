@@ -29,7 +29,7 @@ public class JsonObjectInspectorUtils {
       
       if(data instanceof String ||
          data instanceof Text) {
-          String str = (data instanceof String ? (String)data : ((Text)data).toString() );
+          String str = data instanceof String ? (String)data : ((Text)data).toString();
           if(str.trim().isEmpty())
             return null;
       }

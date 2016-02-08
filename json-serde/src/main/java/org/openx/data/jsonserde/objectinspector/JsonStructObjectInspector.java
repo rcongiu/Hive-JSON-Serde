@@ -98,7 +98,7 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
         MyField f = (MyField) fieldRef;
 
         int fieldID = f.getFieldID();
-        assert (fieldID >= 0 && fieldID < fields.size());
+        assert fieldID >= 0 && fieldID < fields.size();
 
         Object fieldData = null;
         
