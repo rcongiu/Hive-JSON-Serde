@@ -968,7 +968,7 @@ public class JSONObject {
 
         boolean includeSuperClass = klass.getClassLoader() != null;
 
-        Method[] methods = (includeSuperClass) ?
+        Method[] methods = includeSuperClass ?
                 klass.getMethods() : klass.getDeclaredMethods();
         for (int i = 0; i < methods.length; i += 1) {
             try {

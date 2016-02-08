@@ -45,7 +45,7 @@ public class JavaStringLongObjectInspector
         if(o instanceof String) {
            return ParsePrimitiveUtils.parseLong((String)o);
         } else {
-          return ((Long) o);
+          return (Long) o;
         }
     }
 

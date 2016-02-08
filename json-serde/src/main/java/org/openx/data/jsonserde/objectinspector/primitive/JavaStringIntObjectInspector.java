@@ -44,7 +44,7 @@ public class JavaStringIntObjectInspector
         if(o instanceof String) {
            return ParsePrimitiveUtils.parseInt((String)o); 
         } else {
-           return ((Integer) o);
+           return (Integer) o;
         }
     }
 
