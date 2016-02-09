@@ -114,10 +114,10 @@ public class JSONObject {
          */
         @Override
         public boolean equals(Object object) {
-            if(! (object instanceof JSONObject)) {
+            if(object == null || !(object instanceof JSONObject)) {
                 return false;
             } else {
-                return object == null || object == this;
+                return object == this;
             }
         }
 
