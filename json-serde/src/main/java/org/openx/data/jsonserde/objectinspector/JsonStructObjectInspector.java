@@ -12,6 +12,7 @@
 package org.openx.data.jsonserde.objectinspector;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StandardStructObjectInspector;
@@ -105,11 +106,28 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
         try {
             if (data.has(getJsonField(fieldRef))) {
                fieldData = data.get(getJsonField(fieldRef));
-               if (fieldData == JSONObject.NULL) fieldData = null;
-            } 
+
+            }  else if(options.dotsInKeyNames) {
+                // no mappings...but there are dots in name
+                for(Iterator i = data.keys(); i.hasNext(); ) {
+                    String s  = (String) i.next(); // name in json object
+                    if (s == null) break;
+
+                    if(s.contains(".")) {
+                        // substitute . with _
+                        String name = s.replaceAll("\\.", "_");
+                        // does it match the struct field name ?
+                        if(fieldRef.getFieldName().equals(name)) {
+                            fieldData = data.get(s);
+                            break;
+                        }
+                    }
+                }
+            }
         } catch (JSONException ex) {
             // if key does not exist
         }
+        if (fieldData == JSONObject.NULL) fieldData = null;
         return fieldData;
     }
     

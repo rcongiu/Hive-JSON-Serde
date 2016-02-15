@@ -35,14 +35,15 @@ public class JsonObjectInspectorFactory {
      *
      *
      * @param options
-     * @see JsonUtils
      * @param typeInfo
      * @return
      */
     public static ObjectInspector getJsonObjectInspectorFromTypeInfo(
             TypeInfo typeInfo, JsonStructOIOptions options) {
         ObjectInspector result = cachedJsonObjectInspector.get(typeInfo);
-        if (result == null) {
+        // let the factory cache the struct object inspectors since
+        // their key also has some options
+        if (result == null ||  typeInfo.getCategory() == ObjectInspector.Category.STRUCT) {
             switch (typeInfo.getCategory()) {
                 case PRIMITIVE: {
                     PrimitiveTypeInfo pti = (PrimitiveTypeInfo) typeInfo;

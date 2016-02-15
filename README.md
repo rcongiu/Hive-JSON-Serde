@@ -216,15 +216,50 @@ in hive, and hive will fail when issuing a CREATE TABLE.
 This SerDe can map hive columns over attributes named differently, using SerDe properties.
 
 For instance:
+
+```sql
 CREATE TABLE mytable (
 	myfield string,
         ts string ) ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
 WITH SERDEPROPERTIES ( "mapping.ts" = "timestamp" )
 STORED AS TEXTFILE;
+```
 
 Notice the "mapping.ts", that means: take the column 'ts' and read into it the 
 JSON attribute named "timestamp"
 
+#### Mapping names with dots
+
+as noted in issue #131, Hive doesn't like column names containing dots/periods.
+In theory they should work when quoted in backtics, but as noted in this [stack overflow discussion]
+( http://stackoverflow.com/questions/35344480/hive-select-column-with-non-alphanumeric-characters/35349822) 
+it doesn't work in practice for some limitation of the hive parser.
+
+So, you can then set the property `dots.in.keys` to `true` in the Serde Properties and access
+those fields by substituting the dot with an underscore.
+
+For example, if your JSON looks like
+```
+{ "my.field" : "value" , "other" : { "with.dots" : "blah } } 
+```
+you can create the table like
+
+```sql
+CREATE TABLE mytable (
+    my_field string,
+    other struct<with_dots:string> ) 
+    ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+WITH SERDEPROPERTIES ("dots.in.keys" = "true" )
+```
+
+Note how the table was created using underscores instead of dots.
+Now you can query the fields without hive getting confused.
+
+```sql
+SELECT my_field, other.with_dots from mytable
+
+value, blah
+```
 
 ### ARCHITECTURE
 
@@ -310,6 +345,7 @@ Versions:
 			 Added support for HDP 2.3. 
 * 1.3.7   (2015/12/10)   Added support for DATE type (hive 1.2.0 and higher)
           (2016/01/30)   Added JSON UDF
+* 1.3.8   (???)		 Added support for mapping json keys with dots (#131)
 
 
 

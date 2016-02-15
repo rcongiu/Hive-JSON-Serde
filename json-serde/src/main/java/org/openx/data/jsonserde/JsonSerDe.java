@@ -74,8 +74,11 @@ public class JsonSerDe implements SerDe {
     long serializedDataSize;
     // if set, will ignore malformed JSON in deserialization
     boolean ignoreMalformedJson = false;
+
+    // properties used in configuration
     public static final String PROP_IGNORE_MALFORMED_JSON = "ignore.malformed.json";
-    
+    public static final String PROP_DOTS_IN_KEYS = "dots.in.keys";
+
    JsonStructOIOptions options;
 
     /**
@@ -120,9 +123,6 @@ public class JsonSerDe implements SerDe {
         // build options
         options = 
                 new JsonStructOIOptions(getMappings(tbl));
-        
-        rowObjectInspector = (StructObjectInspector) JsonObjectInspectorFactory
-                .getJsonObjectInspectorFromTypeInfo(rowTypeInfo, options);
 
         // Get the sort order
         String columnSortOrder = tbl.getProperty(Constants.SERIALIZATION_SORT_ORDER);
@@ -131,8 +131,13 @@ public class JsonSerDe implements SerDe {
             columnSortOrderIsDesc[i] = columnSortOrder != null && 
                     columnSortOrder.charAt(i) == '-';
         }
-        
-        
+
+        // dots in key names. Substitute with underscores
+        options.setDotsInKeyNames(Boolean.parseBoolean(tbl.getProperty(PROP_DOTS_IN_KEYS,"false")));
+
+        rowObjectInspector = (StructObjectInspector) JsonObjectInspectorFactory
+                .getJsonObjectInspectorFromTypeInfo(rowTypeInfo, options);
+
         // other configuration
         ignoreMalformedJson = Boolean.parseBoolean(tbl
                 .getProperty(PROP_IGNORE_MALFORMED_JSON, "false"));
