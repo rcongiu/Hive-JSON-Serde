@@ -30,7 +30,11 @@ SOFTWARE.
  * @author JSON.org
  * @version 2010-12-24
  */
-public class Cookie {
+public final class Cookie {
+
+    private Cookie() {
+        throw new InstantiationError("This class must not be instantiated.");
+    }
 
     /**
      * Produce a copy of a string in which the characters '+', '%', '=', ';'

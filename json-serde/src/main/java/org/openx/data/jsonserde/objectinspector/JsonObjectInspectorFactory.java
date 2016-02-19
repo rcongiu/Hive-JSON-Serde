@@ -27,9 +27,13 @@ import org.openx.data.jsonserde.objectinspector.primitive.*;
  *
  * @author rcongiu
  */
-public class JsonObjectInspectorFactory {
+public final class JsonObjectInspectorFactory {
 
     static HashMap<TypeInfo, ObjectInspector> cachedJsonObjectInspector = new HashMap<TypeInfo, ObjectInspector>();
+
+    private JsonObjectInspectorFactory() {
+        throw new InstantiationError("This class must not be instantiated.");
+    }
 
     /**
      *

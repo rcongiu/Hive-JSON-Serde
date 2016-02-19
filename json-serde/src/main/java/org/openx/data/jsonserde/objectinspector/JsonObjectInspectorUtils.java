@@ -22,7 +22,12 @@ import org.apache.hadoop.io.Text;
  *
  * @author rcongiu
  */
-public class JsonObjectInspectorUtils {
+public final class JsonObjectInspectorUtils {
+
+    private JsonObjectInspectorUtils() {
+        throw new InstantiationError("This class must not be instantiated.");
+    }
+
       public static Object checkObject(Object data) {
       // just check for null first thing
       if(data == null) return data;

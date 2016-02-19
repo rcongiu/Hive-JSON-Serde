@@ -12,7 +12,12 @@ import org.apache.hadoop.hive.serde2.io.TimestampWritable;
  *
  * @author rcongiu
  */
-public class ParsePrimitiveUtils {
+public final class ParsePrimitiveUtils {
+
+    private ParsePrimitiveUtils() {
+        throw new InstantiationError("This class must not be instantiated.");
+    }
+
     public static boolean isHex(String s) {
         return s.startsWith("0x") || s.startsWith("0X");
     }
