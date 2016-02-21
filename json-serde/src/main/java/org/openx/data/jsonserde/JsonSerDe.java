@@ -323,6 +323,8 @@ public class JsonSerDe implements SerDe {
                         break;
                     case UNKNOWN:
                         throw new RuntimeException("Unknown primitive");
+                    default:
+                        break;
                 }
                 break;
             case MAP:
@@ -336,6 +338,8 @@ public class JsonSerDe implements SerDe {
                 break;
             case UNION:
                 result = serializeUnion(obj, (UnionObjectInspector)oi);
+            default:
+                break;
         }
         return result;
     }
