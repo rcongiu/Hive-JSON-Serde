@@ -24,7 +24,7 @@ a text file with json at a certain point, we would have to parse
 everything up to that point. See below
 ```
 // this will work
-{ "key' : 10 }
+{ "key" : 10 }
 
 // this will not work
 {
