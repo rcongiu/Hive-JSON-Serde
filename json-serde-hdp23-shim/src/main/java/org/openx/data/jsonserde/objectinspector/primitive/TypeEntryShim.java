@@ -12,12 +12,8 @@
 
 package org.openx.data.jsonserde.objectinspector.primitive;
 
-import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
 import org.apache.hadoop.hive.serde2.typeinfo.PrimitiveTypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
-
-import java.util.Map;
 
 /**
  *
@@ -32,11 +28,4 @@ public class TypeEntryShim {
     public static PrimitiveTypeInfo shortType = TypeInfoFactory.shortTypeInfo;
     public static PrimitiveTypeInfo timestampType = TypeInfoFactory.timestampTypeInfo;
     public static PrimitiveTypeInfo stringType = TypeInfoFactory.stringTypeInfo;
-    public static PrimitiveTypeInfo booleanType = TypeInfoFactory.booleanTypeInfo;
-    public static PrimitiveTypeInfo dateType = TypeInfoFactory.dateTypeInfo;
-
-    public static void addObjectInspectors(Map<PrimitiveObjectInspector.PrimitiveCategory, AbstractPrimitiveJavaObjectInspector> primitiveOICache) {
-        primitiveOICache.put(dateType.getPrimitiveCategory(), new JavaStringDateObjectInspector());
-    }
-
 }

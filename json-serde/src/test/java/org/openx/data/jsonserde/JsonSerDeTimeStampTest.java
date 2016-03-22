@@ -107,6 +107,19 @@ public class JsonSerDeTimeStampTest {
     assertEquals(getDate("2013-05-05 17:58:45.123"), 
             jstOi.getPrimitiveJavaObject(result.get("five")) );
   }
+
+  @Test
+  public void testTimestampDeSerializeNumericTimestampWithMilliseconds() throws Exception {
+    // Test that timestamp object can be deserialized
+    Writable w = new Text("{\"one\":true,\"five\":1367801925123}");
+// 
+    JSONObject result = (JSONObject) instance.deserialize(w);
+     StructObjectInspector soi = (StructObjectInspector) instance.getObjectInspector();
+    JavaStringTimestampObjectInspector jstOi = (JavaStringTimestampObjectInspector) 
+            soi.getStructFieldRef("five").getFieldObjectInspector();
+    assertEquals(getDate("2013-05-05 17:58:45.123"), 
+            jstOi.getPrimitiveJavaObject(result.get("five")) );
+  }
   
   /** 
    * for tests, if time zone not specified, make sure that it's in the correct

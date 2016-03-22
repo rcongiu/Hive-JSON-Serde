@@ -14,7 +14,7 @@ package org.openx.data.jsonserde;
 
 import java.util.Properties;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hive.serde.Constants;
+import org.apache.hadoop.hive.serde.serdeConstants;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector.Category;
 import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
@@ -47,8 +47,8 @@ public class NestedStructureTest {
     Configuration conf = null;
     Properties tbl = new Properties();
     // from google video API
-    tbl.setProperty(Constants.LIST_COLUMNS, "kind,etag,pageInfo,v_items");
-    tbl.setProperty(Constants.LIST_COLUMN_TYPES, ("string,string,"+ 
+    tbl.setProperty(serdeConstants.LIST_COLUMNS, "kind,etag,pageInfo,v_items");
+    tbl.setProperty(serdeConstants.LIST_COLUMN_TYPES, ("string,string,"+
                 "struct<totalResults:INT,resultsPerPage:INT>," + 
                 "ARRAY<STRUCT<kind:STRING," +
                     "etag:STRING," +
@@ -100,6 +100,5 @@ public class NestedStructureTest {
     
   }
 
-  
 
 }

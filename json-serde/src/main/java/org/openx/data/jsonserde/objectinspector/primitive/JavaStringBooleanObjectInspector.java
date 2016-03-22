@@ -13,50 +13,55 @@
 package org.openx.data.jsonserde.objectinspector.primitive;
 
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableStringObjectInspector;
-import org.apache.hadoop.io.Text;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableBooleanObjectInspector;
+import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
+import org.apache.hadoop.io.BooleanWritable;
 
 /**
- * This String ObjectInspector was built to tolerate non-string values 
- * and treat them as strings. 
- * @author rcongiu
+ *
+ * @author rajat.85@gmail.com
  */
-public class JsonStringJavaObjectInspector extends
-    AbstractPrimitiveJavaObjectInspector implements
-    SettableStringObjectInspector {
+public class JavaStringBooleanObjectInspector extends AbstractPrimitiveJavaObjectInspector
+  implements SettableBooleanObjectInspector {
 
-  JsonStringJavaObjectInspector() {
-    super(TypeEntryShim.stringType);
+  public JavaStringBooleanObjectInspector() {
+    super(TypeEntryShim.booleanType);
   }
 
   @Override
-  public Text getPrimitiveWritableObject(Object o) {
-    return o == null ? null : new Text((String) o.toString());
+  public Object getPrimitiveWritableObject(Object o) {
+    if(o == null) return null;
+
+    if(o instanceof String) {
+      return new BooleanWritable(Boolean.parseBoolean((String) o));
+    } else {
+      return new BooleanWritable((Boolean) o);
+    }
   }
 
   @Override
-  public String getPrimitiveJavaObject(Object o) {
-    return (String) o.toString();
+  public boolean get(Object o) {
+
+    if(o instanceof String) {
+      return Boolean.parseBoolean((String) o);
+    } else {
+      return (Boolean) o;
+    }
   }
 
   @Override
-  public Object create(Text value) {
-    return value == null ? null : value.toString();
+  public Object getPrimitiveJavaObject(Object o) {
+    return get(o);
   }
 
   @Override
-  public Object set(Object o, Text value) {
-    return value == null ? null : value.toString();
-  }
-
-  @Override
-  public Object create(String value) {
+  public Object create(boolean value) {
     return value;
   }
 
   @Override
-  public Object set(Object o, String value) {
+  public Object set(Object o, boolean value) {
     return value;
   }
-    
+
 }

@@ -22,8 +22,7 @@ import java.util.Map;
 import java.util.Properties;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.SerDeException;
-import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.*;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
@@ -32,11 +31,7 @@ import org.apache.hadoop.io.Writable;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.hive.serde2.SerDeStats;
-import org.apache.hadoop.hive.serde2.objectinspector.ListObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.MapObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector.Category;
-import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.BooleanObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.ByteObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.DoubleObjectInspector;
@@ -80,12 +75,16 @@ public class JsonSerDe implements SerDe {
 
     // if set, will ignore malformed JSON in deserialization
     boolean ignoreMalformedJson = false;
+
+    // properties used in configuration
     public static final String PROP_IGNORE_MALFORMED_JSON = "ignore.malformed.json";
 
     // Causes the JSON parser not to fail when duplicated object keys are encountered
     boolean allowDuplicates = false;
     public static final String PROP_ALLOW_DUPLICATE_KEYS = "allow.duplicate.json.keys";
-    
+
+    public static final String PROP_DOTS_IN_KEYS = "dots.in.keys";
+
    JsonStructOIOptions options;
 
     /**
@@ -119,7 +118,7 @@ public class JsonSerDe implements SerDe {
         } else {
             columnTypes = TypeInfoUtils.getTypeInfosFromTypeString(columnTypeProperty);
         }
-        assert (columnNames.size() == columnTypes.size());
+        assert columnNames.size() == columnTypes.size();
 
         stats = new SerDeStats();
 
@@ -130,19 +129,21 @@ public class JsonSerDe implements SerDe {
         // build options
         options = 
                 new JsonStructOIOptions(getMappings(tbl));
-        
-        rowObjectInspector = (StructObjectInspector) JsonObjectInspectorFactory
-                .getJsonObjectInspectorFromTypeInfo(rowTypeInfo, options);
 
         // Get the sort order
         String columnSortOrder = tbl.getProperty(Constants.SERIALIZATION_SORT_ORDER);
         columnSortOrderIsDesc = new boolean[columnNames.size()];
         for (int i = 0; i < columnSortOrderIsDesc.length; i++) {
-            columnSortOrderIsDesc[i] = (columnSortOrder != null && 
-                    columnSortOrder.charAt(i) == '-');
+            columnSortOrderIsDesc[i] = columnSortOrder != null && 
+                    columnSortOrder.charAt(i) == '-';
         }
-        
-        
+
+        // dots in key names. Substitute with underscores
+        options.setDotsInKeyNames(Boolean.parseBoolean(tbl.getProperty(PROP_DOTS_IN_KEYS,"false")));
+
+        rowObjectInspector = (StructObjectInspector) JsonObjectInspectorFactory
+                .getJsonObjectInspectorFromTypeInfo(rowTypeInfo, options);
+
         // other configuration
         ignoreMalformedJson = Boolean.parseBoolean(tbl
                 .getProperty(PROP_IGNORE_MALFORMED_JSON, "false"));
@@ -167,7 +168,6 @@ public class JsonSerDe implements SerDe {
 	
         // Try parsing row into JSON object
         Object jObj = null;
-
         
         try {
             String txt = rowText.toString().trim();
@@ -236,7 +236,7 @@ public class JsonSerDe implements SerDe {
     }
 
     private String getSerializedFieldName( List<String> columnNames, int pos, StructField sf) {
-        String n = (columnNames==null? sf.getFieldName(): columnNames.get(pos));
+        String n = columnNames==null? sf.getFieldName(): columnNames.get(pos);
         
         if(options.getMappings().containsKey(n)) {
             return options.getMappings().get(n);
@@ -292,7 +292,7 @@ public class JsonSerDe implements SerDe {
      * @param oi  The field's objec inspector
      * @return  the serialized object
      */  
-    Object serializeField(Object obj,
+    public Object serializeField(Object obj,
             ObjectInspector oi ){
         if(obj == null) {return null;}
         
@@ -305,33 +305,35 @@ public class JsonSerDe implements SerDe {
                         result = null;
                         break;
                     case BOOLEAN:
-                        result = (((BooleanObjectInspector)poi).get(obj)?
+                        result = ((BooleanObjectInspector)poi).get(obj)?
                                             Boolean.TRUE:
-                                            Boolean.FALSE);
+                                            Boolean.FALSE;
                         break;
                     case BYTE:
-                        result = (((ByteObjectInspector)poi).get(obj));
+                        result = ((ByteObjectInspector)poi).get(obj);
                         break;
                     case DOUBLE:
-                        result = (((DoubleObjectInspector)poi).get(obj));
+                        result = ((DoubleObjectInspector)poi).get(obj);
                         break;
                     case FLOAT:
-                        result = (((FloatObjectInspector)poi).get(obj));
+                        result = ((FloatObjectInspector)poi).get(obj);
                         break;
                     case INT:
-                        result = (((IntObjectInspector)poi).get(obj));
+                        result = ((IntObjectInspector)poi).get(obj);
                         break;
                     case LONG:
-                        result = (((LongObjectInspector)poi).get(obj));
+                        result = ((LongObjectInspector)poi).get(obj);
                         break;
                     case SHORT:
-                        result = (((ShortObjectInspector)poi).get(obj));
+                        result = ((ShortObjectInspector)poi).get(obj);
                         break;
                     case STRING:
-                        result = (((StringObjectInspector)poi).getPrimitiveJavaObject(obj));
+                        result = ((StringObjectInspector)poi).getPrimitiveJavaObject(obj);
                         break;
                     case UNKNOWN:
                         throw new RuntimeException("Unknown primitive");
+                    default:
+                        break;
                 }
                 break;
             case MAP:
@@ -342,6 +344,10 @@ public class JsonSerDe implements SerDe {
                 break;
             case STRUCT:
                 result = serializeStruct(obj, (StructObjectInspector)oi, null);
+                break;
+            case UNION:
+                result = serializeUnion(obj, (UnionObjectInspector)oi);
+            default:
                 break;
         }
         return result;
@@ -371,6 +377,15 @@ public class JsonSerDe implements SerDe {
             }
         }
         return ar;
+    }
+
+    /**
+     * Serializes a Union
+     */
+    private Object serializeUnion(Object obj, UnionObjectInspector oi) {
+        if(obj == null) return null;
+
+        return serializeField(obj, oi.getObjectInspectors().get(oi.getTag(obj)));
     }
 
     /**

@@ -1,18 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
     <parent>
-	<groupId>org.openx.data</groupId>
-	<artifactId>json-serde-parent</artifactId>
-	<relativePath>../pom.xml</relativePath>
-	<version>1.3.8-MANGO</version>
+        <groupId>org.openx.data</groupId>
+        <artifactId>json-serde-parent</artifactId>
+        <relativePath>../pom.xml</relativePath>
+        <version>1.3.8-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.openx.data</groupId>
-    <artifactId>json-serde</artifactId>
+    <artifactId>json-udf</artifactId>
     <packaging>jar</packaging>
 
-    <name>json-serde-main</name>
+    <name>json-udf</name>
 
 
     <build>
@@ -73,18 +72,10 @@
     <dependencies>
         <dependency>
             <groupId>org.openx.data</groupId>
-            <artifactId>${serde.shim}</artifactId>
+            <artifactId>json-serde</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
-
-        <dependency>
-            <groupId>org.openx.data</groupId>
-            <artifactId>json</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
 
         <dependency>
             <groupId>org.apache.hive</groupId>

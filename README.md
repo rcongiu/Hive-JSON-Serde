@@ -4,6 +4,7 @@ JsonSerde - a read/write SerDe for JSON Data
 AUTHOR: Roberto Congiu <rcongiu@yahoo.com>
 
 Serialization/Deserialization module for Apache Hadoop Hive
+JSON conversion UDF
 
 This module allows hive to read and write in JSON format (see http://json.org for more info).
 
@@ -14,6 +15,24 @@ Features:
 * nested data structures are also supported. 
 * modular to support multiple versions of CDH
 
+IMPORTANT!!! READ THIS BELOW!!
+Json records must be _one per line_, that is, the serde
+WILL NOT WORK with multiline Json. Why ? Because the way hadoop
+works with files, they have to be _splittable_, for instance, 
+hadoop will split text files at end of line..but in order to split
+a text file with json at a certain point, we would have to parse
+everything up to that point. See below
+```
+// this will work
+{ "key" : 10 }
+
+// this will not work
+{
+  "key" : 10 
+}
+```
+
+
 BINARIES
 ----------
 github used to allow uploading of binaries, but not anymore.
@@ -23,7 +42,7 @@ so I decided to upload binaries here:
 http://www.congiu.net/hive-json-serde/
 
 so you don't need to compile your own. There are versions for
-CDH4 and CDH5.
+CDH4, CDH5 and HDP 2.3.
 
 
 COMPILE
@@ -41,6 +60,11 @@ mvn -Pcdh4 clean package
 To build for CDH5:
 ```
 mvn -Pcdh5 clean package
+```
+
+To build for HDP 2.3:
+```
+mvn -Phdp23 clean package
 ```
 
 the serde will be in 
@@ -158,6 +182,32 @@ ALTER TABLE json_table SET SERDEPROPERTIES ( "ignore.malformed.json" = "true");
 it will not make the query fail, and the above record will be returned as
 NULL	null	null
 
+
+### UNIONTYPE support (PLEASE READ IF YOU USE IT)
+
+A Uniontype is a field that can contain different types, like in C.
+Hive usually stores a 'tag' that is basically the index of the datatype,
+for instance, if you create a uniontype<int,string,float> , tag would be
+0 for int, 1 for string, 2 for float (see https://cwiki.apache.org/confluence/display/Hive/LanguageManual+Types#LanguageManualTypes-UnionTypes).
+
+Now, JSON data does not store anything like that, so the serde will try and
+look what it can do.. that is, check, in order, if the data is compatible
+with any of the given types. So, THE ORDER MATTERS. Let's say you define
+a field f as UNIONTYPE<int,string> and your js has
+```{json}
+{ "f": "123" }  // parsed as int, since int precedes string in definitions,
+                // and "123" can be parsed to a number
+{ "f": "asv" }  // parsed as string
+```
+That is, a number in a string. This will return a tag of 0 and an int rather
+than a string.
+It's worth noticing that complex Union types may not be that efficient, since
+the SerDe may try to parse the same data in several ways; however, several
+people asked me to implement this feature to cope with bad JSON, so..I did.
+
+
+
+
 ### MAPPING HIVE KEYWORDS
 
 Sometimes it may happen that JSON data has attributes named like reserved words in hive.
@@ -166,15 +216,50 @@ in hive, and hive will fail when issuing a CREATE TABLE.
 This SerDe can map hive columns over attributes named differently, using SerDe properties.
 
 For instance:
+
+```sql
 CREATE TABLE mytable (
 	myfield string,
         ts string ) ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
 WITH SERDEPROPERTIES ( "mapping.ts" = "timestamp" )
 STORED AS TEXTFILE;
+```
 
 Notice the "mapping.ts", that means: take the column 'ts' and read into it the 
 JSON attribute named "timestamp"
 
+#### Mapping names with dots
+
+as noted in issue #131, Hive doesn't like column names containing dots/periods.
+In theory they should work when quoted in backtics, but as noted in this [stack overflow discussion]
+( http://stackoverflow.com/questions/35344480/hive-select-column-with-non-alphanumeric-characters/35349822) 
+it doesn't work in practice for some limitation of the hive parser.
+
+So, you can then set the property `dots.in.keys` to `true` in the Serde Properties and access
+those fields by substituting the dot with an underscore.
+
+For example, if your JSON looks like
+```
+{ "my.field" : "value" , "other" : { "with.dots" : "blah } } 
+```
+you can create the table like
+
+```sql
+CREATE TABLE mytable (
+    my_field string,
+    other struct<with_dots:string> ) 
+    ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+WITH SERDEPROPERTIES ("dots.in.keys" = "true" )
+```
+
+Note how the table was created using underscores instead of dots.
+Now you can query the fields without hive getting confused.
+
+```sql
+SELECT my_field, other.with_dots from mytable
+
+value, blah
+```
 
 ### ARCHITECTURE
 
@@ -195,6 +280,27 @@ match hive table declaration.
 
 More detailed explanation on my blog:
 http://www.congiu.com/articles/json_serde
+
+
+### UDF
+
+As a bonus, I added a UDF that can turn anything into a JSON string.
+So, if you want to convert anything (arrays, structs..) into 
+a string containing their JSON representation, you can do that.
+
+Example:
+
+```
+add jar json-udf-1.3.8-jar-with-dependencies.jar;
+create temporary function tjson as 'org.openx.data.udf.JsonUDF';
+
+hive> select tjson(named_struct("name",name)) from mytest1;
+OK
+{"name":"roberto"}
+
+
+```
+
 
 ### Notes
 
@@ -233,6 +339,14 @@ Versions:
 		      	refactored Timestamp Handling
 * 1.2     (2014/06)     Refactored to multimodule for CDH5 compatibility
 * 1.3     (2014/09/08)  fixed #80, #82, #84, #85
+* 1.3.5   (2015/08/30)   Added UNIONTYPE support (#53), made CDH5 default, handle
+          empty array where an empty object should be (#112)
+* 1.3.6   (2015/10/08)   Added support for string boolean (#118) Updated docs (#116)
+			 Added support for HDP 2.3. 
+* 1.3.7   (2015/12/10)   Added support for DATE type (hive 1.2.0 and higher)
+          (2016/01/30)   Added JSON UDF
+* 1.3.8   (???)		 Added support for mapping json keys with dots (#131)
+
 
 
 

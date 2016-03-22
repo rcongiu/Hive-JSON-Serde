@@ -12,6 +12,7 @@
 package org.openx.data.jsonserde.objectinspector;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StandardStructObjectInspector;
@@ -61,7 +62,12 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
             // somehow we have the object parsed already
             return getStructFieldDataFromList((List) data, fieldRef );
         } else if (data instanceof JSONArray) {
-            return getStructFieldDataFromList(((JSONArray) data).getAsArrayList(), fieldRef );
+            JSONArray ja = (JSONArray) data;
+            // se #113: some people complain of receving bad JSON,
+            // sometimes getting [] instead of {} for an empty field.
+            // this line should help them
+            if(ja.length() == 0 ) return null;
+            return getStructFieldDataFromList(ja.getAsArrayList(), fieldRef );
         } else {
             throw new Error("Data is not JSONObject  but " + data.getClass().getCanonicalName() +
                     " with value " + data.toString()) ;
@@ -93,18 +99,35 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
         MyField f = (MyField) fieldRef;
 
         int fieldID = f.getFieldID();
-        assert (fieldID >= 0 && fieldID < fields.size());
+        assert fieldID >= 0 && fieldID < fields.size();
 
         Object fieldData = null;
         
         try {
             if (data.has(getJsonField(fieldRef))) {
                fieldData = data.get(getJsonField(fieldRef));
-               if (fieldData == JSONObject.NULL) fieldData = null;
-            } 
+
+            }  else if(options.dotsInKeyNames) {
+                // no mappings...but there are dots in name
+                for(Iterator i = data.keys(); i.hasNext(); ) {
+                    String s  = (String) i.next(); // name in json object
+                    if (s == null) break;
+
+                    if(s.contains(".")) {
+                        // substitute . with _
+                        String name = s.replaceAll("\\.", "_");
+                        // does it match the struct field name ?
+                        if(fieldRef.getFieldName().equals(name)) {
+                            fieldData = data.get(s);
+                            break;
+                        }
+                    }
+                }
+            }
         } catch (JSONException ex) {
             // if key does not exist
         }
+        if (fieldData == JSONObject.NULL) fieldData = null;
         return fieldData;
     }
     

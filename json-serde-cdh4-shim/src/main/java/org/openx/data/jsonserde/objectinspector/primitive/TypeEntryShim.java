@@ -13,8 +13,14 @@
 
 package org.openx.data.jsonserde.objectinspector.primitive;
 
+import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorUtils.PrimitiveTypeEntry;
+import org.apache.hadoop.hive.serde2.typeinfo.PrimitiveTypeInfo;
+import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
+
+import java.util.Map;
 
 /**
  *
@@ -29,5 +35,12 @@ public class TypeEntryShim {
     public static PrimitiveTypeEntry shortType = PrimitiveObjectInspectorUtils.shortTypeEntry;
     public static PrimitiveTypeEntry timestampType = PrimitiveObjectInspectorUtils.timestampTypeEntry;
     public static PrimitiveTypeEntry stringType = PrimitiveObjectInspectorUtils.stringTypeEntry;
-    
+    public static PrimitiveTypeEntry booleanType = PrimitiveObjectInspectorUtils.booleanTypeEntry;
+    // this won't actually be used since datetype was added in 1.2, but we have to add it anyway
+    public static PrimitiveTypeEntry dateType = PrimitiveObjectInspectorUtils.stringTypeEntry;
+
+    // no specific OIs in this shimt
+    public static void addObjectInspectors(Map<PrimitiveObjectInspector.PrimitiveCategory, AbstractPrimitiveJavaObjectInspector> primitiveOICache) {
+
+    }
 }

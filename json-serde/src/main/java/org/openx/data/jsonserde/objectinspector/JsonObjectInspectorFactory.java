@@ -11,27 +11,17 @@
  *======================================================================*/
 package org.openx.data.jsonserde.objectinspector;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
+
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
 import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector.PrimitiveCategory;
+import org.apache.hadoop.hive.serde2.objectinspector.UnionObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitiveJavaObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorFactory;
-import org.apache.hadoop.hive.serde2.typeinfo.ListTypeInfo;
-import org.apache.hadoop.hive.serde2.typeinfo.MapTypeInfo;
-import org.apache.hadoop.hive.serde2.typeinfo.PrimitiveTypeInfo;
-import org.apache.hadoop.hive.serde2.typeinfo.StructTypeInfo;
-import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringByteObjectInspector;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringDoubleObjectInspector;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringFloatObjectInspector;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringIntObjectInspector;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringLongObjectInspector;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringShortObjectInspector;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringTimestampObjectInspector;
+import org.apache.hadoop.hive.serde2.typeinfo.*;
+import org.openx.data.jsonserde.objectinspector.primitive.*;
 
 /**
  *
@@ -45,14 +35,15 @@ public class JsonObjectInspectorFactory {
      *
      *
      * @param options
-     * @see JsonUtils
      * @param typeInfo
      * @return
      */
     public static ObjectInspector getJsonObjectInspectorFromTypeInfo(
             TypeInfo typeInfo, JsonStructOIOptions options) {
         ObjectInspector result = cachedJsonObjectInspector.get(typeInfo);
-        if (result == null) {
+        // let the factory cache the struct object inspectors since
+        // their key also has some options
+        if (result == null ||  typeInfo.getCategory() == ObjectInspector.Category.STRUCT) {
             switch (typeInfo.getCategory()) {
                 case PRIMITIVE: {
                     PrimitiveTypeInfo pti = (PrimitiveTypeInfo) typeInfo;
@@ -91,6 +82,15 @@ public class JsonObjectInspectorFactory {
                             fieldObjectInspectors, options);
                     break;
                 }
+                case UNION:{
+                    List<ObjectInspector> ois = new LinkedList<ObjectInspector>();
+                    for(  TypeInfo ti : ((UnionTypeInfo) typeInfo).getAllUnionObjectTypeInfos()) {
+                        ois.add(getJsonObjectInspectorFromTypeInfo(ti, options));
+                    }
+                    result = getJsonUnionObjectInspector(ois, options);
+                    break;
+                }
+
                 default: {
                     result = null;
                 }
@@ -100,11 +100,32 @@ public class JsonObjectInspectorFactory {
         return result;
     }
 
+
+    static HashMap<ArrayList<Object>, JsonUnionObjectInspector> cachedJsonUnionObjectInspector
+            = new HashMap<ArrayList<Object>, JsonUnionObjectInspector>();
+
+    public static JsonUnionObjectInspector getJsonUnionObjectInspector(
+            List<ObjectInspector> ois,
+            JsonStructOIOptions options) {
+        ArrayList<Object> signature = new ArrayList<Object>();
+        signature.add(ois);
+        signature.add(options);
+        JsonUnionObjectInspector result = cachedJsonUnionObjectInspector
+                .get(signature);
+        if (result == null) {
+            result = new JsonUnionObjectInspector(ois, options);
+            cachedJsonUnionObjectInspector.put(signature,result);
+
+        }
+        return result;
+    }
+
     /*
      * Caches Struct Object Inspectors
      */
     static HashMap<ArrayList<Object>, JsonStructObjectInspector> cachedStandardStructObjectInspector
             = new HashMap<ArrayList<Object>, JsonStructObjectInspector>();
+
 
     public static JsonStructObjectInspector getJsonStructObjectInspector(
             List<String> structFieldNames,
@@ -171,15 +192,19 @@ public class JsonObjectInspectorFactory {
             = new EnumMap<PrimitiveCategory, AbstractPrimitiveJavaObjectInspector>(PrimitiveCategory.class);
 
     static {
-	primitiveOICache.put(PrimitiveCategory.BYTE, new JavaStringByteObjectInspector());
-	primitiveOICache.put(PrimitiveCategory.SHORT, new JavaStringShortObjectInspector());
+        primitiveOICache.put(PrimitiveCategory.STRING, new JavaStringJsonObjectInspector());
+        primitiveOICache.put(PrimitiveCategory.BYTE, new JavaStringByteObjectInspector());
+        primitiveOICache.put(PrimitiveCategory.SHORT, new JavaStringShortObjectInspector());
         primitiveOICache.put(PrimitiveCategory.INT, new JavaStringIntObjectInspector());
         primitiveOICache.put(PrimitiveCategory.LONG, new JavaStringLongObjectInspector());
-	primitiveOICache.put(PrimitiveCategory.FLOAT, new JavaStringFloatObjectInspector());
-	primitiveOICache.put(PrimitiveCategory.DOUBLE, new JavaStringDoubleObjectInspector());
+        primitiveOICache.put(PrimitiveCategory.FLOAT, new JavaStringFloatObjectInspector());
+        primitiveOICache.put(PrimitiveCategory.DOUBLE, new JavaStringDoubleObjectInspector());
         primitiveOICache.put(PrimitiveCategory.TIMESTAMP, new JavaStringTimestampObjectInspector());
+        primitiveOICache.put(PrimitiveCategory.BOOLEAN, new JavaStringBooleanObjectInspector());
+        // add the OIs that were introduced in different versions of hive
+        TypeEntryShim.addObjectInspectors(primitiveOICache);
     }
-    
+
     /**
      * gets the appropriate adapter wrapper around the object inspector if
      * necessary, that is, if we're dealing with numbers. The JSON parser won't
@@ -190,7 +215,7 @@ public class JsonObjectInspectorFactory {
      */
     public static AbstractPrimitiveJavaObjectInspector getPrimitiveJavaObjectInspector(
             PrimitiveCategory primitiveCategory) {
-        
+
             if(! primitiveOICache.containsKey(primitiveCategory)) {
                 primitiveOICache.put(primitiveCategory, PrimitiveObjectInspectorFactory.
                     getPrimitiveJavaObjectInspector(primitiveCategory));

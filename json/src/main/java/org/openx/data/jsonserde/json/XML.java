@@ -131,7 +131,7 @@ public class XML {
                                  String name) throws JSONException {
         char       c;
         int        i;
-        JSONObject jsonobject = null;
+        JSONObject jsonobject;
         String     string;
         String     tagName;
         Object     token;
@@ -330,7 +330,7 @@ public class XML {
 	        if (initial == '0' && string.charAt(negative ? 2 : 1) == '0') {
 	        	return string;
 	        }
-	        if ((initial >= '0' && initial <= '9')) {
+	        if (initial >= '0' && initial <= '9') {
                 if (string.indexOf('.') >= 0) {
                     return Double.valueOf(string);
                 } else if (string.indexOf('e') < 0 && string.indexOf('E') < 0) {
@@ -420,11 +420,6 @@ public class XML {
                 value = jo.opt(key);
                 if (value == null) {
                 	value = "";
-                }
-                if (value instanceof String) {
-                    string = (String)value;
-                } else {
-                    string = null;
                 }
 
 // Emit content in body
