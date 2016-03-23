@@ -7,6 +7,7 @@ package org.openx.data.jsonserde.objectinspector.primitive;
 
 import java.sql.Timestamp;
 import org.apache.hadoop.hive.serde2.io.TimestampWritable;
+import org.openx.data.jsonserde.json.JSONObject;
 
 /**
  *
@@ -70,6 +71,10 @@ public class ParsePrimitiveUtils {
             }            
         }
         return value;
+    }
+
+    public static boolean isString(Object value) {
+        return value instanceof String || value instanceof JSONObject.DelayedValue;
     }
 
 }

@@ -57,18 +57,13 @@ public class JavaStringTimestampObjectInspector extends AbstractPrimitiveJavaObj
     @Override
     public TimestampWritable getPrimitiveWritableObject(Object o) {
         if(o == null) return null;
-        
-        if(o instanceof String) {
-           return new TimestampWritable(ParsePrimitiveUtils.parseTimestamp((String)o)); 
-        } else {
-          return new TimestampWritable((Timestamp) o);
-        }
+        return new TimestampWritable(getPrimitiveJavaObject(0));
     }
 
     @Override
     public Timestamp getPrimitiveJavaObject(Object o) {
-         if(o instanceof String) {
-           return ParsePrimitiveUtils.parseTimestamp((String)o); 
+         if(ParsePrimitiveUtils.isString(o)) {
+           return ParsePrimitiveUtils.parseTimestamp(o.toString());
         } else {
            return (Timestamp) o;
         }

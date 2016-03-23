@@ -31,19 +31,13 @@ public class JavaStringLongObjectInspector
     @Override
     public Object getPrimitiveWritableObject(Object o) {
         if(o == null) return null;
-
-        if(o instanceof String) {
-           return new LongWritable(ParsePrimitiveUtils.parseLong((String)o));
-        } else {
-          return new LongWritable(((Long) o).longValue());
-        }
+        return new LongWritable(get(o));
     }
 
     @Override
     public long get(Object o) {
-
-        if(o instanceof String) {
-           return ParsePrimitiveUtils.parseLong((String)o);
+        if(ParsePrimitiveUtils.isString(o)) {
+           return ParsePrimitiveUtils.parseLong(o.toString());
         } else {
           return (Long) o;
         }
