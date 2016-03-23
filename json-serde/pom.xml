@@ -143,21 +143,8 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-kotlin</artifactId>
-            <version>2.7.1-2</version>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
-    <repositories>
-        <repository>
-            <id>jackson</id>
-            <url>http://dl.bintray.com/jaysonminard/kohesive</url>
-        </repository>
-    </repositories>
 </project>
 
 
