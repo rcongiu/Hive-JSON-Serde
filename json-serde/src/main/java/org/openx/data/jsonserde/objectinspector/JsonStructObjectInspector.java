@@ -11,9 +11,8 @@
  *======================================================================*/
 package org.openx.data.jsonserde.objectinspector;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StandardStructObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
@@ -39,7 +38,7 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
       public JsonStructObjectInspector(List<String> structFieldNames,
             List<ObjectInspector> structFieldObjectInspectors,JsonStructOIOptions opts) {
         super(structFieldNames, structFieldObjectInspectors);   
-        
+
         options = opts;
     }
 
@@ -104,7 +103,10 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
         Object fieldData = null;
         
         try {
-            if (data.has(getJsonField(fieldRef))) {
+            if (fieldRef.getFieldName().equalsIgnoreCase(options.unmappedValuesFieldName)) {
+                fieldData = data.getNotTheseKeys(getJsonFieldNames());
+            }
+            else if (data.has(getJsonField(fieldRef))) {
                fieldData = data.get(getJsonField(fieldRef));
 
             }  else if(options.dotsInKeyNames) {
@@ -156,13 +158,35 @@ public class JsonStructObjectInspector extends StandardStructObjectInspector {
         JSONObject jObj = (JSONObject) o;
         values.clear();
 
+        int unmappedFieldPosition = -1;
         for (int i = 0; i < fields.size(); i++) {
-                if (jObj.has(getJsonField(fields.get(i)))){
-                    values.add(getStructFieldData(o, fields.get(i)));
-                } else {
+                StructField field = fields.get(i);
+                if (field.getFieldName().equalsIgnoreCase(options.unmappedValuesFieldName)) {
+                    unmappedFieldPosition = i;
                     values.add(null);
                 }
+                else {
+                    String fieldName = getJsonField(field);
+                    if (jObj.has(fieldName)){
+                        values.add(getStructFieldData(o, field));
+                    } else {
+                        values.add(null);
+                    }
+                }
         }
+
+        if(unmappedFieldPosition != -1) {
+            values.set(unmappedFieldPosition, jObj.getNotTheseKeys(getJsonFieldNames()));
+        }
+
         return values;
+    }
+
+    public Set<String> getJsonFieldNames() {
+        Set<String> fieldNames = new HashSet<String>();
+        for(StructField field : fields) {
+            fieldNames.add(getJsonField(field));
+        }
+        return fieldNames;
     }
 }

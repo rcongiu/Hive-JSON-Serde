@@ -29,13 +29,7 @@ import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * A JSONObject is an unordered collection of name/value pairs. Its
@@ -458,12 +452,14 @@ public class JSONObject {
         if (key == null) {
             throw new JSONException("Null key.");
         }
-        Object object = opt(key);
-        if (object == null) {
+
+        // Null values are allowed!  Make sure you explicitly test for key presence
+        if(!this.map.containsKey(key)) {
             throw new JSONException("JSONObject[" + quote(key) +
                     "] not found.");
         }
-        return object;
+
+        return opt(key);
     }
 
 
@@ -1231,6 +1227,31 @@ public class JSONObject {
     }
 
     /**
+     * This simply prevents values that were parsed w/o quotes to re-serialized to
+     * values w/o quotes since otherwise numbers will turn into strings when parsed and
+     * then returned to a JSON encoding!
+     */
+    public static class DelayedValue implements JSONString {
+
+        private final String value;
+
+        DelayedValue(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toJSONString() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return value;
+        }
+
+    }
+
+    /**
      * Try to convert a string into a number, boolean, or null. If the string
      * can't be converted, return the string.
      * @param string A String.
@@ -1250,7 +1271,9 @@ public class JSONObject {
             return JSONObject.NULL;
         }
 
-        return string;
+        // This is probably going to be a Number, but we'll delay parsing until we
+        // know we need it in case there's an encoding problem we'd rather ignore
+        return new DelayedValue(string);
     }
 
 
@@ -1426,7 +1449,7 @@ public class JSONObject {
      * @throws JSONException If the value is or contains an invalid number.
      */
     public static String valueToString(Object value) throws JSONException {
-        if (value == null ) {
+        if (value == null || value == NULL) {
             return "null";
         }
         if (value instanceof JSONString) {
@@ -1480,7 +1503,7 @@ public class JSONObject {
          int    indentFactor, 
          int    indent
      ) throws JSONException {
-        if (value == null ) {
+        if (value == null || value == NULL) {
             return "null";
         }
         try {
@@ -1609,4 +1632,38 @@ public class JSONObject {
             throw new JSONException(exception);
         }
      }
+
+    /**
+     * Creates a new, single-level "remainder attributes" JSONObject whose keys are all keys on this object not in the
+     * list passed and the values are *always* strings that represent the JSON encoding of all this object's value.
+     * Except that all null values remain to retain semantics.
+     * @param fieldNames
+     * @return
+     */
+     public JSONObject getNotTheseKeys(Set<String> fieldNames) {
+         try {
+             JSONObject retVal = new JSONObject();
+             Iterator iter = this.map.entrySet().iterator();
+             while (iter.hasNext()) {
+                 Map.Entry entry = (Map.Entry) iter.next();
+                 String key = entry.getKey().toString();
+                 Object value = entry.getValue();
+                 if (!fieldNames.contains(key)) {
+                     if(value == null || value == NULL) {
+                         // Let nulls remain explicit and not string encoded
+                         retVal.map.put(key, null);
+                     }
+                     else {
+                         retVal.map.put(key, valueToString(value));
+                     }
+                 }
+             }
+
+             return retVal;
+         }
+         catch(Throwable ex) {
+             throw new RuntimeException("Could not build unmapped attributes col", ex);
+         }
+     }
+
 }

@@ -85,6 +85,10 @@ public class JsonSerDe implements SerDe {
 
     public static final String PROP_DOTS_IN_KEYS = "dots.in.keys";
 
+    // Allow table schema to define an extra MAP<STRING, STRING> column to dump all other base level keys into that
+    // aren't otherwise defined in the schema
+    public static final String PROP_UNMAPPED_ATTR_KEY = "unmapped.attr.key";
+
    JsonStructOIOptions options;
 
     /**
@@ -150,6 +154,8 @@ public class JsonSerDe implements SerDe {
 
         allowDuplicates = Boolean.parseBoolean(tbl
                 .getProperty(PROP_ALLOW_DUPLICATE_KEYS, "false"));
+
+        options.setUnmappedValuesFieldName(tbl.getProperty(PROP_UNMAPPED_ATTR_KEY));
         
     }
 

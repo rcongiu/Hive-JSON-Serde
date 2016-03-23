@@ -43,6 +43,20 @@
 
     <profiles>
         <profile>
+            <id>mango</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+                <serde.shim>json-serde-cdh5-shim</serde.shim>
+                <cdh.version>${cdh5.version}</cdh.version>
+                <cdh.hive.version>1.0.0</cdh.hive.version>
+                <cdh.hadoop.version>2.6.0</cdh.hadoop.version>
+                <cdh.shim>cdh5</cdh.shim>
+            </properties>
+        </profile>
+        <profile>
             <id>cdh4</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
@@ -59,7 +73,7 @@
         <profile>
             <id>cdh5</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
                 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -106,7 +120,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

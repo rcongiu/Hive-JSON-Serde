@@ -30,6 +30,7 @@ public  class JsonStructOIOptions {
         }
 
         boolean dotsInKeyNames = false;
+        String unmappedValuesFieldName = null;
         public Map<String, String> getMappings() {
             return mappings;
         }
@@ -40,6 +41,10 @@ public  class JsonStructOIOptions {
 
      public void setDotsInKeyNames(boolean dotsInKeyNames) {
          this.dotsInKeyNames = dotsInKeyNames;
+     }
+
+     public void setUnmappedValuesFieldName(String unmappedValuesFieldName) {
+         this.unmappedValuesFieldName = unmappedValuesFieldName;
      }
 
      @Override
