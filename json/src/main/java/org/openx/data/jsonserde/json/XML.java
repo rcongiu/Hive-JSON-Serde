@@ -33,7 +33,7 @@ import java.util.Iterator;
  * @author JSON.org
  * @version 2011-02-11
  */
-public class XML {
+public final class XML {
 
     /** The Character '&'. */
     public static final Character AMP   = new Character('&');
@@ -61,6 +61,10 @@ public class XML {
 
     /** The Character '/'. */
     public static final Character SLASH = new Character('/');
+
+    private XML() {
+        throw new InstantiationError("This class must not be instantiated.");
+    }
 
     /**
      * Replace special characters with XML escapes:

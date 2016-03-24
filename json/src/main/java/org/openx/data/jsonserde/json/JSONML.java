@@ -34,8 +34,12 @@ import java.util.Iterator;
  * @author JSON.org
  * @version 2010-12-23
  */
-public class JSONML {
-		
+public final class JSONML {
+
+    private JSONML() {
+        throw new InstantiationError("This class must not be instantiated.");
+    }
+
     /**
      * Parse XML values and store them in a JSONArray.
      * @param x       The XMLTokener containing the source string.

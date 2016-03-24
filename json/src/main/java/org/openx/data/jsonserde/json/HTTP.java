@@ -31,10 +31,14 @@ import java.util.Iterator;
  * @author JSON.org
  * @version 2010-12-24
  */
-public class HTTP {
+public final class HTTP {
 
     /** Carriage return/line feed. */
     public static final String CRLF = "\r\n";
+
+    private HTTP() {
+        throw new InstantiationError("This class must not be instantiated.");
+    }
 
     /**
      * Convert an HTTP header string into a JSONObject. It can be a request

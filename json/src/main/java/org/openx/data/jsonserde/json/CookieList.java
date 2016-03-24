@@ -31,7 +31,11 @@ import java.util.Iterator;
  * @author JSON.org
  * @version 2010-12-24
  */
-public class CookieList {
+public final class CookieList {
+
+    private CookieList() {
+        throw new InstantiationError("This class must not be instantiated.");
+    }
 
     /**
      * Convert a cookie list into a JSONObject. A cookie list is a sequence
