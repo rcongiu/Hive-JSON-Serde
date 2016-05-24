@@ -51,7 +51,7 @@ public class JavaStringDateObjectInspector  extends AbstractPrimitiveJavaObjectI
     @Override
     public Date getPrimitiveJavaObject(Object o) {
         if(o instanceof String) {
-           parse((String)o);
+           return parse((String)o);
         } else {
             if (o instanceof Date) return (Date) o;
         }
