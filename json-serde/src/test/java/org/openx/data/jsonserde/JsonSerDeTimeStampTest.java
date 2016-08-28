@@ -14,7 +14,7 @@
 package org.openx.data.jsonserde;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hive.serde.Constants;
+import org.apache.hadoop.hive.serde.serdeConstants;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.junit.Before;
@@ -48,8 +48,8 @@ public class JsonSerDeTimeStampTest {
     instance = new JsonSerDe();
     Configuration conf = null;
     Properties tbl = new Properties();
-    tbl.setProperty(Constants.LIST_COLUMNS, "one,two,three,four,five");
-    tbl.setProperty(Constants.LIST_COLUMN_TYPES, "boolean,float,array<string>,string,timestamp");
+    tbl.setProperty(serdeConstants.LIST_COLUMNS, "one,two,three,four,five");
+    tbl.setProperty(serdeConstants.LIST_COLUMN_TYPES, "boolean,float,array<string>,string,timestamp");
 
     instance.initialize(conf, tbl);
   }
@@ -137,6 +137,4 @@ public class JsonSerDeTimeStampTest {
       return ts;
       
   }
-
-
 }

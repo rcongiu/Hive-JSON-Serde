@@ -141,7 +141,7 @@ public class JSONObject {
     /**
      * The map where the JSONObject's properties are kept.
      */
-    private Map map;
+    private Map<String,Object> map;
 
 
     /**
@@ -157,7 +157,7 @@ public class JSONObject {
      * Construct an empty JSONObject.
      */
     public JSONObject() {
-        this.map = new HashMap();
+        this.map = new HashMap<String,Object>();
     }
 
 
@@ -243,14 +243,14 @@ public class JSONObject {
      *  the JSONObject. 
      */
     public JSONObject(Map map) {
-        this.map = new HashMap();
+        this.map = new HashMap<String,Object>();
         if (map != null) {
             Iterator i = map.entrySet().iterator();
             while (i.hasNext()) {
                 Map.Entry e = (Map.Entry)i.next();
                 Object value = e.getValue();
                 if (value != null) {
-                    this.map.put(e.getKey(), wrap(value));
+                    this.map.put(e.getKey().toString(), wrap(value));
                 }
             }
         }
@@ -707,7 +707,7 @@ public class JSONObject {
      *
      * @return An iterator of the keys.
      */
-    public Iterator keys() {
+    public Iterator<String> keys() {
         return this.map.keySet().iterator();
     }
 

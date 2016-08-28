@@ -1,7 +1,7 @@
 package org.openx.data.jsonserde;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hive.serde.Constants;
+import org.apache.hadoop.hive.serde.serdeConstants;
 import org.apache.hadoop.hive.serde2.objectinspector.*;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
@@ -31,8 +31,8 @@ public class JsonUnionTest {
         Configuration conf = null;
         Properties tbl = new Properties();
         // from google video API
-        tbl.setProperty(Constants.LIST_COLUMNS, "country,stuff");
-        tbl.setProperty(Constants.LIST_COLUMN_TYPES, "string,uniontype<int,double,array<string>,struct<a:int,b:string>,string>".toLowerCase());
+        tbl.setProperty(serdeConstants.LIST_COLUMNS, "country,stuff");
+        tbl.setProperty(serdeConstants.LIST_COLUMN_TYPES, "string,uniontype<int,double,array<string>,struct<a:int,b:string>,string>".toLowerCase());
 
         instance.initialize(conf, tbl);
     }

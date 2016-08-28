@@ -13,7 +13,7 @@
 package org.openx.data.jsonserde;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hive.serde.Constants;
+import org.apache.hadoop.hive.serde.serdeConstants;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.junit.Test;
@@ -36,8 +36,8 @@ public class ProtobufJsonTest {
 
         Configuration conf = null;
         Properties tbl = new Properties();
-        tbl.setProperty(Constants.LIST_COLUMNS, "one");
-        tbl.setProperty(Constants.LIST_COLUMN_TYPES, "string");
+        tbl.setProperty(serdeConstants.LIST_COLUMNS, "one");
+        tbl.setProperty(serdeConstants.LIST_COLUMN_TYPES, "string");
 
         instance.initialize(conf, tbl);
     }

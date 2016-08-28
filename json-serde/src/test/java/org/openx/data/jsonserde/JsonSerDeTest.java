@@ -11,44 +11,26 @@
  *======================================================================*/
 package org.openx.data.jsonserde;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hive.serde.serdeConstants;
+import org.apache.hadoop.hive.serde2.SerDeException;
+import org.apache.hadoop.hive.serde2.objectinspector.*;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.StringObjectInspector;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.Writable;
+import org.junit.*;
+import org.openx.data.jsonserde.json.JSONArray;
+import org.openx.data.jsonserde.json.JSONException;
+import org.openx.data.jsonserde.json.JSONObject;
+import org.openx.data.jsonserde.objectinspector.primitive.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-import java.util.Map;
-import java.util.HashMap;
-import org.apache.hadoop.hive.serde2.SerDeException;
-import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.ArrayList;
-import org.openx.data.jsonserde.json.JSONArray;
-import org.apache.hadoop.io.Text;
-import org.openx.data.jsonserde.json.JSONException;
-import org.openx.data.jsonserde.json.JSONObject;
-import java.util.Properties;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hive.serde.Constants;
-import org.apache.hadoop.hive.serde2.objectinspector.ListObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
-import org.apache.hadoop.hive.serde2.objectinspector.StructField;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.JavaBooleanObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.StringObjectInspector;
-import org.apache.hadoop.io.Writable;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import java.util.*;
+
 import static org.junit.Assert.*;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringBooleanObjectInspector;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringByteObjectInspector;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringDoubleObjectInspector;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringFloatObjectInspector;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringIntObjectInspector;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringLongObjectInspector;
-import org.openx.data.jsonserde.objectinspector.primitive.JavaStringShortObjectInspector;
 
 /**
  *
@@ -81,8 +63,8 @@ public class JsonSerDeTest {
 
         Configuration conf = null;
         Properties tbl = new Properties();
-        tbl.setProperty(Constants.LIST_COLUMNS, "one,two,three,four");
-        tbl.setProperty(Constants.LIST_COLUMN_TYPES, "boolean,float,array<string>,string");
+        tbl.setProperty(serdeConstants.LIST_COLUMNS, "one,two,three,four");
+        tbl.setProperty(serdeConstants.LIST_COLUMN_TYPES, "boolean,float,array<string>,string");
 
         instance.initialize(conf, tbl);
     }
@@ -92,8 +74,8 @@ public class JsonSerDeTest {
 
         Configuration conf = null;
         Properties tbl = new Properties();
-        tbl.setProperty(Constants.LIST_COLUMNS, "one,two,three,four,five");
-        tbl.setProperty(Constants.LIST_COLUMN_TYPES, "boolean,float,array<string>,string,string");
+        tbl.setProperty(serdeConstants.LIST_COLUMNS, "one,two,three,four,five");
+        tbl.setProperty(serdeConstants.LIST_COLUMN_TYPES, "boolean,float,array<string>,string,string");
 
         instance.initialize(conf, tbl);
     }
@@ -268,29 +250,14 @@ public class JsonSerDeTest {
 
     /**
      * Test of serialize method, of class JsonSerDe.
-     * @throws org.apache.hadoop.hive.serde2.SerDeException
-     * @throws org.openx.data.jsonserde.json.JSONException
      */
-    /*    @Test
-     public void testSerialize() throws Exception {
-     System.out.println("serialize");
-     Object o = null;
-     ObjectInspector oi = null;
-     JsonSerDe instance = new JsonSerDe();
-     Writable expResult = null;
-     Writable result = instance.serialize(o, oi);
-     assertEquals(expResult, result);
-     }
-     *  
-     */
-    // @Test
     public void testSerialize() throws SerDeException, JSONException, Exception {
         System.out.println("serialize");
         
         JsonSerDe instance = new JsonSerDe();
         initialize(instance);
         
-        ArrayList row = new ArrayList(5);
+        ArrayList<Object> row = new ArrayList<Object>(5);
 
         List<ObjectInspector> lOi = new LinkedList<ObjectInspector>();
         List<String> fieldNames = new LinkedList<String>();
@@ -350,8 +317,8 @@ public class JsonSerDeTest {
         JsonSerDe serde = new JsonSerDe();
         Configuration conf = null;
         Properties tbl = new Properties();
-        tbl.setProperty(Constants.LIST_COLUMNS, "one,two,three,four,ts");
-        tbl.setProperty(Constants.LIST_COLUMN_TYPES, "boolean,float,array<string>,string,int");
+        tbl.setProperty(serdeConstants.LIST_COLUMNS, "one,two,three,four,ts");
+        tbl.setProperty(serdeConstants.LIST_COLUMN_TYPES, "boolean,float,array<string>,string,int");
         // this means, we call it ts but in data it's 'timestamp'
         tbl.setProperty("mapping.ts", "timestamp");
 
@@ -364,8 +331,8 @@ public class JsonSerDeTest {
         JsonSerDe serde = new JsonSerDe();
         Configuration conf = null;
         Properties tbl = new Properties();
-        tbl.setProperty(Constants.LIST_COLUMNS, "cboolean,ctinyint,csmallint,cint,cbigint,cfloat,cdouble");
-        tbl.setProperty(Constants.LIST_COLUMN_TYPES, "boolean,tinyint,smallint,int,bigint,float,double");
+        tbl.setProperty(serdeConstants.LIST_COLUMNS, "cboolean,ctinyint,csmallint,cint,cbigint,cfloat,cdouble");
+        tbl.setProperty(serdeConstants.LIST_COLUMN_TYPES, "boolean,tinyint,smallint,int,bigint,float,double");
      
         serde.initialize(conf, tbl);
         return serde;
@@ -470,9 +437,7 @@ public class JsonSerDeTest {
     }
      
      /**
-      * Test scientific notation with 
-      * @throws SerDeException
-      * @throws JSONException 
+      * Test scientific notation
       */
      @Test
     public void testENotationNumbers() throws SerDeException, JSONException {
@@ -543,7 +508,7 @@ public class JsonSerDeTest {
         JsonSerDe serde = getMappedSerde();
         
         System.out.println("serialize");
-        ArrayList row = new ArrayList(5);
+        ArrayList<Object> row = new ArrayList<Object>(5);
 
         List<ObjectInspector> lOi = new LinkedList<ObjectInspector>();
         List<String> fieldNames = new LinkedList<String>();
@@ -553,12 +518,12 @@ public class JsonSerDeTest {
         lOi.add(ObjectInspectorFactory.getReflectionObjectInspector(Boolean.class,
                 ObjectInspectorFactory.ObjectInspectorOptions.JAVA));
         
-        row.add(new Float(43.2));
+        row.add(43.2f);
         fieldNames.add("two");
         lOi.add(ObjectInspectorFactory.getReflectionObjectInspector(Float.class,
                 ObjectInspectorFactory.ObjectInspectorOptions.JAVA));
         
-        List<String> lst = new LinkedList<String>();
+        final List<String> lst = new LinkedList<String>();
         row.add(lst);
         fieldNames.add("three");
         lOi.add(ObjectInspectorFactory.getStandardListObjectInspector(ObjectInspectorFactory
@@ -569,7 +534,7 @@ public class JsonSerDeTest {
         lOi.add(ObjectInspectorFactory.getReflectionObjectInspector(String.class,
                 ObjectInspectorFactory.ObjectInspectorOptions.JAVA));
         
-        row.add(new Integer(7898));
+        row.add(7898);
         fieldNames.add("ts");
         lOi.add(ObjectInspectorFactory.getReflectionObjectInspector(Integer.class,
                 ObjectInspectorFactory.ObjectInspectorOptions.JAVA));

@@ -6,7 +6,7 @@ import java.util.Properties;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.ql.udf.UDFJson;
-import org.apache.hadoop.hive.serde.Constants;
+import org.apache.hadoop.hive.serde.serdeConstants;
 import org.apache.hadoop.hive.serde2.SerDeException;
 import org.apache.hadoop.hive.serde2.objectinspector.ListObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
@@ -38,9 +38,9 @@ public class GetJsonObjectTest {
         Configuration conf = null;
         Properties tbl = new Properties();
         // from google video API
-        tbl.setProperty(Constants.LIST_COLUMNS, "kind,etag,pageInfo,v_items");
+        tbl.setProperty(serdeConstants.LIST_COLUMNS, "kind,etag,pageInfo,v_items");
         tbl.setProperty(
-            Constants.LIST_COLUMN_TYPES,
+            serdeConstants.LIST_COLUMN_TYPES,
             ("string,string," + "string,"
                 + "ARRAY<STRUCT<kind:STRING,"
                 + "etag:STRING,"

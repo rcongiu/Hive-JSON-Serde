@@ -36,7 +36,7 @@ public class JsonListObjectInspector extends StandardListObjectInspector {
       return null;
     }
     JSONArray array = (JSONArray) data;
-    List al = new ArrayList(array.length());
+    List<Object> al = new ArrayList<Object>(array.length());
     for(int i =0; i< array.length(); i++) {
 	al.add(getListElement(data,i));
     }

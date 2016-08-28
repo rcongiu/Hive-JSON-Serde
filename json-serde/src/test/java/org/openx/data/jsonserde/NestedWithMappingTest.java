@@ -15,7 +15,7 @@ package org.openx.data.jsonserde;
 import java.util.List;
 import java.util.Properties;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hive.serde.Constants;
+import org.apache.hadoop.hive.serde.serdeConstants;
 import org.apache.hadoop.hive.serde2.objectinspector.ListObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector.Category;
 import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
@@ -70,8 +70,8 @@ public class NestedWithMappingTest {
        STORED AS TEXTFILE;
 
     */
-    tbl.setProperty(Constants.LIST_COLUMNS, "ts,t,request");
-    tbl.setProperty(Constants.LIST_COLUMN_TYPES, ("string,int," +
+    tbl.setProperty(serdeConstants.LIST_COLUMNS, "ts,t,request");
+    tbl.setProperty(serdeConstants.LIST_COLUMN_TYPES, ("string,int," +
         "struct<path:string,ip:string,headers:struct<useragent:array<string>>>").
             toLowerCase());
     tbl.setProperty("mapping.useragent" , "User-Agent");
