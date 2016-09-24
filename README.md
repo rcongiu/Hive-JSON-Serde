@@ -182,6 +182,17 @@ ALTER TABLE json_table SET SERDEPROPERTIES ( "ignore.malformed.json" = "true");
 it will not make the query fail, and the above record will be returned as
 NULL	null	null
 
+#### Promoting a scalar to an array
+
+It is a common issue to have a field that sometimes is a scalar and sometimes is an array, for instance:
+```
+{ field: "hello", .. }
+{ field: [ "hello", "world" ], ...
+```
+
+In this case , if you declare your table as `array<string>,` if the SerDe finds a scalar, it will return a one-element
+array, effectively promoting the scalar to an array. The scalar has to be of the correct type.
+
 
 ### UNIONTYPE support (PLEASE READ IF YOU USE IT)
 
