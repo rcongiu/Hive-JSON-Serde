@@ -39,6 +39,10 @@
         <hdp23.version>2.3.0</hdp23.version>
         <hdp23.hive.version>1.2.1</hdp23.hive.version>
         <hdp23.hadoop.version>2.7.1</hdp23.hadoop.version>
+        <!-- hdp24 versions -->
+        <hdp23.version>2.3.0</hdp23.version>
+        <hdp23.hive.version>1.2.1</hdp23.hive.version>
+        <hdp23.hadoop.version>2.7.1</hdp23.hadoop.version>
     </properties>
 
     <profiles>
