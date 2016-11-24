@@ -79,6 +79,7 @@ public class JsonSerDe extends AbstractSerDe {
     // properties used in configuration
     public static final String PROP_IGNORE_MALFORMED_JSON = "ignore.malformed.json";
     public static final String PROP_DOTS_IN_KEYS = "dots.in.keys";
+    public static final String PROP_REMOVE_COMMA_ENDING = "remove.comma.ending";
 
    JsonStructOIOptions options;
 
@@ -135,6 +136,7 @@ public class JsonSerDe extends AbstractSerDe {
 
         // dots in key names. Substitute with underscores
         options.setDotsInKeyNames(Boolean.parseBoolean(tbl.getProperty(PROP_DOTS_IN_KEYS,"false")));
+        options.setRemoveCommaEnding(Boolean.parseBoolean(tbl.getProperty(PROP_REMOVE_COMMA_ENDING,"true")));
 
         rowObjectInspector = (StructObjectInspector) JsonObjectInspectorFactory
                 .getJsonObjectInspectorFromTypeInfo(rowTypeInfo, options);
@@ -163,6 +165,11 @@ public class JsonSerDe extends AbstractSerDe {
         
         try {
             String txt = rowText.toString().trim();
+
+            // if necessary, remove comma at the end.
+            if(options.isRemoveCommaEnding() && txt.endsWith(",")) {
+                txt = txt.substring(0,txt.length()-1);
+            }
             
             if(txt.startsWith("{")) {
                 jObj = new JSONObject(txt);

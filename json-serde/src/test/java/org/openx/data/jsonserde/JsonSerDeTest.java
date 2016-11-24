@@ -327,14 +327,15 @@ public class JsonSerDeTest {
     }
     
     public JsonSerDe getNumericSerde() throws SerDeException {
-        System.out.println("testMapping");
+        return getNumericSerdeWithProps(new Properties());
+    }
+
+    public JsonSerDe getNumericSerdeWithProps(Properties tbl) throws SerDeException {
         JsonSerDe serde = new JsonSerDe();
         Configuration conf = null;
-        Properties tbl = new Properties();
         tbl.setProperty(serdeConstants.LIST_COLUMNS, "cboolean,ctinyint,csmallint,cint,cbigint,cfloat,cdouble");
         tbl.setProperty(serdeConstants.LIST_COLUMN_TYPES, "boolean,tinyint,smallint,int,bigint,float,double");
-     
-        serde.initialize(conf, tbl);
+        serde.initialize(conf,tbl);
         return serde;
     }
     
@@ -585,5 +586,48 @@ public class JsonSerDeTest {
             is.close();
         } catch (IOException ex){}
     }
-    
+
+    @Test
+    public void testCommaEnding() throws SerDeException, JSONException {
+        // this is basically the same as the Hex test. We just want to be sure it's able to parse the data with comma and space at the end
+        System.out.println("testCommaEndingOk");
+
+        JsonSerDe serde = getNumericSerde();
+        Text line = new Text("{ cboolean:true, ctinyint:0x01, csmallint:0x0a, cint:0Xabcd,cbigint:0xabcd121212, cfloat:3.1415, cdouble:43424234234.4243423}, ");
+
+        StructObjectInspector soi = (StructObjectInspector) serde.getObjectInspector();
+
+        JSONObject result = (JSONObject) serde.deserialize(line);
+        StructField sf = soi.getStructFieldRef("ctinyint");
+
+        assertTrue(sf.getFieldObjectInspector() instanceof JavaStringByteObjectInspector);
+        JavaStringByteObjectInspector boi = (JavaStringByteObjectInspector) sf.getFieldObjectInspector();
+        assertEquals(1, boi.get(result.get("ctinyint")));
+
+    }
+
+    @Test
+    public void testNoCommaEnding() throws SerDeException, JSONException {
+        // this is basically the same as the Hex test. We just want to be sure it's able to parse the data with comma and space at the end
+        System.out.println("testNoCommaEndingFailure");
+
+        Properties props = new Properties();
+        props.setProperty(JsonSerDe.PROP_REMOVE_COMMA_ENDING,"false");
+        JsonSerDe serde = getNumericSerdeWithProps(props);
+
+        Text line = new Text("{ cboolean:true, ctinyint:0x01, csmallint:0x0a, cint:0Xabcd,cbigint:0xabcd121212, cfloat:3.1415, cdouble:43424234234.4243423}, ");
+
+        StructObjectInspector soi = (StructObjectInspector) serde.getObjectInspector();
+
+        JSONObject result = (JSONObject) serde.deserialize(line);
+        StructField sf = soi.getStructFieldRef("ctinyint");
+
+        assertTrue(sf.getFieldObjectInspector() instanceof JavaStringByteObjectInspector);
+        JavaStringByteObjectInspector boi = (JavaStringByteObjectInspector) sf.getFieldObjectInspector();
+        assertEquals(1, boi.get(result.get("ctinyint")));
+
+    }
+
+
+
 }

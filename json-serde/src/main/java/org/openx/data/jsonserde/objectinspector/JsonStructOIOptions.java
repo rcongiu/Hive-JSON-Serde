@@ -30,6 +30,7 @@ public  class JsonStructOIOptions {
         }
 
         boolean dotsInKeyNames = false;
+        boolean removeCommaEnding = true;
         public Map<String, String> getMappings() {
             return mappings;
         }
@@ -37,7 +38,6 @@ public  class JsonStructOIOptions {
      public boolean isDotsInKeyNames() {
          return dotsInKeyNames;
      }
-
      public void setDotsInKeyNames(boolean dotsInKeyNames) {
          this.dotsInKeyNames = dotsInKeyNames;
      }
@@ -60,4 +60,7 @@ public  class JsonStructOIOptions {
          result = 31 * result + (dotsInKeyNames ? 1 : 0);
          return result;
      }
+
+     public void setRemoveCommaEnding(boolean remove) {removeCommaEnding = remove;}
+     public boolean isRemoveCommaEnding() { return removeCommaEnding;}
  }
