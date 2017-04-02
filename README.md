@@ -3,8 +3,6 @@ JsonSerde - a read/write SerDe for JSON Data
 
 [![Build Status](https://travis-ci.org/rcongiu/Hive-JSON-Serde.svg?branch=master)](https://travis-ci.org/rcongiu/Hive-JSON-Serde)
 
-AUTHOR: Roberto Congiu <rcongiu@yahoo.com>
-
 Serialization/Deserialization module for Apache Hadoop Hive
 JSON conversion UDF
 
@@ -326,39 +324,18 @@ to convert timestamps.
 
 I am using gitflow for the release cycle.
 
+### History
+
+This library is written by [Roberto Congiu](http://www.congiu.com) <rcongiu@yahoo.com>
+during his time at [OpenX Technologies, Inc.](https://www.openx.com).
+
+See [CHANGELOG](CHANGELOG.md) for details.
 
 ### THANKS
 
 Thanks to Douglas Crockford for the liberal license for his JSON library, and thanks to
 my employer OpenX and my boss Michael Lum for letting me open source the code.
 
-
-
-Versions:
-* 1.0: initial release
-* 1.1: fixed some string issues
-* 1.1.1 (2012/07/03): fixed Map Adapter (get and put would call themselves...ooops)
-* 1.1.2 (2012/07/26): Fixed issue with columns that are not mapped into JSON, reported by Michael Phung
-* 1.1.4 (2012/10/04): Fixed issue #13, problem with floats, Reported by Chuck Connell
-* 1.1.6 (2013/07/10): Fixed issue #28, error after 'alter table add columns'
-* 1.1.7 (2013/09/30): Fixed issue #25, timestamp support, fix parametrized build,
-		    Fixed issue #31 (static member shouldn't be static)
-* 1.1.8 (2014/01/22): Rewritten handling of numbers, so their parsing from string is delayed to
-                      deserialization time. Fixes #39, #45, #34, #29, #26, #22, #13
-* 1.1.9.1 (2014/02/02) fixed some bugs
-* 1.1.9.2 (2014/02/25)	fixed issue with { field = null }  #50,
-		      	support for array records,
-		      	fixed handling of null in arrays #54,
-		      	refactored Timestamp Handling
-* 1.2     (2014/06)     Refactored to multimodule for CDH5 compatibility
-* 1.3     (2014/09/08)  fixed #80, #82, #84, #85
-* 1.3.5   (2015/08/30)   Added UNIONTYPE support (#53), made CDH5 default, handle
-          empty array where an empty object should be (#112)
-* 1.3.6   (2015/10/08)   Added support for string boolean (#118) Updated docs (#116)
-			 Added support for HDP 2.3.
-* 1.3.7   (2015/12/10)   Added support for DATE type (hive 1.2.0 and higher)
-          (2016/01/30)   Added JSON UDF
-* 1.3.8   (???)		 Added support for mapping json keys with dots (#131)
 
 
 
