@@ -33,7 +33,7 @@ public class JsonMapObjectInspector extends StandardMapObjectInspector {
 
   @Override
   public Map<?, ?> getMap(Object data) {
-    if (JsonObjectInspectorUtils.checkObject(data) == null) {
+    if (JsonObjectInspectorUtils.checkObject(data) == null && !(data instanceof JSONObject)) {
       return null;
     }
     
