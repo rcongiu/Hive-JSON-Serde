@@ -302,22 +302,22 @@ public class JsonSerDe extends AbstractSerDe {
                                             Boolean.FALSE;
                         break;
                     case BYTE:
-                        result = ((ByteObjectInspector)poi).get(obj);
+                        result = new Byte(((ByteObjectInspector)poi).get(obj));
                         break;
                     case DOUBLE:
-                        result = ((DoubleObjectInspector)poi).get(obj);
+                        result = new Double(((DoubleObjectInspector)poi).get(obj));
                         break;
                     case FLOAT:
-                        result = ((FloatObjectInspector)poi).get(obj);
+                        result = new Float(((FloatObjectInspector)poi).get(obj));
                         break;
                     case INT:
-                        result = ((IntObjectInspector)poi).get(obj);
+                        result = new Integer(((IntObjectInspector)poi).get(obj));
                         break;
                     case LONG:
-                        result = ((LongObjectInspector)poi).get(obj);
+                        result = new Long(((LongObjectInspector)poi).get(obj));
                         break;
                     case SHORT:
-                        result = ((ShortObjectInspector)poi).get(obj);
+                        result = new Short(((ShortObjectInspector)poi).get(obj));
                         break;
                     case STRING:
                         result = ((StringObjectInspector)poi).getPrimitiveJavaObject(obj);
