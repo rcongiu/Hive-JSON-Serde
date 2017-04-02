@@ -1,6 +1,8 @@
 JsonSerde - a read/write SerDe for JSON Data
 ================================================
 
+[![Build Status](https://travis-ci.org/rcongiu/Hive-JSON-Serde.svg?branch=master)](https://travis-ci.org/rcongiu/Hive-JSON-Serde)
+
 AUTHOR: Roberto Congiu <rcongiu@yahoo.com>
 
 Serialization/Deserialization module for Apache Hadoop Hive
@@ -12,13 +14,13 @@ Features:
 * Read data stored in JSON format
 * Convert data to JSON format when INSERT INTO table
 * arrays and maps are supported
-* nested data structures are also supported. 
+* nested data structures are also supported.
 * modular to support multiple versions of CDH
 
 IMPORTANT!!! READ THIS BELOW!!
 Json records must be _one per line_, that is, the serde
 WILL NOT WORK with multiline Json. Why ? Because the way hadoop
-works with files, they have to be _splittable_, for instance, 
+works with files, they have to be _splittable_, for instance,
 hadoop will split text files at end of line..but in order to split
 a text file with json at a certain point, we would have to parse
 everything up to that point. See below
@@ -28,7 +30,7 @@ everything up to that point. See below
 
 // this will not work
 {
-  "key" : 10 
+  "key" : 10
 }
 ```
 
@@ -49,8 +51,8 @@ COMPILE
 ---------
 
 Use maven to compile the serde.
-The project uses maven profiles to support multiple 
-version of hive/CDH. 
+The project uses maven profiles to support multiple
+version of hive/CDH.
 To build for CDH4:
 
 ```
@@ -67,7 +69,7 @@ To build for HDP 2.3:
 mvn -Phdp23 clean package
 ```
 
-the serde will be in 
+the serde will be in
 ```
 json-serde/target/json-serde-VERSION-jar-with-dependencies.jar
 ```
@@ -115,7 +117,7 @@ gold
 yellow
 ```
 
-If you have complex json it can become tedious to create the table 
+If you have complex json it can become tedious to create the table
 by hand. I recommend [hive-json-schema](https://github.com/quux00/hive-json-schema) to build your schema from the data.
 
 
@@ -144,7 +146,7 @@ select religions['catholic'][0] from json_nested_test; -- result: 10
 ```
 
 ### SUPPORT FOR ARRAYS
-You could have JSON arrays, in that case the SerDe would still work, 
+You could have JSON arrays, in that case the SerDe would still work,
 and it will expect data in the JSON arrays ordered just like the hive
 columns, like you'd see in the regular text/csv serdes.
 For instance, if you do
@@ -158,7 +160,7 @@ your data should look like
 ```
 Arrays can still be nested, so you could have
 ```sql
-CREATE TABLE complex_array ( 
+CREATE TABLE complex_array (
 	name string, address struct<street:string,city:string>) ...
 -- data:
 ["John", { street:"10 green street", city:"Paris" } .. ]
@@ -167,8 +169,8 @@ CREATE TABLE complex_array (
 
 ### MALFORMED DATA
 
-The default behavior on malformed data is throwing an exception. 
-For example, for malformed json like 
+The default behavior on malformed data is throwing an exception.
+For example, for malformed json like
 {"country":"Italy","languages" "Italian","religions":{"catholic":"90"}}
 
 you get:
@@ -222,7 +224,7 @@ people asked me to implement this feature to cope with bad JSON, so..I did.
 ### MAPPING HIVE KEYWORDS
 
 Sometimes it may happen that JSON data has attributes named like reserved words in hive.
-For instance, you may have a JSON attribute named 'timestamp', which is a reserved word 
+For instance, you may have a JSON attribute named 'timestamp', which is a reserved word
 in hive, and hive will fail when issuing a CREATE TABLE.
 This SerDe can map hive columns over attributes named differently, using SerDe properties.
 
@@ -236,14 +238,14 @@ WITH SERDEPROPERTIES ( "mapping.ts" = "timestamp" )
 STORED AS TEXTFILE;
 ```
 
-Notice the "mapping.ts", that means: take the column 'ts' and read into it the 
+Notice the "mapping.ts", that means: take the column 'ts' and read into it the
 JSON attribute named "timestamp"
 
 #### Mapping names with dots
 
 as noted in issue #131, Hive doesn't like column names containing dots/periods.
 In theory they should work when quoted in backtics, but as noted in this [stack overflow discussion]
-( http://stackoverflow.com/questions/35344480/hive-select-column-with-non-alphanumeric-characters/35349822) 
+( http://stackoverflow.com/questions/35344480/hive-select-column-with-non-alphanumeric-characters/35349822)
 it doesn't work in practice for some limitation of the hive parser.
 
 So, you can then set the property `dots.in.keys` to `true` in the Serde Properties and access
@@ -251,14 +253,14 @@ those fields by substituting the dot with an underscore.
 
 For example, if your JSON looks like
 ```
-{ "my.field" : "value" , "other" : { "with.dots" : "blah } } 
+{ "my.field" : "value" , "other" : { "with.dots" : "blah } }
 ```
 you can create the table like
 
 ```sql
 CREATE TABLE mytable (
     my_field string,
-    other struct<with_dots:string> ) 
+    other struct<with_dots:string> )
     ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
 WITH SERDEPROPERTIES ("dots.in.keys" = "true" )
 ```
@@ -284,9 +286,9 @@ are executed for every (and possibly billions) record we want to minimize object
 instead of serializing/deserializing to an ArrayList, I kept the JSONObject and built a cached
 objectinspector around it. So when deserializing, hive gets a JSONObject, and a JSONStructObjectInspector
 to read from it. Hive has Structs, Maps, Arrays and primitives while JSON has Objects, Arrays and primitives.
-Hive Maps and Structs are both implemented as object, which are less restrictive than hive maps: 
-a JSON Object could be a mix of keys and values of different types, while hive expects you to declare the 
-type of map (example: map<string,string>). The user is responsible for having the JSON data structure 
+Hive Maps and Structs are both implemented as object, which are less restrictive than hive maps:
+a JSON Object could be a mix of keys and values of different types, while hive expects you to declare the
+type of map (example: map<string,string>). The user is responsible for having the JSON data structure
 match hive table declaration.
 
 More detailed explanation on my blog:
@@ -296,7 +298,7 @@ http://www.congiu.com/articles/json_serde
 ### UDF
 
 As a bonus, I added a UDF that can turn anything into a JSON string.
-So, if you want to convert anything (arrays, structs..) into 
+So, if you want to convert anything (arrays, structs..) into
 a string containing their JSON representation, you can do that.
 
 Example:
@@ -326,8 +328,8 @@ I am using gitflow for the release cycle.
 
 
 ### THANKS
- 
-Thanks to Douglas Crockford for the liberal license for his JSON library, and thanks to 
+
+Thanks to Douglas Crockford for the liberal license for his JSON library, and thanks to
 my employer OpenX and my boss Michael Lum for letting me open source the code.
 
 
@@ -341,7 +343,7 @@ Versions:
 * 1.1.6 (2013/07/10): Fixed issue #28, error after 'alter table add columns'
 * 1.1.7 (2013/09/30): Fixed issue #25, timestamp support, fix parametrized build,
 		    Fixed issue #31 (static member shouldn't be static)
-* 1.1.8 (2014/01/22): Rewritten handling of numbers, so their parsing from string is delayed to 
+* 1.1.8 (2014/01/22): Rewritten handling of numbers, so their parsing from string is delayed to
                       deserialization time. Fixes #39, #45, #34, #29, #26, #22, #13
 * 1.1.9.1 (2014/02/02) fixed some bugs
 * 1.1.9.2 (2014/02/25)	fixed issue with { field = null }  #50,
@@ -353,7 +355,7 @@ Versions:
 * 1.3.5   (2015/08/30)   Added UNIONTYPE support (#53), made CDH5 default, handle
           empty array where an empty object should be (#112)
 * 1.3.6   (2015/10/08)   Added support for string boolean (#118) Updated docs (#116)
-			 Added support for HDP 2.3. 
+			 Added support for HDP 2.3.
 * 1.3.7   (2015/12/10)   Added support for DATE type (hive 1.2.0 and higher)
           (2016/01/30)   Added JSON UDF
 * 1.3.8   (???)		 Added support for mapping json keys with dots (#131)
