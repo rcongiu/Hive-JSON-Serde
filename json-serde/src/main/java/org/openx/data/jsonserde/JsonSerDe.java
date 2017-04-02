@@ -73,12 +73,22 @@ public class JsonSerDe extends AbstractSerDe {
     private boolean lastOperationSerialize;
     long deserializedDataSize;
     long serializedDataSize;
+
     // if set, will ignore malformed JSON in deserialization
     boolean ignoreMalformedJson = false;
 
     // properties used in configuration
     public static final String PROP_IGNORE_MALFORMED_JSON = "ignore.malformed.json";
+
+    // Causes the JSON parser not to fail when duplicated object keys are encountered
+    boolean allowDuplicates = false;
+    public static final String PROP_ALLOW_DUPLICATE_KEYS = "allow.duplicate.json.keys";
+
     public static final String PROP_DOTS_IN_KEYS = "dots.in.keys";
+
+    // Allow table schema to define an extra MAP<STRING, STRING> column to dump all other base level keys into that
+    // aren't otherwise defined in the schema
+    public static final String PROP_UNMAPPED_ATTR_KEY = "unmapped.attr.key";
 
    JsonStructOIOptions options;
 
@@ -142,6 +152,11 @@ public class JsonSerDe extends AbstractSerDe {
         // other configuration
         ignoreMalformedJson = Boolean.parseBoolean(tbl
                 .getProperty(PROP_IGNORE_MALFORMED_JSON, "false"));
+
+        allowDuplicates = Boolean.parseBoolean(tbl
+                .getProperty(PROP_ALLOW_DUPLICATE_KEYS, "false"));
+
+        options.setUnmappedValuesFieldName(tbl.getProperty(PROP_UNMAPPED_ATTR_KEY));
         
     }
 
@@ -165,16 +180,16 @@ public class JsonSerDe extends AbstractSerDe {
             String txt = rowText.toString().trim();
             
             if(txt.startsWith("{")) {
-                jObj = new JSONObject(txt);
+                jObj = new JSONObject(txt, allowDuplicates);
             } else if (txt.startsWith("[")){
-                jObj = new JSONArray(txt);
+                jObj = new JSONArray(txt, allowDuplicates);
             }
         } catch (JSONException e) {
             // If row is not a JSON object, make the whole row NULL
             onMalformedJson("Row is not a valid JSON Object - JSONException: "
                     + e.getMessage());
             try {
-                jObj = new JSONObject("{}");
+                jObj = new JSONObject("{}", allowDuplicates);
             } catch (JSONException ex) {
                 onMalformedJson("Error parsing empty row. This should never happen.");
             }

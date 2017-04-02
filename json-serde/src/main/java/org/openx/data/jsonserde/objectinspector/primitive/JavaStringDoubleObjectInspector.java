@@ -30,19 +30,13 @@ public class JavaStringDoubleObjectInspector extends AbstractPrimitiveJavaObject
     @Override
     public Object getPrimitiveWritableObject(Object o) {
         if(o == null) return null;
-        
-        if(o instanceof String) {
-           return new DoubleWritable(Double.parseDouble((String)o)); 
-        } else {
-          return new DoubleWritable((Double) o);
-        }
+        return new DoubleWritable(get(o));
     }
 
     @Override
     public double get(Object o) {
-        
-        if(o instanceof String) {
-           return Double.parseDouble((String)o); 
+        if(ParsePrimitiveUtils.isString(o)) {
+           return Double.parseDouble(o.toString());
         } else {
           return (Double) o;
         }

@@ -31,18 +31,13 @@ public class JavaStringIntObjectInspector
     @Override
     public Object getPrimitiveWritableObject(Object o) {
         if(o == null) return null;
-        
-        if(o instanceof String) {
-           return new IntWritable(ParsePrimitiveUtils.parseInt((String)o)); 
-        } else {
-           return new IntWritable((Integer) o);
-        }
+        return new IntWritable(get(o));
     }
 
     @Override
     public int get(Object o) {
-        if(o instanceof String) {
-           return ParsePrimitiveUtils.parseInt((String)o); 
+        if(ParsePrimitiveUtils.isString(o)) {
+           return ParsePrimitiveUtils.parseInt(o.toString());
         } else {
            return (Integer) o;
         }

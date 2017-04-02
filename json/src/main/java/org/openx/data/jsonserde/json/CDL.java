@@ -183,7 +183,7 @@ public final class CDL {
      * @throws JSONException
      */
     public static JSONArray toJSONArray(String string) throws JSONException {
-        return toJSONArray(new JSONTokener(string));
+        return toJSONArray(new JSONTokener(string, false));
     }
 
     /**
@@ -207,7 +207,7 @@ public final class CDL {
      */
     public static JSONArray toJSONArray(JSONArray names, String string)
             throws JSONException {
-        return toJSONArray(names, new JSONTokener(string));
+        return toJSONArray(names, new JSONTokener(string, false));
     }
 
     /**

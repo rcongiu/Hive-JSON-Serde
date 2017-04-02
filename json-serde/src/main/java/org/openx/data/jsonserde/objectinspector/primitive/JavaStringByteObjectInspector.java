@@ -31,18 +31,13 @@ public  class JavaStringByteObjectInspector
     @Override
     public Object getPrimitiveWritableObject(Object o) {
         if(o == null) return null;
-        
-        if(o instanceof String) {
-           return new ByteWritable(ParsePrimitiveUtils.parseByte((String)o)); 
-        } else {
-           return new ByteWritable((Byte) o);
-        }
+        return new ByteWritable(get(o));
     }
 
     @Override
     public byte get(Object o) {
-        if(o instanceof String) {
-           return ParsePrimitiveUtils.parseByte((String)o); 
+        if(ParsePrimitiveUtils.isString(o)) {
+           return ParsePrimitiveUtils.parseByte(o.toString());
         } else {
            return (Byte) o;
         }

@@ -31,19 +31,13 @@ public class JavaStringShortObjectInspector
     @Override
     public Object getPrimitiveWritableObject(Object o) {
         if(o == null) return null;
-        
-        if(o instanceof String) {
-          return new ShortWritable(ParsePrimitiveUtils.parseShort((String)o)); 
-        } else {
-          return new ShortWritable((Short) o);
-        }
+        return new ShortWritable(get(o));
     }
 
     @Override
     public short get(Object o) {
-        
-        if(o instanceof String) {
-           return ParsePrimitiveUtils.parseShort((String)o); 
+        if(ParsePrimitiveUtils.isString(o)) {
+           return ParsePrimitiveUtils.parseShort(o.toString());
         } else {
           return (Short) o;
         }

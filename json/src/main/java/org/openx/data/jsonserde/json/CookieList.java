@@ -52,7 +52,7 @@ public final class CookieList {
      */
     public static JSONObject toJSONObject(String string) throws JSONException {
         JSONObject jo = new JSONObject();
-        JSONTokener x = new JSONTokener(string);
+        JSONTokener x = new JSONTokener(string, false);
         while (x.more()) {
             String name = Cookie.unescape(x.nextTo('='));
             x.next('=');
