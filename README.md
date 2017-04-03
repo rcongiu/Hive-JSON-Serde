@@ -4,7 +4,7 @@ Build Status:
 * master : [![Build Status](https://travis-ci.org/rcongiu/Hive-JSON-Serde.svg?branch=master)](https://travis-ci.org/rcongiu/Hive-JSON-Serde)
 * develop:[![Build Status](https://travis-ci.org/rcongiu/Hive-JSON-Serde.svg?branch=develop)](https://travis-ci.org/rcongiu/Hive-JSON-Serde)
 
-This library enables Apache Hive to read and write in JSON format. It includes support for serialization and 
+This library enables Apache Hive to read and write in JSON format. It includes support for serialization and
 deserialization (SerDe) as well as JSON conversion UDF.
 
 ### Features
@@ -18,14 +18,14 @@ deserialization (SerDe) as well as JSON conversion UDF.
 
 ### Installation
 
-Download the latest binaries (`json-serde-X.Y.Z-jar-with-dependencies.jar` and `json-udf-X.Y.Z-jar-with-dependencies.jar`) 
-from [congiu.net/hive-json-serde](http://www.congiu.net/hive-json-serde). 
+Download the latest binaries (`json-serde-X.Y.Z-jar-with-dependencies.jar` and `json-udf-X.Y.Z-jar-with-dependencies.jar`)
+from [congiu.net/hive-json-serde](http://www.congiu.net/hive-json-serde).
 Choose the correct verson for CDH 4, CDH 5 or Hadoop 2.3. Place the JARs into `hive/lib` or use `ADD JAR` in Hive.
 
 ### JSON Data Files
 
-Upload JSON files to HDFS with `hadoop fs -put` or `LOAD DATA LOCAL`. JSON records in data files 
-must appear _one per line_, without a trailing CR/LF after the last record. This is because Hadoop partitions 
+Upload JSON files to HDFS with `hadoop fs -put` or `LOAD DATA LOCAL`. JSON records in data files
+must appear _one per line_, an empty line would produce a NULL record. This is because Hadoop partitions
 files as text using CR/LF as a separator to distribute work.
 
 The following example will work.
@@ -56,13 +56,7 @@ Uses [json-serde/src/test/scripts/test-without-cr-lf.json](json-serde/src/test/s
 {"text":"foo","number":123}
 {"text":"bar","number":345}
 
-~$ perl -pe 'chomp if eof' test.json > test-without-cr-lf.json
-
-~$ cat test-without-cr-lf.json
-{"text":"foo","number":123}
-{"text":"bar","number":345}~$
-
-$ hadoop fs -put -f test-without-cr-lf.json /user/data/test.json
+$ hadoop fs -put -f test.json /user/data/test.json
 
 $ hive
 
@@ -102,7 +96,7 @@ gold
 yellow
 ```
 
-If you have complex json it can be tedious to create tables manually. 
+If you have complex json it can be tedious to create tables manually.
 Try [hive-json-schema](https://github.com/quux00/hive-json-schema) to build your schema from data.
 
 See [json-serde/src/test/scripts](json-serde/src/test/scripts) for more examples.
@@ -165,7 +159,7 @@ CREATE TABLE complex_array (
 
 ### Importing Malformed Data
 
-The SerDe will raise exceptions with malformed data. For example, the following malformed JSON will raise 
+The SerDe will raise exceptions with malformed data. For example, the following malformed JSON will raise
 `org.apache.hadoop.hive.serde2.SerDeException`.
 
 ```json
@@ -202,14 +196,14 @@ Declare your table as `array<string>`, the SerDe will return a one-element array
 
 ### Support for UNIONTYPE
 
-A `Uniontype` is a field that can contain different types. Hive usually stores a 'tag' that is basically the index 
-of the datatype. For example, if you create a `uniontype<int,string,float>`, a tag would be 0 for int, 1 for string, 
+A `Uniontype` is a field that can contain different types. Hive usually stores a 'tag' that is basically the index
+of the datatype. For example, if you create a `uniontype<int,string,float>`, a tag would be 0 for int, 1 for string,
 2 for float as per the [UnionType documentation](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+Types#LanguageManualTypes-UnionTypes).
 
-JSON data does not store anything describing the type, so the SerDe will try and infer it. The order matters. 
+JSON data does not store anything describing the type, so the SerDe will try and infer it. The order matters.
 For example, if you define a field `f` as `UNIONTYPE<int,string>` you will get different results.
 
-The following data will be parsed as `int`, since it precedes the `String` type in the defintion and `123` is 
+The following data will be parsed as `int`, since it precedes the `String` type in the defintion and `123` is
 successfully parsed as a number.
 
 ```json
@@ -222,13 +216,13 @@ The following data will parsed as a `String`.
 { "f": "asv" }
 ```
 
-It's worth noting that complex `Union` types may not be very efficient, since the SerDe may try to parse the same 
+It's worth noting that complex `Union` types may not be very efficient, since the SerDe may try to parse the same
 data in multiple ways.
 
 ### Mapping Hive Keywords
 
-Sometimes JSON data has attributes named like reserved words in hive. For instance, you may have a JSON attribute 
-named 'timestamp', and hive will fail when issuing a `CREATE TABLE`. This SerDe can map hive columns over attributes 
+Sometimes JSON data has attributes named like reserved words in hive. For instance, you may have a JSON attribute
+named 'timestamp', and hive will fail when issuing a `CREATE TABLE`. This SerDe can map hive columns over attributes
 with different names using properties.
 
 In the following example `mapping.ts` translates the `ts` field into it the JSON attribute called `timestamp`.
@@ -243,8 +237,8 @@ STORED AS TEXTFILE;
 
 ### Mapping Names with Periods
 
-Hive doesn't support column names containing periods. In theory they should work when quoted in backtics, but 
-doesn't, as noted in [SO#35344480](http://stackoverflow.com/questions/35344480/hive-select-column-with-non-alphanumeric-characters/35349822). 
+Hive doesn't support column names containing periods. In theory they should work when quoted in backtics, but
+doesn't, as noted in [SO#35344480](http://stackoverflow.com/questions/35344480/hive-select-column-with-non-alphanumeric-characters/35349822).
 To work around this issue set the property `dots.in.keys` to `true` in the SerDe Properties and access these fields by
  substituting the period with an underscore.
 
