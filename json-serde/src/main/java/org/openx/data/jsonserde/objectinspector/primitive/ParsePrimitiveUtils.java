@@ -9,6 +9,8 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 /**
  *
@@ -57,6 +59,11 @@ public final class ParsePrimitiveUtils {
         } else {
             return Long.parseLong(s);
         }
+    }
+
+    static TimeZone defaultZone = TimeZone.getDefault();
+    public static String serializeAsUTC(Timestamp ts) {
+        return UTC_FORMAT.format(ts.getTime() - defaultZone.getOffset(ts.getTime()) );
     }
 
     public static Timestamp parseTimestamp(String s) {

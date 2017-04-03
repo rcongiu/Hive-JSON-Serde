@@ -55,6 +55,8 @@ import javax.print.attribute.standard.DateTimeAtCompleted;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.serde.serdeConstants;
 import org.apache.hadoop.hive.serde2.typeinfo.PrimitiveTypeInfo;
+import org.openx.data.jsonserde.objectinspector.primitive.JavaStringTimestampObjectInspector;
+import org.openx.data.jsonserde.objectinspector.primitive.ParsePrimitiveUtils;
 
 /**
  * Properties:
@@ -325,7 +327,7 @@ public class JsonSerDe extends AbstractSerDe {
                         result = ((StringObjectInspector)poi).getPrimitiveJavaObject(obj);
                         break;
                     case TIMESTAMP:
-                        result = ((TimestampObjectInspector)poi).getPrimitiveJavaObject(obj);
+                        result = ParsePrimitiveUtils.serializeAsUTC((Timestamp)((TimestampObjectInspector)poi).getPrimitiveJavaObject(obj));
                         break;
                     case UNKNOWN:
                         throw new RuntimeException("Unknown primitive");

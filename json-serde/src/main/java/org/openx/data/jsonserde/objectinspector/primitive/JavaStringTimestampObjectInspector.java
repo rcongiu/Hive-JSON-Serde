@@ -46,12 +46,19 @@ public class JavaStringTimestampObjectInspector extends AbstractPrimitiveJavaObj
 
     @Override
     public Object create(byte[] bytes, int offset) {
-       return new TimestampWritable(bytes, offset).toString();
+       return formatTimeStamp(new TimestampWritable(bytes, offset));
     }
 
     @Override
     public Object create(Timestamp tmstmp) {
-        return tmstmp.toString();
+        return formatTimeStamp(tmstmp);
+    }
+
+    private String formatTimeStamp(Timestamp ts) {
+        return ParsePrimitiveUtils.serializeAsUTC(ts);
+    }
+    private String formatTimeStamp(TimestampWritable tsw) {
+        return formatTimeStamp(tsw.getTimestamp());
     }
 
     @Override
