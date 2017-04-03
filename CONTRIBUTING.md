@@ -65,6 +65,16 @@ mvn -Pcdh5 clean package
 mvn -Phdp23 clean package
 ```
 
+### Other versions of hadoop
+
+Somebody asked for other versions of hadoop that were not supported by
+Cloudera (1.x). It is possible to build the serde for those versions:
+
+```
+ mvn -Dcdh5.hadoop.version=1.2.1 -Dhadoop.dependency=hadoop-core clean package
+```
+
+
 ### Generate a JAR
 
 All output is generated into `json-serde/target/json-serde-VERSION-jar-with-dependencies.jar`.
