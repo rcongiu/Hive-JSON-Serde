@@ -203,11 +203,11 @@ public class JsonSerDeTimeStampTest {
     assertTrue(obj instanceof Text);
     String serialized = obj.toString();
 
-    // this is what we get.. but the order of the elements may vary...
-    String res = "{\"one\":true,\"two\":\"field\",\"three\":\"1970-01-16 00:27:19.5\"}";
-
-    // they should be the same...let's hope spacing is the same
-    assertEquals(serialized,res );
+    // serialization does not guarantee the order of the fields, so we only check the fields
+    // one by one
+    assertTrue(serialized.contains("\"one\":true"));
+    assertTrue(serialized.contains("\"two\":\"field\""));
+    assertTrue(serialized.contains("\"three\":\"1970-01-16 00:27:19.5\""));
 
 
   }
