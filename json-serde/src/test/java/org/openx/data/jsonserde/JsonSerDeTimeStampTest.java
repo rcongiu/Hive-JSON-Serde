@@ -31,10 +31,9 @@ import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
 import static org.junit.Assert.assertEquals;
 import org.openx.data.jsonserde.objectinspector.primitive.JavaStringTimestampObjectInspector;
+import org.openx.data.jsonserde.objectinspector.primitive.ParsePrimitiveUtils;
 
-/**
- * User: guyrt
- */
+
 public class JsonSerDeTimeStampTest {
 
   static JsonSerDe instance;
@@ -64,6 +63,20 @@ public class JsonSerDeTimeStampTest {
     StructObjectInspector soi = (StructObjectInspector) instance.getObjectInspector();
     
     JavaStringTimestampObjectInspector jstOi = (JavaStringTimestampObjectInspector) 
+            soi.getStructFieldRef("five").getFieldObjectInspector();
+    assertEquals(Timestamp.valueOf("2013-03-27 23:18:40.0"), jstOi.getPrimitiveJavaObject(result.get("five")));
+  }
+
+  @Test
+  public void testUTCTimestampDeSerialize() throws Exception {
+    // Test that timestamp object can be deserialized
+    Writable w = new Text("{\"one\":true,\"five\":\"2013-03-27T23:18:40Z\"}");
+
+    JSONObject result = (JSONObject) instance.deserialize(w);
+
+    StructObjectInspector soi = (StructObjectInspector) instance.getObjectInspector();
+
+    JavaStringTimestampObjectInspector jstOi = (JavaStringTimestampObjectInspector)
             soi.getStructFieldRef("five").getFieldObjectInspector();
     assertEquals(Timestamp.valueOf("2013-03-27 23:18:40.0"), jstOi.getPrimitiveJavaObject(result.get("five")));
   }
@@ -136,5 +149,11 @@ public class JsonSerDeTimeStampTest {
       Timestamp ts = new Timestamp(cal.getTimeInMillis());
       return ts;
       
+  }
+  
+  @Test
+  public void testformatDateFromUTC() throws ParseException {
+    String string1 = "2001-07-04T12:08:56Z";
+    assertEquals("2001-07-04 12:08:56", ParsePrimitiveUtils.nonUTCFormat(string1));
   }
 }
