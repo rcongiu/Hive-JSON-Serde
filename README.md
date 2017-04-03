@@ -287,6 +287,9 @@ OK
 {"name":"roberto"}
 ```
 
+The SerDe must also be in the classpath for the UDF to work. If not installed
+as a hive extra library, you should also `ADD JAR` theSerDe Jar
+
 ### Timestamps
 
 Note that the system default timezone is used to convert timestamps.

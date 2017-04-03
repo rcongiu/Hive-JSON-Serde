@@ -28,7 +28,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-jar-plugin.version>2.4</maven-jar-plugin.version>
         <!-- cdh4 versions -->
-        <cdh4.version>4.6.0</cdh4.version>
+        <cdh4.version>4.7.1</cdh4.version>
         <cdh4.hive.version>0.10.0-cdh${cdh4.version}</cdh4.hive.version>
         <cdh4.hadoop.version>2.0.0-cdh${cdh4.version}</cdh4.hadoop.version>
         <!-- cdh5 versions -->
@@ -43,6 +43,7 @@
         <hdp23.version>2.3.0</hdp23.version>
         <hdp23.hive.version>1.2.1</hdp23.hive.version>
         <hdp23.hadoop.version>2.7.1</hdp23.hadoop.version>
+        <hadoop.dependency>hadoop-common</hadoop.dependency>
     </properties>
 
     <profiles>
@@ -51,6 +52,9 @@
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
+            <modules>
+                <module>json-serde-cdh4-shim</module>
+            </modules>
             <properties>
                 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
                 <serde.shim>json-serde-cdh4-shim</serde.shim>
@@ -65,6 +69,9 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+            <modules>
+                <module>json-serde-cdh5-shim</module>
+            </modules>
             <properties>
                 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
                 <serde.shim>json-serde-cdh5-shim</serde.shim>
@@ -79,6 +86,9 @@
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
+            <modules>
+                <module>json-serde-cdh5-shim</module>
+            </modules>
             <properties>
                 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
                 <serde.shim>json-serde-cdh5-shim</serde.shim>
@@ -92,8 +102,6 @@
 
     <modules>
         <module>json</module>
-        <module>json-serde-cdh4-shim</module>
-        <module>json-serde-cdh5-shim</module>
         <module>json-serde</module>
         <module>json-udf</module>
     </modules>

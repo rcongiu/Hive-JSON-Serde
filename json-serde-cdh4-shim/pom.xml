@@ -46,7 +46,7 @@
 	</dependency>
 	<dependency>
 	    <groupId>org.apache.hadoop</groupId>
-	    <artifactId>hadoop-common</artifactId>
+	    <artifactId>${hadoop.dependency}</artifactId>
 	    <version>${cdh4.hadoop.version}</version>
 	    <scope>provided</scope>
 	</dependency>
