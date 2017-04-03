@@ -1,7 +1,8 @@
 JsonSerde - a read/write SerDe for JSON Data
 ================================================
-
-[![Build Status](https://travis-ci.org/rcongiu/Hive-JSON-Serde.svg?branch=master)](https://travis-ci.org/rcongiu/Hive-JSON-Serde)
+Build Status:
+* master : [![Build Status](https://travis-ci.org/rcongiu/Hive-JSON-Serde.svg?branch=master)](https://travis-ci.org/rcongiu/Hive-JSON-Serde)
+* develop:[![Build Status](https://travis-ci.org/rcongiu/Hive-JSON-Serde.svg?branch=develop)](https://travis-ci.org/rcongiu/Hive-JSON-Serde)
 
 This library enables Apache Hive to read and write in JSON format. It includes support for serialization and 
 deserialization (SerDe) as well as JSON conversion UDF.

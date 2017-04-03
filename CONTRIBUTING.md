@@ -2,7 +2,8 @@
 
 This project is work of [many contributors](https://github.com/rcongiu/Hive-JSON-Serde/graphs/contributors).
 
-You're encouraged to submit [pull requests](https://github.com/rcongiu/Hive-JSON-Serde/pulls), [propose features and discuss issues](https://github.com/rcongiu/Hive-JSON-Serde/issues).
+You're encouraged to submit [pull requests](https://github.com/rcongiu/Hive-JSON-Serde/pulls), 
+[propose features and discuss issues](https://github.com/rcongiu/Hive-JSON-Serde/issues).
 
 In the examples below, substitute your Github username for `contributor` in URLs.
 
@@ -27,11 +28,18 @@ mvn test
 
 ### Architecture
 
-JSON encoding and decoding is using a somewhat modified version of [Douglas Crockfords JSON library](https://github.com/douglascrockford/JSON-java), which is included in the distribution.
+JSON encoding and decoding is using a somewhat modified version of 
+[Douglas Crockfords JSON library](https://github.com/douglascrockford/JSON-java), which is included in the distribution.
 
-The SerDe builds a series of wrappers around `JSONObject`. Since serialization and deserialization are executed for every (and possibly billions) record we want to minimize object creation, so instead of serializing/deserializing to an `ArrayList`, the `JSONObject` is kept and a cached
-`ObjectInspector` is built around it. When deserializing, Hive gets a `JSONObject`, and a `JSONStructObjectInspector` to read from. Hive has `Structs`, `Maps`, `Arrays` and primitives while `JSON` has `Objects`, `Arrays` and primitives. Hive `Maps` and `Structs` are both implemented as `Object`, which are less restrictive than hive maps. A JSON `Object` could be a mix of keys and values of different types, while Hive expects you to declare the
-type of map (eg. `map<string,string>`). The user is responsible for having the JSON data structure match hive table declaration.
+The SerDe builds a series of wrappers around `JSONObject`. Since serialization and deserialization are executed 
+for every (and possibly billions) record we want to minimize object creation, so instead of serializing/deserializing
+to an `ArrayList`, the `JSONObject` is kept and a cached
+`ObjectInspector` is built around it. When deserializing, Hive gets a `JSONObject`, and a `JSONStructObjectInspector` 
+to read from. Hive has `Structs`, `Maps`, `Arrays` and primitives while `JSON` has `Objects`, `Arrays` and primitives. 
+Hive `Maps` and `Structs` are both implemented as `Object`, which are less restrictive than hive maps. 
+A JSON `Object` could be a mix of keys and values of different types, while Hive expects you to declare the
+type of map (eg. `map<string,string>`). The user is responsible for having the JSON data structure match hive 
+table declaration.
 
 See [www.congiu.com](http://www.congiu.com/?s=serde) for details.
 
@@ -152,11 +160,21 @@ git push origin my-feature-branch -f
 
 ## Check on Your Pull Request
 
-Go back to your pull request after a few minutes and see whether it passed muster with Travis-CI. Everything should look green, otherwise fix issues and amend your commit as described above.
+Go back to your pull request after a few minutes and see whether it passed muster with Travis-CI. Everything should 
+look green, otherwise fix issues and amend your commit as described above.
 
 ## Be Patient
 
-It's likely that your change will not be merged and that the nitpicky maintainers will ask you to do more, or fix seemingly benign problems. Hang on there!
+It's likely that your change will not be merged and that the nitpicky maintainers will ask you to do more, or fix 
+seemingly benign problems. Hang on there!
+
+Keep in mind that this SerDe is used by many, many people, so we don't want to make any non-backward compatible
+change unless it's really, really necessary.
+Also, we don't want to introduce any surprise behavior. 
+For example, we do want the query to fail on incorrect/broken
+data *unless we have a way for the user to force it*. The default behaviour on malformed data is to fail, and
+not to quietly ingest it returning a value.
+
 
 ## Thank You
 
