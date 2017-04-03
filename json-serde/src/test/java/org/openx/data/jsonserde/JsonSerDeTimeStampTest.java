@@ -165,7 +165,7 @@ public class JsonSerDeTimeStampTest {
 
   @Test
   public void testSerializeTimestamp() throws SerDeException, JSONException {
-    System.out.println("testSerializeWithMapping");
+    System.out.println("testSerializeTimestamp");
 
     JsonSerDe serde = new JsonSerDe();
     Configuration conf = null;
