@@ -158,6 +158,7 @@ public class JsonSerDeTimeStampTest {
   
   @Test
   public void testformatDateFromUTC() throws ParseException {
+    System.out.println("testFormatDateFromUTC");
     String string1 = "2001-07-04T12:08:56Z";
     assertEquals("2001-07-04 12:08:56", ParsePrimitiveUtils.nonUTCFormat(string1));
   }
@@ -174,7 +175,6 @@ public class JsonSerDeTimeStampTest {
     tbl.setProperty(serdeConstants.LIST_COLUMN_TYPES, "boolean,string,timestamp"); // one timestamp field
     serde.initialize(conf, tbl);
 
-    System.out.println("serialize");
     ArrayList<Object> row = new ArrayList<Object>(3);
 
     List<ObjectInspector> lOi = new LinkedList<ObjectInspector>();
@@ -202,7 +202,7 @@ public class JsonSerDeTimeStampTest {
 
     assertTrue(obj instanceof Text);
     String serialized = obj.toString();
-
+    System.out.println("Returned " + serialized);
     // serialization does not guarantee the order of the fields, so we only check the fields
     // one by one
     assertTrue(serialized.contains("\"one\":true"));
