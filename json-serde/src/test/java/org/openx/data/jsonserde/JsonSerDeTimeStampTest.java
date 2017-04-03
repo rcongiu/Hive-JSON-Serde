@@ -15,21 +15,26 @@ package org.openx.data.jsonserde;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.serde.serdeConstants;
+import org.apache.hadoop.hive.serde2.SerDeException;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.junit.Before;
 import org.junit.Test;
+import org.openx.data.jsonserde.json.JSONException;
 import org.openx.data.jsonserde.json.JSONObject;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Properties;
+import java.util.*;
+
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.openx.data.jsonserde.objectinspector.primitive.JavaStringTimestampObjectInspector;
 import org.openx.data.jsonserde.objectinspector.primitive.ParsePrimitiveUtils;
 
@@ -156,4 +161,55 @@ public class JsonSerDeTimeStampTest {
     String string1 = "2001-07-04T12:08:56Z";
     assertEquals("2001-07-04 12:08:56", ParsePrimitiveUtils.nonUTCFormat(string1));
   }
+
+
+  @Test
+  public void testSerializeTimestamp() throws SerDeException, JSONException {
+    System.out.println("testSerializeWithMapping");
+
+    JsonSerDe serde = new JsonSerDe();
+    Configuration conf = null;
+    Properties tbl = new Properties();
+    tbl.setProperty(serdeConstants.LIST_COLUMNS, "one,two,three");
+    tbl.setProperty(serdeConstants.LIST_COLUMN_TYPES, "boolean,string,timestamp"); // one timestamp field
+    serde.initialize(conf, tbl);
+
+    System.out.println("serialize");
+    ArrayList<Object> row = new ArrayList<Object>(3);
+
+    List<ObjectInspector> lOi = new LinkedList<ObjectInspector>();
+    List<String> fieldNames = new LinkedList<String>();
+
+    row.add(Boolean.TRUE);
+    fieldNames.add("one");
+    lOi.add(ObjectInspectorFactory.getReflectionObjectInspector(Boolean.class,
+            ObjectInspectorFactory.ObjectInspectorOptions.JAVA));
+
+    row.add("field");
+    fieldNames.add("two");
+    lOi.add(ObjectInspectorFactory.getReflectionObjectInspector(String.class,
+            ObjectInspectorFactory.ObjectInspectorOptions.JAVA));
+
+
+    row.add( new Timestamp(1326439500L));
+    fieldNames.add("three");
+    lOi.add(ObjectInspectorFactory
+            .getReflectionObjectInspector(Timestamp.class, ObjectInspectorFactory.ObjectInspectorOptions.JAVA));
+
+    StructObjectInspector soi = ObjectInspectorFactory.getStandardStructObjectInspector(fieldNames, lOi);
+
+    Object obj = serde.serialize(row, soi);
+
+    assertTrue(obj instanceof Text);
+    String serialized = obj.toString();
+
+    // this is what we get.. but the order of the elements may vary...
+    String res = "{\"one\":true,\"two\":\"field\",\"three\":\"1970-01-16 00:27:19.5\"}";
+
+    // they should be the same...let's hope spacing is the same
+    assertEquals(serialized,res );
+
+
+  }
+
 }
