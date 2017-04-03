@@ -58,12 +58,23 @@ public final class ParsePrimitiveUtils {
         final String sampleUnixTimestampInMs = "1454612111000";
 
         Timestamp value;
-        if (s.indexOf(':') > 0) {
+        //DateISO8601 Format Acceptance
+        String datePattern = "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]";
+
+        if (s == null || s.length() == 0) {
+            return null;
+        }
+
+        if(s.contains("T")) {
+            value = new Timestamp(javax.xml.bind.DatatypeConverter.parseDateTime(s).getTimeInMillis());
+        } else if (s.indexOf(':') > 0) {
             value = Timestamp.valueOf(s);
+        } else if(s.matches(datePattern)){
+            value = new Timestamp(javax.xml.bind.DatatypeConverter.parseDate(s).getTimeInMillis());
         } else if (s.indexOf('.') >= 0) {
             // it's a float
             value = new Timestamp(
-                    (long) ((double) (Double.parseDouble(s) * 1000)));
+                (long) ((double) (Double.parseDouble(s) * 1000)));
         } else {
             // integer 
             Long timestampValue = Long.parseLong(s);
@@ -72,9 +83,10 @@ public final class ParsePrimitiveUtils {
                 value = new Timestamp(timestampValue);
             } else {
                 value = new Timestamp(timestampValue * 1000);
-            }            
+            }
         }
-        return value;
+        
+        return value;        
     }
 
 }
