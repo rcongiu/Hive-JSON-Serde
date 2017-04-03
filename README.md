@@ -3,128 +3,107 @@ JsonSerde - a read/write SerDe for JSON Data
 
 [![Build Status](https://travis-ci.org/rcongiu/Hive-JSON-Serde.svg?branch=master)](https://travis-ci.org/rcongiu/Hive-JSON-Serde)
 
-Serialization/Deserialization module for Apache Hadoop Hive
-JSON conversion UDF
+This library enables Apache Hive to read and write in JSON format. It includes support for serialization and deserialization (SerDe) as well as JSON conversion UDF.
 
-This module allows hive to read and write in JSON format (see http://json.org for more info).
+### Features
 
-Features:
 * Read data stored in JSON format
-* Convert data to JSON format when INSERT INTO table
-* arrays and maps are supported
-* nested data structures are also supported.
-* modular to support multiple versions of CDH
+* Convert data to JSON format during `INSERT INTO <table>`
+* Support for JSON arrays and maps
+* Support for nested data structures
+* Support for Cloudera's Distribution Including Apache Hadoop (CDH)
+* Support for multiple versions of Hadoop
 
-IMPORTANT!!! READ THIS BELOW!!
-Json records must be _one per line_, that is, the serde
-WILL NOT WORK with multiline Json. Why ? Because the way hadoop
-works with files, they have to be _splittable_, for instance,
-hadoop will split text files at end of line..but in order to split
-a text file with json at a certain point, we would have to parse
-everything up to that point. See below
-```
-// this will work
+### Installation
+
+Download the latest binaries (`json-serde-X.Y.Z-jar-with-dependencies.jar` and `json-udf-X.Y.Z-jar-with-dependencies.jar`) from [congiu.net/hive-json-serde](http://www.congiu.net/hive-json-serde). Choose the correct verson for CDH 4, CDH 5 or Hadoop 2.3. Place the JARs into `hive/lib` or use `ADD JAR` in Hive.
+
+### JSON Data Files
+
+Upload JSON files to HDFS with `hadoop fs -put` or `LOAD DATA LOCAL`. JSON records in data files must appear _one per line_, without a trailing CR/LF after the last record. This is because Hadoop partitions files as text using CR/LF as a separator to distribute work.
+
+The following example will work.
+
+```json
 { "key" : 10 }
+{ "key" : 20 }
+```
 
-// this will not work
+The following example will not work.
+
+```json
 {
   "key" : 10
 }
+{
+  "key" : 20
+}
 ```
 
+### Loading a JSON File and Querying Data
 
-BINARIES
-----------
-github used to allow uploading of binaries, but not anymore.
-Many people have been asking me for binaries in private by email
-so I decided to upload binaries here:
-
-http://www.congiu.net/hive-json-serde/
-
-so you don't need to compile your own. There are versions for
-CDH4, CDH5 and HDP 2.3.
-
-
-COMPILE
----------
-
-Use maven to compile the serde.
-The project uses maven profiles to support multiple
-version of hive/CDH.
-To build for CDH4:
+Uses [json-serde/src/test/scripts/test-without-cr-lf.json](json-serde/src/test/scripts/test-without-cr-lf.json).
 
 ```
-mvn -Pcdh4 clean package
+~$ cat test.json
+
+{"text":"foo","number":123}
+{"text":"bar","number":345}
+
+~$ perl -pe 'chomp if eof' test.json > test-without-cr-lf.json
+
+~$ cat test-without-cr-lf.json
+{"text":"foo","number":123}
+{"text":"bar","number":345}~$
+
+$ hadoop fs -put -f test-without-cr-lf.json /user/data/test.json
+
+$ hive
+
+hive> CREATE DATABASE test;
+
+hive> CREATE EXTERNAL TABLE test ( text string )
+      ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+      LOCATION '/user/data';
+
+hive> SELECT * FROM test;
+OK
+
+foo 123
+bar 345
 ```
 
-To build for CDH5:
+### Querying Complex Fields
+
+Uses [json-serde/src/test/scripts/data.txt](json-serde/src/test/scripts/data.txt).
+
 ```
-mvn -Pcdh5 clean package
-```
+hive> CREATE DATABASE test;
 
-To build for HDP 2.3:
-```
-mvn -Phdp23 clean package
-```
+hive> CREATE TABLE test (
+        one boolean,
+        three array<string>,
+        two double,
+        four string )
+      ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+      STORED AS TEXTFILE;
 
-the serde will be in
-```
-json-serde/target/json-serde-VERSION-jar-with-dependencies.jar
-```
+hive> LOAD DATA LOCAL INPATH 'data.txt' OVERWRITE INTO TABLE test;
 
-
-```bash
-$ mvn package
-
-# If you want to compile the serde against a different
-# version of the cloudera libs, use -D:
-$ mvn -Dcdh.version=0.9.0-cdh3u4c-SNAPSHOT package
-```
-
-
-
-Hive 0.14.0 and 1.0.0
------------
-
-Compile with
-```
-mvn -Pcdh5 -Dcdh5.hive.version=1.0.0 clean package
-```
-
-
-EXAMPLES
-------------
-
-Example scripts with simple sample data are in src/test/scripts. Here some excerpts:
-
-### Query with complex fields like arrays
-
-```sql
-CREATE TABLE json_test1 (
-	one boolean,
-	three array<string>,
-	two double,
-	four string )
-ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
-STORED AS TEXTFILE;
-
-LOAD DATA LOCAL INPATH 'data.txt' OVERWRITE INTO TABLE  json_test1 ;
-hive> select three[1] from json_test1;
+hive> select three[1] from test;
 
 gold
 yellow
 ```
 
-If you have complex json it can become tedious to create the table
-by hand. I recommend [hive-json-schema](https://github.com/quux00/hive-json-schema) to build your schema from the data.
+If you have complex json it can be tedious to create tables manually. Try [hive-json-schema](https://github.com/quux00/hive-json-schema) to build your schema from data.
 
+See [json-serde/src/test/scripts](json-serde/src/test/scripts) for more examples.
 
-### Nested structures
-
-You can also define nested structures:
+### Defining Nested Structures
 
 ```sql
-add jar ../../../target/json-serde-1.0-SNAPSHOT-jar-with-dependencies.jar;
+ADD JAR json-serde-1.3.7-SNAPSHOT-jar-with-dependencies.jar;
 
 CREATE TABLE json_nested_test (
 	country string,
@@ -133,127 +112,125 @@ CREATE TABLE json_nested_test (
 ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
 STORED AS TEXTFILE;
 
--- data : {"country":"Switzerland","languages":["German","French",
--- "Italian"],"religions":{"catholic":[10,20],"protestant":[40,50]}}
+-- data : {"country":"Switzerland","languages":["German","French","Italian"],"religions":{"catholic":[10,20],"protestant":[40,50]}}
 
-LOAD DATA LOCAL INPATH 'nesteddata.txt' OVERWRITE INTO TABLE  json_nested_test ;
+LOAD DATA LOCAL INPATH 'nesteddata.txt' OVERWRITE INTO TABLE  json_nested_test;
 
-select * from json_nested_test;  -- result: Switzerland	["German","French","Italian"]	{"catholic":[10,20],"protestant":[40,50]}
-select languages[0] from json_nested_test; -- result: German
-select religions['catholic'][0] from json_nested_test; -- result: 10
+select * from json_nested_test;
+
+-- result: Switzerland	["German","French","Italian"]	{"catholic":[10,20],"protestant":[40,50]}
+
+select languages[0] from json_nested_test;
+-- result: German
+
+select religions['catholic'][0] from json_nested_test;
+-- result: 10
 ```
 
-### SUPPORT FOR ARRAYS
-You could have JSON arrays, in that case the SerDe would still work,
-and it will expect data in the JSON arrays ordered just like the hive
-columns, like you'd see in the regular text/csv serdes.
-For instance, if you do
-```sql
-CREATE TABLE people ( name string, age int)
-```
-your data should look like
-```javascript
+### Using Arrays
+
+Data in JSON arrays should be ordered identically to Hive columns, similarly to text/csv.
+
+For example, array data as follows.
+
+```js
 ["John", 26 ]
 ["Mary", 23 ]
 ```
-Arrays can still be nested, so you could have
+
+Can be imported into the following table.
+
+```sql
+CREATE TABLE people (name string, age int)
+```
+
+Arrays can also be nested.
+
 ```sql
 CREATE TABLE complex_array (
-	name string, address struct<street:string,city:string>) ...
+	name string, address struct<street:string,city:string>
+)
+
 -- data:
 ["John", { street:"10 green street", city:"Paris" } .. ]
 ```
 
+### Importing Malformed Data
 
-### MALFORMED DATA
+The SerDe will raise exceptions with malformed data. For example, the following malformed JSON will raise `org.apache.hadoop.hive.serde2.SerDeException`.
 
-The default behavior on malformed data is throwing an exception.
-For example, for malformed json like
+```json
 {"country":"Italy","languages" "Italian","religions":{"catholic":"90"}}
+```
 
-you get:
-Failed with exception java.io.IOException:org.apache.hadoop.hive.serde2.SerDeException: Row is not a valid JSON Object - JSONException: Expected a ':' after a key at 32 [character 33 line 1]
+```
+Failed with exception java.io.IOException:org.apache.hadoop.hive.serde2.SerDeException:
+Row is not a valid JSON Object - JSONException: Expected a ':' after a key at 32 [character 33 line 1]
+```
 
-this may not be desirable if you have a few bad lines you wish to ignore. If so you can do:
+This may not be desirable if you have a few bad lines you wish to ignore. Set `ignore.malformed.json` in that case.
+
 ```sql
 ALTER TABLE json_table SET SERDEPROPERTIES ( "ignore.malformed.json" = "true");
 ```
 
-it will not make the query fail, and the above record will be returned as
-NULL	null	null
+While this option will not make the query fail, a NULL record will be inserted instead.
 
-#### Promoting a scalar to an array
-
-It is a common issue to have a field that sometimes is a scalar and sometimes is an array, for instance:
 ```
-{ field: "hello", .. }
-{ field: [ "hello", "world" ], ...
+NULL	NULL	NULL
 ```
 
-In this case , if you declare your table as `array<string>,` if the SerDe finds a scalar, it will return a one-element
-array, effectively promoting the scalar to an array. The scalar has to be of the correct type.
+### Promoting a Scalar to an Array
 
+It is a common issue to have a field that sometimes is a scalar and sometimes an array.
 
-### UNIONTYPE support (PLEASE READ IF YOU USE IT)
-
-A Uniontype is a field that can contain different types, like in C.
-Hive usually stores a 'tag' that is basically the index of the datatype,
-for instance, if you create a uniontype<int,string,float> , tag would be
-0 for int, 1 for string, 2 for float (see https://cwiki.apache.org/confluence/display/Hive/LanguageManual+Types#LanguageManualTypes-UnionTypes).
-
-Now, JSON data does not store anything like that, so the serde will try and
-look what it can do.. that is, check, in order, if the data is compatible
-with any of the given types. So, THE ORDER MATTERS. Let's say you define
-a field f as UNIONTYPE<int,string> and your js has
-```{json}
-{ "f": "123" }  // parsed as int, since int precedes string in definitions,
-                // and "123" can be parsed to a number
-{ "f": "asv" }  // parsed as string
+```json
+{ "field" : "hello", .. }
+{ "field" : [ "hello", "world" ], ...
 ```
-That is, a number in a string. This will return a tag of 0 and an int rather
-than a string.
-It's worth noticing that complex Union types may not be that efficient, since
-the SerDe may try to parse the same data in several ways; however, several
-people asked me to implement this feature to cope with bad JSON, so..I did.
 
+Declare your table as `array<string>`, the SerDe will return a one-element array of the right type, promoting the scalar.
 
+### Support for UNIONTYPE
 
+A `Uniontype` is a field that can contain different types. Hive usually stores a 'tag' that is basically the index of the datatype. For example, if you create a `uniontype<int,string,float>`, a tag would be 0 for int, 1 for string, 2 for float as per the [UnionType documentation](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+Types#LanguageManualTypes-UnionTypes).
 
-### MAPPING HIVE KEYWORDS
+JSON data does not store anything describing the type, so the SerDe will try and infer it. The order matters. For example, if you define
+a field `f` as `UNIONTYPE<int,string>` you will get different results.
 
-Sometimes it may happen that JSON data has attributes named like reserved words in hive.
-For instance, you may have a JSON attribute named 'timestamp', which is a reserved word
-in hive, and hive will fail when issuing a CREATE TABLE.
-This SerDe can map hive columns over attributes named differently, using SerDe properties.
+The following data will be parsed as `int`, since it precedes the `String` type in the defintion and `123` is successfully parsed as a number.
 
-For instance:
+```json
+{ "f": "123" }
+```
+
+The following data will parsed as a `String`.
+
+```json
+{ "f": "asv" }
+```
+
+It's worth noting that complex `Union` types may not be very efficient, since the SerDe may try to parse the same data in multiple ways.
+
+### Mapping Hive Keywords
+
+Sometimes JSON data has attributes named like reserved words in hive. For instance, you may have a JSON attribute named 'timestamp', and hive will fail when issuing a `CREATE TABLE`. This SerDe can map hive columns over attributes with different names using properties.
+
+In the following example `mapping.ts` translates the `ts` field into it the JSON attribute called `timestamp`.
 
 ```sql
 CREATE TABLE mytable (
-	myfield string,
-        ts string ) ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+	myfield string, ts string
+) ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
 WITH SERDEPROPERTIES ( "mapping.ts" = "timestamp" )
 STORED AS TEXTFILE;
 ```
 
-Notice the "mapping.ts", that means: take the column 'ts' and read into it the
-JSON attribute named "timestamp"
+### Mapping Names with Periods
 
-#### Mapping names with dots
+Hive doesn't support column names containing periods. In theory they should work when quoted in backtics, but doesn't, as noted in [SO#35344480](http://stackoverflow.com/questions/35344480/hive-select-column-with-non-alphanumeric-characters/35349822). To work around this issue set the property `dots.in.keys` to `true` in the SerDe Properties and access these fields by substituting the period with an underscore.
 
-as noted in issue #131, Hive doesn't like column names containing dots/periods.
-In theory they should work when quoted in backtics, but as noted in this [stack overflow discussion]
-( http://stackoverflow.com/questions/35344480/hive-select-column-with-non-alphanumeric-characters/35349822)
-it doesn't work in practice for some limitation of the hive parser.
-
-So, you can then set the property `dots.in.keys` to `true` in the Serde Properties and access
-those fields by substituting the dot with an underscore.
-
-For example, if your JSON looks like
-```
-{ "my.field" : "value" , "other" : { "with.dots" : "blah } }
-```
-you can create the table like
+For example, create the following table.
 
 ```sql
 CREATE TABLE mytable (
@@ -263,8 +240,13 @@ CREATE TABLE mytable (
 WITH SERDEPROPERTIES ("dots.in.keys" = "true" )
 ```
 
-Note how the table was created using underscores instead of dots.
-Now you can query the fields without hive getting confused.
+Load the following JSON.
+
+```
+{ "my.field" : "value" , "other" : { "with.dots" : "blah } }
+```
+
+Query data substituting periods with underscores.
 
 ```sql
 SELECT my_field, other.with_dots from mytable
@@ -272,72 +254,37 @@ SELECT my_field, other.with_dots from mytable
 value, blah
 ```
 
-### ARCHITECTURE
+### User Defined Functions (UDF)
 
-For the JSON encoding/decoding, I am using a modified version of Douglas Crockfords JSON library:
-https://github.com/douglascrockford/JSON-java
-which is included in the distribution. I had to make some minor changes to it, for this reason
-I included it in my distribution and moved it to another package (since it's included in hive!)
+#### tjson
 
-The SerDe builds a series of wrappers around JSONObject. Since serialization and deserialization
-are executed for every (and possibly billions) record we want to minimize object creation, so
-instead of serializing/deserializing to an ArrayList, I kept the JSONObject and built a cached
-objectinspector around it. So when deserializing, hive gets a JSONObject, and a JSONStructObjectInspector
-to read from it. Hive has Structs, Maps, Arrays and primitives while JSON has Objects, Arrays and primitives.
-Hive Maps and Structs are both implemented as object, which are less restrictive than hive maps:
-a JSON Object could be a mix of keys and values of different types, while hive expects you to declare the
-type of map (example: map<string,string>). The user is responsible for having the JSON data structure
-match hive table declaration.
-
-More detailed explanation on my blog:
-http://www.congiu.com/articles/json_serde
-
-
-### UDF
-
-As a bonus, I added a UDF that can turn anything into a JSON string.
-So, if you want to convert anything (arrays, structs..) into
-a string containing their JSON representation, you can do that.
-
-Example:
+The `tjson` UDF can turn array, structs or strings into JSON.
 
 ```
-add jar json-udf-1.3.8-jar-with-dependencies.jar;
+ADD JAR json-udf-X.Y.Z-jar-with-dependencies.jar;
 create temporary function tjson as 'org.openx.data.udf.JsonUDF';
 
 hive> select tjson(named_struct("name",name)) from mytest1;
 OK
 {"name":"roberto"}
-
-
 ```
 
+### Timestamps
 
-### Notes
+Note that the system default timezone is used to convert timestamps.
 
-#### Timestamp support
-note that timestamp support will use the systems default timezone
-to convert timestamps.
+### Contributing
 
-
-### CONTRIBUTING
-
-I am using gitflow for the release cycle.
+See [CONTRIBUTING](CONTRIBUTING.md) for how to build the project.
 
 ### History
 
-This library is written by [Roberto Congiu](http://www.congiu.com) <rcongiu@yahoo.com>
+This library is written by [Roberto Congiu](http://www.congiu.com) &lt;rcongiu@yahoo.com&gt;
 during his time at [OpenX Technologies, Inc.](https://www.openx.com).
 
 See [CHANGELOG](CHANGELOG.md) for details.
 
-### THANKS
+### Thanks
 
 Thanks to Douglas Crockford for the liberal license for his JSON library, and thanks to
 my employer OpenX and my boss Michael Lum for letting me open source the code.
-
-
-
-
-
-
