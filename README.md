@@ -266,6 +266,28 @@ SELECT my_field, other.with_dots from mytable
 value, blah
 ```
 
+### Case Sensitivity in mappings
+
+Since hive is case insensitive, all JSON keys are by default lowercased, to accomodate
+situations where the same JSON key is in a different case. 
+However, this may not be what you want, you may need to treat the same key with different case
+as two different ones. You'll then have to use mappings, since hive does not support case 
+sensitive columns, and you'll also have to tell the SerDe not to be case insensitive (the default).
+
+```sql
+CREATE TABLE mytable (  
+  time1 string, 
+  time2 string)
+ ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+WITH SERDEPROPERTIES (
+   "case.insensitive" = "false", --tells hive to ignore key case
+   "mappings.time1"= "time", -- lowercase 'time' mapped into 'time1'
+   "mappings.time2"= "Time) -- uppercase to 'time2'
+
+-- Data: { "time" : "2012-10-22:, "Time": "2012-11-22"} 
+SELECT time1,time2 from mytable
+```
+
 ### User Defined Functions (UDF)
 
 #### tjson

@@ -28,7 +28,7 @@ public  class JsonStructOIOptions {
         public JsonStructOIOptions (Map<String,String> mp) {
             mappings = mp;
         }
-
+        boolean caseInsensitive = true; // converts JSON keys to case sensitive
         boolean dotsInKeyNames = false;
         public Map<String, String> getMappings() {
             return mappings;
@@ -41,6 +41,8 @@ public  class JsonStructOIOptions {
      public void setDotsInKeyNames(boolean dotsInKeyNames) {
          this.dotsInKeyNames = dotsInKeyNames;
      }
+     public void setCaseInsensitive(boolean c) { this.caseInsensitive = c; }
+     public boolean isCaseInsensitive() { return this.caseInsensitive; }
 
      @Override
      public boolean equals(Object o) {
