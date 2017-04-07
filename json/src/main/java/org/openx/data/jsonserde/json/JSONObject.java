@@ -202,7 +202,7 @@ public class JSONObject {
                 return;
             default:
                 x.back();
-                key = x.nextValue().toString().toLowerCase();
+                key = getKey(x.nextValue().toString());
             }
 
 // The key is followed by ':'. We will also tolerate '=' or '=>'.
@@ -356,6 +356,19 @@ public class JSONObject {
                 }
                 target.put(path[last].toLowerCase(), bundle.getString((String)key));
             }
+        }
+    }
+
+    /**
+     *  Gets the key in an Object, depending if it's lowercase or not.
+     * @param key
+     * @return
+     */
+    private String getKey(String key) {
+        if(JSONOptions.globalOptions.isCaseInsensitive) {
+            return key.toLowerCase();
+        } else {
+            return key;
         }
     }
 

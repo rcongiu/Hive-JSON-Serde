@@ -585,5 +585,48 @@ public class JsonSerDeTest {
             is.close();
         } catch (IOException ex){}
     }
+
+    @Test
+    public void testCaseSensitiveMapping() throws SerDeException, IOException {
+        System.out.println("testCaseSensitiveMapping");
+        JsonSerDe serde = new JsonSerDe();
+        Configuration conf = null;
+        Properties tbl = new Properties();
+        tbl.setProperty(serdeConstants.LIST_COLUMNS, "time1,time2");
+        tbl.setProperty(serdeConstants.LIST_COLUMN_TYPES, "string,string");
+        // this means, we call it ts but in data it's 'timestamp'
+        tbl.setProperty("mapping.time1", "Time");
+        tbl.setProperty("mapping.time2", "time");
+        tbl.setProperty(JsonSerDe.PROP_CASE_INSENSITIVE, "false");
+
+        serde.initialize(conf, tbl);
+        StructObjectInspector soi = (StructObjectInspector) serde.getObjectInspector();
+        Object res = serde.deserialize(new Text("{\"Time\":\"forme\",\"time\":\"foryou\"}"));
+
+        assertTrue(soi.getStructFieldData(res, soi.getStructFieldRef("time1")).equals("forme"));
+        assertTrue(soi.getStructFieldData(res, soi.getStructFieldRef("time2")).equals("foryou"));
+    }
+
+    @Test
+    public void testNestedCaseSensitiveMapping() throws SerDeException, IOException {
+        System.out.println("testCaseSensitiveMapping");
+        JsonSerDe serde = new JsonSerDe();
+        Configuration conf = null;
+        Properties tbl = new Properties();
+        tbl.setProperty(serdeConstants.LIST_COLUMNS, "col1,col2");
+        tbl.setProperty(serdeConstants.LIST_COLUMN_TYPES, "string,struct<time1:string>");
+        // this means, we call it ts but in data it's 'timestamp'
+        tbl.setProperty("mapping.time1", "Time");
+        tbl.setProperty(JsonSerDe.PROP_CASE_INSENSITIVE, "false");
+
+        serde.initialize(conf, tbl);
+        StructObjectInspector soi = (StructObjectInspector) serde.getObjectInspector();
+        Object res = serde.deserialize(new Text("{\"col1\":\"forme\",\"col2\":{\"Time\":\"foryou\"}}"));
+
+        assertTrue(soi.getStructFieldData(res, soi.getStructFieldRef("col1")).equals("forme"));
+        StructObjectInspector soi2 = (StructObjectInspector) soi.getStructFieldRef("col2").getFieldObjectInspector();
+        Object col2 = soi.getStructFieldData(res, soi.getStructFieldRef("col2"));
+        assertTrue(soi2.getStructFieldData(col2, soi2.getStructFieldRef("time1")).equals("foryou"));
+    }
     
 }

@@ -48,6 +48,7 @@ import org.apache.hadoop.io.Text;
 import org.openx.data.jsonserde.json.JSONArray;
 import org.openx.data.jsonserde.json.JSONException;
 import org.openx.data.jsonserde.json.JSONObject;
+import org.openx.data.jsonserde.json.JSONOptions;
 import org.openx.data.jsonserde.objectinspector.JsonObjectInspectorFactory;
 import org.openx.data.jsonserde.objectinspector.JsonStructOIOptions;
 
@@ -83,6 +84,7 @@ public class JsonSerDe extends AbstractSerDe {
     // properties used in configuration
     public static final String PROP_IGNORE_MALFORMED_JSON = "ignore.malformed.json";
     public static final String PROP_DOTS_IN_KEYS = "dots.in.keys";
+    public static final String PROP_CASE_INSENSITIVE ="case.insensitive" ;
 
    JsonStructOIOptions options;
 
@@ -126,8 +128,9 @@ public class JsonSerDe extends AbstractSerDe {
                 .getStructTypeInfo(columnNames, columnTypes);
         
         // build options
-        options = 
-                new JsonStructOIOptions(getMappings(tbl));
+        boolean isCaseInsensitive = Boolean.parseBoolean(tbl.getProperty(PROP_CASE_INSENSITIVE, "true"));
+        options = new JsonStructOIOptions(getMappings(tbl, isCaseInsensitive));
+        options.setCaseInsensitive(isCaseInsensitive);
 
         // Get the sort order
         String columnSortOrder = tbl.getProperty(serdeConstants.SERIALIZATION_SORT_ORDER);
@@ -139,6 +142,8 @@ public class JsonSerDe extends AbstractSerDe {
 
         // dots in key names. Substitute with underscores
         options.setDotsInKeyNames(Boolean.parseBoolean(tbl.getProperty(PROP_DOTS_IN_KEYS,"false")));
+
+        JSONOptions.globalOptions = new JSONOptions().setCaseInsensitive(options.isCaseInsensitive());
 
         rowObjectInspector = (StructObjectInspector) JsonObjectInspectorFactory
                 .getJsonObjectInspectorFromTypeInfo(rowTypeInfo, options);
@@ -438,7 +443,7 @@ public class JsonSerDe extends AbstractSerDe {
      * @param tbl
      * @return 
      */
-    private Map<String, String> getMappings(Properties tbl) {
+    private Map<String, String> getMappings(Properties tbl, boolean isCaseInsensitive) {
         int n = PFX.length();
         Map<String,String> mps = new HashMap<String,String>();
         
@@ -447,7 +452,8 @@ public class JsonSerDe extends AbstractSerDe {
             String s = (String) o;
             
             if(s.startsWith(PFX) ) {
-                mps.put(s.substring(n), tbl.getProperty(s).toLowerCase());
+                String fieldTo = tbl.getProperty(s);
+                mps.put(s.substring(n), (isCaseInsensitive ? fieldTo.toLowerCase(): fieldTo));
             }
         }
         return mps;
