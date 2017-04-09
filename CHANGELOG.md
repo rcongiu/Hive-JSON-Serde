@@ -1,98 +1,211 @@
-# Changelog
+# openx-json-serde v1.3.8-SNAPSHOT git changelog
 
-### 1.3.8 (Next)
+2017-04-07 15:17:33 -0700    case sensitivity in JSON Keys (Roberto Congiu)  
+2017-04-03 13:02:24 -0700    Removed CR/LF note, this seems to be a red herring. (dblock)  
+2017-04-03 09:06:43 -0700    Added instructions to compile for a custom version of hadoop (Roberto Congiu)  
+2017-04-03 08:58:12 -0700    cleaned up profiles, made it so for one profile it only compiles its needed shim (Roberto Congiu)  
+2017-04-03 03:44:44 -0700    Timestamp serialization in UTC, independent of timezone (Roberto Congiu)  
+2017-04-03 02:11:35 -0700    test passes locally but not on travis, trying to find out why (Roberto Congiu)  
+2017-04-03 02:04:18 -0700    changelog/readme changes (Roberto Congiu)  
+2017-04-03 01:55:36 -0700    fixed test name for serializeTimestamp (Roberto Congiu)  
+2017-04-03 01:47:29 -0700    fixed non-determinism in serialization test (Roberto Congiu)  
+2017-04-03 01:11:24 -0700    Added timestamp serialization, plus test. (Roberto Congiu)  
+2017-04-03 00:54:49 -0700    line-wrapped README (Roberto Congiu)  
+2017-04-02 17:15:46 -0700    Revamped README and CONTRIBUTING. (dblock)  
+2017-04-02 11:58:54 -0700    Extracted CHANGELOG. (dblock)  
+2017-04-02 10:57:50 -0700    Added Travis-CI. (dblock)  
+2017-04-01 08:10:38 -0700    Fix: typo \[ci skip\] (GitHub)  
+2016-09-23 18:02:00 -0700    Added docs for the scalar promotion to array (Roberto Congiu)  
+2016-09-23 17:57:34 -0700    to help with issue #12, if a field is declared as an array, but a scalar is found, coerce the scalar into a one element array (Roberto Congiu)  
+2016-08-28 02:20:11 -0700    removed code lint, got rid of uncecked warnings and deprecation as well. No code/functionality change (Roberto Congiu)  
+2016-05-23 23:56:49 -0700    for String type input, JavaStringDateObjectInspector getPrimitiveJavaObject should not return null (wangxianbin1987)  
+2016-03-29 20:05:06 -0700    Added support for timestamp serialization. (Denny Riadi)  
+2016-02-21 07:19:26 -0800    Fixed typo in example (Mike Rostermund)  
+2016-02-19 06:32:48 -0800    squid:SwitchLastCaseIsDefaultCheck - switch statements should end with a default clause (George Kankava)  
+2016-02-19 05:43:53 -0800    squid:S1118 - Utility classes should not have public constructors (George Kankava)  
+2016-02-14 17:19:34 -0800    added dots/underscores translation, fixes #131 (Roberto Congiu)  
+2016-02-10 23:20:55 -0800    squid:S1854 - Dead stores should be removed (George Kankava)  
+2016-02-09 02:07:56 -0800    squid:S2583 -  Conditions should not unconditionally evaluate to TRUE or to FALSE (George Kankava)  
+2016-02-05 05:43:39 -0800    squid:UselessParenthesesCheck - Useless parentheses around expressions should be removed to prevent any misunderstanding (George Kankava)  
+2016-02-04 11:25:30 -0800    Added timestamp in milliseconds support (Kevin Stumpf)  
+2016-01-30 20:30:17 -0800    added udf to deploy (Roberto Congiu)  
+2016-01-30 20:24:58 -0800    Updating develop poms back to pre merge state (Roberto Congiu)  
+2016-01-30 20:24:57 -0800    updating develop poms to master versions to avoid merge conflicts (Roberto Congiu)  
 
-* [#131](https://github.com/rcongiu/Hive-JSON-Serde/issues/131): Added support for mapping json keys with periods - [@rcongiu](https://github.com/rcongiu).
-* [#148](https://github.com/rcongiu/Hive-JSON-Serde/pull/148): Fix: for `String` type input, `JavaStringDateObjectInspector#getPrimitiveJavaObject` should not return `null` - [@wangxianbin1987](https://github.com/wangxianbin1987).
-* [#135](https://github.com/rcongiu/Hive-JSON-Serde/pull/135), [#134](https://github.com/rcongiu/Hive-JSON-Serde/pull/134), [#132](https://github.com/rcongiu/Hive-JSON-Serde/pull/132), [#130](https://github.com/rcongiu/Hive-JSON-Serde/pull/130), [#129](https://github.com/rcongiu/Hive-JSON-Serde/pull/129): Fix Sonar warnings - [@georgekankava](https://github.com/georgekankava).
-* [#128](https://github.com/rcongiu/Hive-JSON-Serde/pull/128): Added support for timestamps in milliseconds - [@kevinstumpf](https://github.com/kevinstumpf).
-* [#102](https://github.com/rcongiu/Hive-JSON-Serde/pull/102): When empty string appears where a Hive Map (JSON Object) was expected, treat it as NULL, not -1 - [@mhandwerker](https://github.com/mhandwerker).
-* [#12](https://github.com/rcongiu/Hive-JSON-Serde/issues/12): If a field is declared an array but a scalar is found, coerce it - [@rcongiu](https://github.com/rcongiu).
+**1.3.7**  
+2016-01-30 20:24:28 -0800    updating poms for branch'release/1.3.7' with non-snapshot versions (Roberto Congiu)  
+2016-01-30 20:24:16 -0800    changed docs (Roberto Congiu)  
+2016-01-30 20:23:26 -0800    updating poms for 1.3.8-SNAPSHOT development (Roberto Congiu)  
+2016-01-30 20:23:21 -0800    updating poms for 1.3.7 branch with snapshot versions (Roberto Congiu)  
+2016-01-30 20:22:32 -0800    udf docs added (Roberto Congiu)  
+2016-01-30 20:16:55 -0800    completed UDF (Roberto Congiu)  
+2015-12-16 08:51:28 -0800    Double uses the serde version instead of the hadoop version (Roberto Congiu)  
+2015-12-11 09:43:17 -0800    Added note in README (Roberto Congiu)  
+2015-12-11 09:42:38 -0800    Added support for date types (hive 1.2.0 and later) (Roberto Congiu)  
+2015-10-31 11:03:32 -0700    added tests for map (Roberto Congiu)  
+2015-10-26 11:35:06 -0700    Add support for UTC date format (Vidur Patel)  
+2015-10-08 11:06:44 -0700    Updating develop poms back to pre merge state (Roberto Congiu)  
+2015-10-08 11:06:44 -0700    updating develop poms to master versions to avoid merge conflicts (Roberto Congiu)  
 
-### 1.3.7 (2015/12/10)
+**1.3.6**  
+2015-10-08 11:05:54 -0700    fixed dependency (Roberto Congiu)  
+2015-10-08 11:04:31 -0700    updating poms for branch'release/1.3.6' with non-snapshot versions (Roberto Congiu)  
+2015-10-08 11:04:10 -0700    updating poms for 1.3.6 branch with snapshot versions (Roberto Congiu)  
+2015-10-08 11:01:04 -0700    fixed master branch (Roberto Congiu)  
+2015-10-08 10:37:22 -0700    Updating develop poms back to pre merge state (Roberto Congiu)  
+2015-10-08 10:37:22 -0700    updating develop poms to master versions to avoid merge conflicts (Roberto Congiu)  
+2015-10-08 10:36:53 -0700    disabling javadoc on release (Roberto Congiu)  
+2015-10-08 10:33:42 -0700    removed javadoc plugin, causing issue with release (Roberto Congiu)  
+2015-10-08 10:31:54 -0700    updating poms for branch'release/1.3.6' with non-snapshot versions (Roberto Congiu)  
+2015-10-08 10:31:30 -0700    release docs (Roberto Congiu)  
+2015-10-08 10:28:41 -0700    updating poms for 1.3.7-SNAPSHOT development (Roberto Congiu)  
+2015-10-08 10:28:35 -0700    updating poms for 1.3.6 branch with snapshot versions (Roberto Congiu)  
+2015-10-08 10:27:39 -0700    updated jgitflow plugin (Roberto Congiu)  
+2015-10-08 10:21:05 -0700    updated version of jgitflow plugin (Roberto Congiu)  
+2015-10-08 10:17:14 -0700    added deploy script, fixed boolean support for cdh4 (Roberto Congiu)  
+2015-10-07 23:01:50 -0700    Add support for String to Boolean conversion (Rajat Jain)  
+2015-10-05 17:55:31 -0700    Added comments about multi-line json. Closes #116 (Roberto Congiu)  
+2015-10-05 17:48:25 -0700    Merged support for HDP2.3 (Roberto Congiu)  
+2015-10-02 17:16:46 -0700    Add support for HDP 2.3 (Dave Beckett)  
+2015-08-30 14:27:01 -0700    updating poms for 1.3.6-SNAPSHOT development (Roberto Congiu)  
+2015-08-30 14:26:39 -0700    merging release/1.3.5' into master (Roberto Congiu)  
 
-* Added JSON UDF - [@rcongiu](https://github.com/rcongiu).
-* Added support for DATE type (Hive 1.2.0 and higher) - [@rcongiu](https://github.com/rcongiu).
+**1.3.5**  
+2015-08-30 14:23:31 -0700    added javadoc (Roberto Congiu)  
+2015-08-30 14:23:06 -0700    updating poms for 1.3.5 release (Roberto Congiu)  
+2015-08-30 14:15:58 -0700    preparing release (Roberto Congiu)  
+2015-08-30 14:14:12 -0700    actually, it fixes #112 (Roberto Congiu)  
+2015-08-30 14:13:08 -0700    Handle empty array where a JsonObject should be, fixes #113 (Roberto Congiu)  
+2015-08-30 14:01:35 -0700    Added UNIONTYPE support ( fixes #53) (Roberto Congiu)  
+2015-05-25 09:24:09 -0700    added reference to hive-json-schema to readme (Roberto Congiu)  
+2015-03-08 16:38:52 -0700    fixed readme (Roberto Congiu)  
+2015-03-08 16:31:10 -0700    instructions to compile for hive 1.0.0 (Roberto Congiu)  
+2015-03-08 15:56:12 -0700    updated readme (Roberto Congiu)  
+2015-02-24 16:15:16 -0800    When empty string appears where a Hive Map (JSON Object) was expected, treat it as NULL, not -1 (Martin Handwerker)  
+2014-12-15 10:15:40 -0800    add missing getPrimitiveJavaObject implementations (yuyang-lan)  
+2014-09-18 22:09:09 -0700    Fix for #issue-70 related to get_json_object (Will Moss)  
+2014-09-08 11:02:39 -0700    updated readme (Roberto Congiu)  
+2014-09-08 11:01:22 -0700    added link for binaries (Roberto Congiu)  
+2014-09-08 10:53:23 -0700    updating poms for 1.3.1-SNAPSHOT development (Roberto Congiu)  
 
-### 1.3.6 (2015/10/08)
+**1.3**  
+2014-09-08 10:52:38 -0700    merging release/1.3' into master (Roberto Congiu)  
+2014-09-08 10:52:21 -0700    updating poms for 1.3 release (Roberto Congiu)  
+2014-08-27 14:38:27 -0700    A long should always be a long (Andy Kramolisch)  
+2014-08-27 08:32:02 -0700    lowercase mappings, since JSON does it anyway. Fixes #84 (Roberto Congiu)  
+2014-08-25 12:52:35 -0700    merging feature/issue82' into develop (Roberto Congiu)  
+2014-08-25 12:52:03 -0700    struct and map use the same logic to determine if an object is a null, considering also an empty string / string of only spaces as a null (Roberto Congiu)  
+2014-08-25 12:43:08 -0700    fixed #82, can handle maps with empty string (Roberto Congiu)  
+2014-08-25 11:22:05 -0700    moved unit test (Roberto Congiu)  
+2014-08-25 11:15:21 -0700    updating poms for issue82 branch (Roberto Congiu)  
+2014-08-25 06:07:22 -0700    Move "Fix for \a or \v, because Java does not recognize in strings" on top of develop (Piotr Stapp)  
+2014-08-08 00:32:57 -0700    added serde location after it's built (Roberto Congiu)  
+2014-07-24 14:19:07 -0700    updating poms for 1.3-SNAPSHOT development (Roberto Congiu)  
 
-* [#117](https://github.com/rcongiu/Hive-JSON-Serde/pull/117): Added support for HDP 2.3 - [@dajobe](https://github.com/dajobe).
-* [#118](https://github.com/rcongiu/Hive-JSON-Serde/pull/118): Added support for String to Boolean conversion - [@rjainqb](https://github.com/rjainqb).
-* [#116](https://github.com/rcongiu/Hive-JSON-Serde/issues/116): Updated docs - [@rcongiu](https://github.com/rcongiu).
+**1.2**  
+2014-07-24 14:18:52 -0700    merging release/1.2' into master (Roberto Congiu)  
+2014-07-24 14:18:23 -0700    updating poms for 1.2 release (Roberto Congiu)  
+2014-07-24 12:58:53 -0700    fixed pom (Roberto Congiu)  
+2014-07-24 08:59:22 -0700    changed README (Roberto Congiu)  
+2014-07-24 08:54:41 -0700    refactoring to reduce code duplication (Roberto Congiu)  
+2014-07-24 08:04:48 -0700    refactor (Roberto Congiu)  
+2014-07-10 23:40:12 -0700    compiles with both cdh4 and cdh5 profile, but have to test it (Roberto Congiu)  
+2014-07-10 09:44:25 -0700    removing all target directories, updating gitignore (Roberto Congiu)  
+2014-07-10 09:42:13 -0700    changes (Roberto Congiu)  
+2014-05-28 18:34:40 -0700    refactoring, almost got it to work (Roberto Congiu)  
+2014-05-28 16:08:33 -0700    major refactoring for cdh compatibility (Roberto Congiu)  
+2014-05-05 05:18:14 -0700    Obj Inspector Class Cast Exception fix (appanasatya)  
+2014-04-28 17:15:59 -0700    added profile for cdh5, updated deps for cdh4 (Roberto Congiu)  
+2014-04-28 13:30:14 -0700    pom with profiles (Roberto Congiu)  
+2014-03-19 07:29:55 -0700    minor source cleanup (Roberto Congiu)  
+2014-03-03 14:09:49 -0800    Check for null, #57 (Roberto Congiu)  
+2014-02-25 09:52:18 -0800    updating poms for 1.1.9.3-SNAPSHOT development (Roberto Congiu)  
 
-### 1.3.5 (2015/08/30)
+**1.1.9.2**  
+2014-02-25 09:52:07 -0800    merging release/1.1.9.2' into master (Roberto Congiu)  
+2014-02-25 09:51:56 -0800    updating poms for 1.1.9.2 release (Roberto Congiu)  
+2014-02-25 09:51:02 -0800    updated readme (Roberto Congiu)  
+2014-02-25 09:50:08 -0800    updating poms for 1.1.9.2 release (Roberto Congiu)  
+2014-02-23 05:41:22 -0800    fix wrong cast (Powerrr)  
+2014-02-20 08:20:50 -0800    fixed readme (Roberto Congiu)  
+2014-02-20 08:16:45 -0800    merging feature/refactor-timestamp' into develop (Roberto Congiu)  
+2014-02-20 08:16:33 -0800    completed refactoring for timestamp (Roberto Congiu)  
+2014-02-19 23:58:04 -0800    updated readme (Roberto Congiu)  
+2014-02-19 23:56:44 -0800    merging feature/support-array-records' into develop (Roberto Congiu)  
+2014-02-19 23:56:32 -0800    added unit test, added feature (Roberto Congiu)  
+2014-02-19 23:12:50 -0800    fixe for error in JsonListObjectInspector (Roberto Congiu)  
+2014-02-19 16:29:01 -0800    merging feature/null-issue' into develop (Roberto Congiu)  
+2014-02-19 16:28:34 -0800    issue with nulls, fixes (Roberto Congiu)  
+2014-02-19 15:42:00 -0800    updating poms for null-issue branch (Roberto Congiu)  
+2014-02-16 15:02:42 -0800    fix typo (Powerrr)  
+2014-02-12 09:51:49 -0800    merging feature/timezone-issue-48' into develop (Roberto Congiu)  
+2014-02-12 09:51:29 -0800    fixed timezone issue in unit tests, fixes #48 (Roberto Congiu)  
+2014-02-07 14:47:51 -0800    added javadocs (Roberto Congiu)  
+2014-02-06 09:26:11 -0800    updated README (Roberto Congiu)  
+2014-02-06 09:15:43 -0800    merging feature/null-issue' into develop (Roberto Congiu)  
+2014-02-06 09:15:19 -0800    Fixed null handling, fixes #50 (Roberto Congiu)  
+2014-02-02 20:44:09 -0800    updating poms for 1.1.9.2-SNAPSHOT development (Roberto Congiu)  
 
-* Made CDH5 default - [@rcongiu](https://github.com/rcongiu).
-* [#53](https://github.com/rcongiu/Hive-JSON-Serde/issues/53): Added `UNIONTYPE` support - [@rcongiu](https://github.com/rcongiu).
-* [#112](https://github.com/rcongiu/Hive-JSON-Serde/issues/112): Handle empty array where an empty object should be - [@rcongiu](https://github.com/rcongiu).
-* [#98](https://github.com/rcongiu/Hive-JSON-Serde/pull/98): Added missing getPrimitiveJavaObject implementations - [@y-lan](https://github.com/y-lan).
+**1.1.9.1**  
+2014-02-02 20:43:34 -0800    merging release/1.1.9.1' into master (Roberto Congiu)  
+2014-02-02 20:43:18 -0800    updating poms for 1.1.9.1 release (Roberto Congiu)  
+2014-02-02 20:43:10 -0800    updated readme (Roberto Congiu)  
+2014-02-02 20:42:23 -0800    updating poms for 1.1.9.1 release (Roberto Congiu)  
+2014-02-02 20:25:27 -0800    fixed bug reported by Sonia Ling - wrong type (long) in JavaStringInt ObjectInspector (Roberto Congiu)  
+2014-01-22 18:15:04 -0800    updating poms for 1.1.9-SNAPSHOT development (Roberto Congiu)  
 
-### 1.3 (2014/09/08)
+**1.1.8**  
+2014-01-22 18:14:53 -0800    merging release/1.1.8' into master (Roberto Congiu)  
+2014-01-22 18:14:44 -0800    updating poms for 1.1.8 release (Roberto Congiu)  
+2014-01-22 18:13:51 -0800    no deploy (Roberto Congiu)  
+2014-01-22 18:11:21 -0800    updating poms for 1.1.8 release (Roberto Congiu)  
+2014-01-22 18:11:09 -0800    changed readme (Roberto Congiu)  
+2014-01-22 18:07:21 -0800    updating poms for 1.1.8 release (Roberto Congiu)  
+2014-01-22 18:07:08 -0800    updated cloudera dependencies (Roberto Congiu)  
+2014-01-22 18:04:28 -0800    moved to jgitflow for release (Roberto Congiu)  
+2014-01-22 08:44:56 -0800    added a bunch of unit tests. Also, centralized primitive parsing in an utility class (Roberto Congiu)  
+2014-01-21 18:03:52 -0800    Completed all the Primitive OI for all numeric types, with unit tests. (Roberto Congiu)  
+2014-01-21 09:35:14 -0800    working on unit tests (Roberto Congiu)  
+2014-01-20 16:20:48 -0800    Making SerDe smarter when handling numeric numbers. Keep string representation till it's actually time to parse it, this way the JSON parser does not need to know in advance if a number should be a short, into or large int. Work towards solving #34 and #45 (Roberto Congiu)  
+2014-01-20 09:15:51 -0800    committing (Roberto Congiu)  
+2013-11-01 07:24:05 -0700    Equals check always false. (Leonardo Bispo de Oliveira)  
 
-* [#82](https://github.com/rcongiu/Hive-JSON-Serde/issues/82): Fixed parsing empty strings to `map(string, string)` - [@rcongiu](https://github.com/rcongiu).
-* [#84](https://github.com/rcongiu/Hive-JSON-Serde/issues/84): Deep name mapping - [@rcongiu](https://github.com/rcongiu).
-* [#83](https://github.com/rcongiu/Hive-JSON-Serde/pull/83): - Fix for `\a` or `\v` that Java does not recognize in strings - [@ptrstpp950](https://github.com/ptrstpp950).
-* [#86](https://github.com/rcongiu/Hive-JSON-Serde/pull/86): - Fix `PrimitiveObjectInspector#getPrimitiveJavaObject(Object)` - [@andykram](https://github.com/andykram).
+**1.1.7**  
+2013-09-30 09:25:02 -0700    release 1.1.7 (Roberto Congiu)  
+2013-08-07 07:46:45 -0700    updated docs (Roberto Congiu)  
+2013-08-07 07:18:54 -0700    removed static list used to deserialize json struct (Roberto Congiu)  
+2013-07-10 22:34:00 -0700    updated readme (Roberto Congiu)  
+2013-07-10 22:18:59 -0700    merged issue #28 (Roberto Congiu)  
 
-### 1.2 (2014/06/01)
+**1.1.6**  
+2013-07-10 09:11:44 -0700    gitflow release (Roberto Congiu)  
+2013-07-10 09:05:54 -0700    updated readme (Roberto Congiu)  
+2013-07-10 00:04:23 -0700    fixes #28 , error after alter (Roberto Congiu)  
+2013-05-05 18:32:45 -0700    Merged timestamp support, plus added support for numeric timestamps (Roberto Congiu)  
+2013-03-30 09:25:12 -0700    Added check for missing fields. (Richard T. Guy)  
+2013-03-30 08:16:19 -0700    Added basic timestamp tracking. (Richard T. Guy)  
 
-* Refactored to multimodule for CDH5 compatibility - [@rcongiu](https://github.com/rcongiu).
-* [#90](https://github.com/rcongiu/Hive-JSON-Serde/pull/90): Fix `get_json_object` on Json String unless one defines it as struct - [@moss](https://github.com/wmoss).
-* [#68](https://github.com/rcongiu/Hive-JSON-Serde/pull/68): Custom primitive object inspectors in the Serde need to override `getPrimitiveJavaObject` - [@appanasatya](https://github.com/appanasatya).
-
-### 1.1.9.2 (2014/02/25)
-
-* Added support for array records - [@rcongiu](https://github.com/rcongiu).
-* Refactored timestamp handling - [@rcongiu](https://github.com/rcongiu).
-* [#50](https://github.com/rcongiu/Hive-JSON-Serde/issues/50): Fixed issue with `{ field = null }` - [@rcongiu](https://github.com/rcongiu).
-* [#54](https://github.com/rcongiu/Hive-JSON-Serde/issues/54): Fixed handling of `null` in arrays - [@rcongiu](https://github.com/rcongiu).
-* [#55](https://github.com/rcongiu/Hive-JSON-Serde/pull/55): Fixed wrong cast - [@Powerrr](https://github.com/Powerrr).
-* [#52](https://github.com/rcongiu/Hive-JSON-Serde/pull/52): Fixed `tynyint/byte` type - [@Powerrr](https://github.com/Powerrr).
-
-### 1.1.9.1 (2014/02/02)
-
-* Fixed wrong type (`long`) in `JavaStringIntObjectInspector` - [@rcongiu](https://github.com/rcongiu).
-* [#22](https://github.com/rcongiu/Hive-JSON-Serde/pull/22): Verify castability - [@elreydetodo](https://github.com/elreydetodo).
-
-### 1.1.8 (2014/01/22)
-
-* Rewritten handling of numbers, so their parsing from string is delayed - [@rcongiu](https://github.com/rcongiu).
-* [#39](https://github.com/rcongiu/Hive-JSON-Serde/issues/39): Fixed `testTimestampDeSerializeNumericTimestampWithNanoseconds` in different timezones - [@rcongiu](https://github.com/rcongiu).
-* [#45](https://github.com/rcongiu/Hive-JSON-Serde/issues/45): Fixed `String` cannot be cast to `Integer` - [@rcongiu](https://github.com/rcongiu).
-* [#34](https://github.com/rcongiu/Hive-JSON-Serde/issues/34): Fixed `Integer` cannot be cast to `Long` - [@rcongiu](https://github.com/rcongiu).
-* [#43](https://github.com/rcongiu/Hive-JSON-Serde/issues/43): Fixed escape characters handling - [@rcongiu](https://github.com/rcongiu).
-* [#29](https://github.com/rcongiu/Hive-JSON-Serde/issues/29): Fixed double cast - [@rcongiu](https://github.com/rcongiu).
-* [#26](https://github.com/rcongiu/Hive-JSON-Serde/issues/26): Fixed `Integer` cannot be cast to `Double` - [@rcongiu](https://github.com/rcongiu).
-* [#13](https://github.com/rcongiu/Hive-JSON-Serde/issues/13): Support Hive `FLOAT` - [@rcongiu](https://github.com/rcongiu).
-* [#40](https://github.com/rcongiu/Hive-JSON-Serde/pull/40): Fixed `JSONObject#equals` - [@leobispo](https://github.com/leobispo).
-
-### 1.1.7 (2013/09/30)
-
-* [#31](https://github.com/rcongiu/Hive-JSON-Serde/issues/31): Fixed static members not to be - [@rcongiu](https://github.com/rcongiu).
-* [#25](https://github.com/rcongiu/Hive-JSON-Serde/issues/25): Added basic timestamp support in deserializer - [@rcongiu](https://github.com/rcongiu), [@guyrt](https://github.com/guyrt).
-
-### 1.1.6 (2013/07/10)
-
-* [#28](https://github.com/rcongiu/Hive-JSON-Serde/issues/28): Fixed error after `ALTER TABLE ADD COLUMNS` - [@rcongiu](https://github.com/rcongiu), [@brndnmtthws](https://github.com/brndnmtthws).
-
-### 1.1.4 (2012/10/04)
-
-* [#13](https://github.com/rcongiu/Hive-JSON-Serde/issues/13): Problem with floats - [@rcongiu](https://github.com/rcongiu), [@ChuckConnell](https://github.com/ChuckConnell).
-* [#7](https://github.com/rcongiu/Hive-JSON-Serde/pull/7): Fix handling of `{ arrayProp: null }` when expecting `{ arrayProp:[] }` - [@peterdm](https://github.com/peterdm).
-
-### 1.1.2 (2012/07/26)
-
-* Fixed columns not mapped into JSON - [@rcongiu](https://github.com/rcongiu), [@pmohan6](https://github.com/pmohan6).
-
-### 1.1.1 (2012/07/03)
-
-* Fixed infinite loop in `MapAdapter` - [@rcongiu](https://github.com/rcongiu).
-
-### 1.1 (2011/09/09)
-
-* Fixed 'string' type to accept non-string data in JSON representation - [@rcongiu](https://github.com/rcongiu).
-
-### 1.0 (2011/07/12)
-
-* Initial public release - [@rcongiu](https://github.com/rcongiu).
-
+**1.1.5**  
+**json-serde-1.1.5**  
+2013-03-25 21:12:02 -0700    pom fix for release plugin (Roberto Congiu)  
+2013-03-25 10:00:03 -0700    pre-release (Roberto Congiu)  
+2013-03-25 09:02:33 -0700    mapping now works with serialization. Also added unit test for it. (Roberto Congiu)  
+2013-03-25 01:17:24 -0700    fixes #24 (Roberto Congiu)  
+2013-03-16 17:37:28 -0700    README addition (Roberto Congiu)  
+2013-03-16 15:30:07 -0700    Updated README with compilation info (Roberto Congiu)  
+2013-03-16 15:28:23 -0700    made CDH version parametric (Roberto Congiu)  
+2013-02-22 07:49:56 -0800    Verify castability before actually doing it (Martin Meyer)  
+2012-11-29 22:15:50 -0800    made JSONObject keys lowercase for case insensitivity, #17 (Roberto Congiu)  
+2012-10-04 16:15:31 -0700    new binary minor release with bugfix (Roberto Congiu)  
+2012-10-04 16:12:36 -0700    fixed issue using float, issue #13 (Roberto Congiu)  
+2012-08-29 12:25:28 -0700    Handles JSONObject.NULL when parsing arrays. (Peter Dixon-Moses)  
+2012-08-21 00:23:14 -0700    changes to make it compatible with hive 0.8 (Roberto Congiu)  
+2012-07-26 10:07:15 -0700    Fixed issue with columns that are not mapped into JSON, reported by Michael Phung (Roberto Congiu)  
+2012-07-03 18:45:02 -0700    bumped version number (Roberto Congiu)  
+2012-07-03 18:41:12 -0700    added cloudera repository, changed dependencies to cdh-3 (Roberto Congiu)  
+2012-07-03 18:31:46 -0700    Fixed infinite loop in MapAdapter (Roberto Congiu)  
+2011-08-09 18:54:19 -0700    Made 'string' type to accept non-string data in Json representation, using calling their .toString(). Added an option to tolerate malformed JSON (Roberto Congiu)  
+2011-07-29 11:23:25 -0700    - Cleaned up some 'code lint' - Added some JavaDoc (Roberto Congiu)  
+2011-07-12 14:47:54 -0700    fixed name of author of JSON.org java library (roberto congiu)  
+2011-07-12 14:21:31 -0700    Added Author to README (Roberto Congiu)  
+2011-07-12 14:19:12 -0700    first commit (Roberto Congiu)  
