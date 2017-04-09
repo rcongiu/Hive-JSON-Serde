@@ -1,5 +1,6 @@
 # openx-json-serde v1.3.8-SNAPSHOT git changelog
 
+2017-04-09 11:58:26 -0700    Added automatic changelog generation when building package (Roberto Congiu)  
 2017-04-07 15:17:33 -0700    case sensitivity in JSON Keys (Roberto Congiu)  
 2017-04-03 13:02:24 -0700    Removed CR/LF note, this seems to be a red herring. (dblock)  
 2017-04-03 09:06:43 -0700    Added instructions to compile for a custom version of hadoop (Roberto Congiu)  
