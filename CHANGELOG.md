@@ -1,7 +1,6 @@
 # Changelog for the Hive-JSON-SerDe
 _Generated automatically by maven_
 
-Changelog of Git Changelog.
 ## Unreleased
  *  *2017-04-09 22:55:24*  deleted changelog _(rcongiu)_ [9e39dd27ac00e34](https://github.com/rcongiu/Hive-JSON-Serde/commit/9e39dd27ac00e34)
 ## 1.3.8
