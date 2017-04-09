@@ -1,4 +1,5 @@
-# Git Changelog changelog
+# Changelog for the Hive-JSON-SerDe
+_Generated automatically by maven_
 
 Changelog of Git Changelog.
 ## 1.3.7
