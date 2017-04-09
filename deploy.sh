@@ -9,5 +9,6 @@ for i in cdh4 cdh5 hdp23; do
 	# build
 	mvn -P$i  clean package || exit -2
 	scp json-serde/target/json-serde-${VERSION}-jar-with-dependencies.jar $HOST:$DEST_DIR || exit -3
+        scp json-udf/target/json-udf-${VERSION}-jar-with-dependencies.jar $HOST:$DEST_DIR || exit -3
 	
 done

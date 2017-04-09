@@ -28,34 +28,38 @@ public  class JsonStructOIOptions {
         public JsonStructOIOptions (Map<String,String> mp) {
             mappings = mp;
         }
-
+        boolean caseInsensitive = true; // converts JSON keys to case sensitive
+        boolean dotsInKeyNames = false;
         public Map<String, String> getMappings() {
             return mappings;
         }
 
-        
-        
-        @Override
-        public boolean equals(Object obj) {
-            if(obj == null || !(obj instanceof JsonStructOIOptions) ) {
-                return false ;
-            } else {
-                JsonStructOIOptions oio = (JsonStructOIOptions) obj;
-                
-                if(mappings != null) {
-                    return mappings.equals(oio.mappings);
-                } else {
-                    return mappings == oio.mappings;
-                }
-            }
-        }
+     public boolean isDotsInKeyNames() {
+         return dotsInKeyNames;
+     }
 
-        @Override
-        public int hashCode() {
-            int hash = 5;
-            hash = 67 * hash + (this.mappings != null ? this.mappings.hashCode() : 0);
-            return hash;
-        }
-        
-        
-    }
+     public void setDotsInKeyNames(boolean dotsInKeyNames) {
+         this.dotsInKeyNames = dotsInKeyNames;
+     }
+     public void setCaseInsensitive(boolean c) { this.caseInsensitive = c; }
+     public boolean isCaseInsensitive() { return this.caseInsensitive; }
+
+     @Override
+     public boolean equals(Object o) {
+         if (this == o) return true;
+         if (o == null || getClass() != o.getClass()) return false;
+
+         JsonStructOIOptions that = (JsonStructOIOptions) o;
+
+         if (dotsInKeyNames != that.dotsInKeyNames) return false;
+         return mappings != null ? mappings.equals(that.mappings) : that.mappings == null;
+
+     }
+
+     @Override
+     public int hashCode() {
+         int result = mappings != null ? mappings.hashCode() : 0;
+         result = 31 * result + (dotsInKeyNames ? 1 : 0);
+         return result;
+     }
+ }

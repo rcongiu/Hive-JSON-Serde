@@ -43,7 +43,11 @@ SOFTWARE.
  * @author JSON.org
  * @version 2010-12-24
  */
-public class CDL {
+public final class CDL {
+
+    private CDL() {
+        throw new InstantiationError("This class must not be instantiated.");
+    }
 
     /**
      * Get the next value. The value can be wrapped in quotes. The value can

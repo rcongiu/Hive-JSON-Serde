@@ -39,7 +39,7 @@ public class TypeEntryShim {
     // this won't actually be used since datetype was added in 1.2, but we have to add it anyway
     public static PrimitiveTypeEntry dateType = PrimitiveObjectInspectorUtils.stringTypeEntry;
 
-    // no specific OIs in this shimt
+    // no specific OIs in this shim
     public static void addObjectInspectors(Map<PrimitiveObjectInspector.PrimitiveCategory, AbstractPrimitiveJavaObjectInspector> primitiveOICache) {
 
     }

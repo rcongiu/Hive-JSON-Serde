@@ -27,22 +27,27 @@ import org.openx.data.jsonserde.objectinspector.primitive.*;
  *
  * @author rcongiu
  */
-public class JsonObjectInspectorFactory {
+public final class JsonObjectInspectorFactory {
 
     static HashMap<TypeInfo, ObjectInspector> cachedJsonObjectInspector = new HashMap<TypeInfo, ObjectInspector>();
+
+    private JsonObjectInspectorFactory() {
+        throw new InstantiationError("This class must not be instantiated.");
+    }
 
     /**
      *
      *
      * @param options
-     * @see JsonUtils
      * @param typeInfo
      * @return
      */
     public static ObjectInspector getJsonObjectInspectorFromTypeInfo(
             TypeInfo typeInfo, JsonStructOIOptions options) {
         ObjectInspector result = cachedJsonObjectInspector.get(typeInfo);
-        if (result == null) {
+        // let the factory cache the struct object inspectors since
+        // their key also has some options
+        if (result == null ||  typeInfo.getCategory() == ObjectInspector.Category.STRUCT) {
             switch (typeInfo.getCategory()) {
                 case PRIMITIVE: {
                     PrimitiveTypeInfo pti = (PrimitiveTypeInfo) typeInfo;
@@ -82,8 +87,6 @@ public class JsonObjectInspectorFactory {
                     break;
                 }
                 case UNION:{
-                    UnionTypeInfo unionTypeInfo = (UnionTypeInfo) typeInfo;
-
                     List<ObjectInspector> ois = new LinkedList<ObjectInspector>();
                     for(  TypeInfo ti : ((UnionTypeInfo) typeInfo).getAllUnionObjectTypeInfos()) {
                         ois.add(getJsonObjectInspectorFromTypeInfo(ti, options));

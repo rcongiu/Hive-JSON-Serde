@@ -2,7 +2,7 @@ package org.openx.data.udf;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.ql.exec.UDF;
-import org.apache.hadoop.hive.serde.Constants;
+import org.apache.hadoop.hive.serde.serdeConstants;
 import org.apache.hadoop.hive.serde2.SerDeException;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.LongWritable;
@@ -44,8 +44,8 @@ public class JsonUDF extends GenericUDF {
         inOi = arguments[0];
         try {
             Properties props = new Properties();
-            props.setProperty(Constants.LIST_COLUMNS,"col1");
-            props.setProperty(Constants.LIST_COLUMN_TYPES, inOi.getTypeName());
+            props.setProperty(serdeConstants.LIST_COLUMNS,"col1");
+            props.setProperty(serdeConstants.LIST_COLUMN_TYPES, inOi.getTypeName());
             serde.initialize(new Configuration(), props);
         } catch (SerDeException ex) {
             throw new UDFArgumentException(ex);
@@ -66,7 +66,7 @@ public class JsonUDF extends GenericUDF {
 
     @Override
     public String getDisplayString(String[] children) {
-        assert (children.length > 0);
+        assert children.length > 0;
 
         StringBuilder sb = new StringBuilder();
         sb.append("JsonUDF(");

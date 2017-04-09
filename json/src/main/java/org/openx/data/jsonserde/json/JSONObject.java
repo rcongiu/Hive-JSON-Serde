@@ -114,10 +114,10 @@ public class JSONObject {
          */
         @Override
         public boolean equals(Object object) {
-            if(! (object instanceof JSONObject)) {
+            if(object == null || !(object instanceof JSONObject)) {
                 return false;
             } else {
-                return object == null || object == this;
+                return object == this;
             }
         }
 
@@ -141,7 +141,7 @@ public class JSONObject {
     /**
      * The map where the JSONObject's properties are kept.
      */
-    private Map map;
+    private Map<String,Object> map;
 
 
     /**
@@ -157,7 +157,7 @@ public class JSONObject {
      * Construct an empty JSONObject.
      */
     public JSONObject() {
-        this.map = new HashMap();
+        this.map = new HashMap<String,Object>();
     }
 
 
@@ -202,7 +202,7 @@ public class JSONObject {
                 return;
             default:
                 x.back();
-                key = x.nextValue().toString().toLowerCase();
+                key = getKey(x.nextValue().toString());
             }
 
 // The key is followed by ':'. We will also tolerate '=' or '=>'.
@@ -243,14 +243,14 @@ public class JSONObject {
      *  the JSONObject. 
      */
     public JSONObject(Map map) {
-        this.map = new HashMap();
+        this.map = new HashMap<String,Object>();
         if (map != null) {
             Iterator i = map.entrySet().iterator();
             while (i.hasNext()) {
                 Map.Entry e = (Map.Entry)i.next();
                 Object value = e.getValue();
                 if (value != null) {
-                    this.map.put(e.getKey(), wrap(value));
+                    this.map.put(e.getKey().toString(), wrap(value));
                 }
             }
         }
@@ -356,6 +356,19 @@ public class JSONObject {
                 }
                 target.put(path[last].toLowerCase(), bundle.getString((String)key));
             }
+        }
+    }
+
+    /**
+     *  Gets the key in an Object, depending if it's lowercase or not.
+     * @param key
+     * @return
+     */
+    private String getKey(String key) {
+        if(JSONOptions.globalOptions.isCaseInsensitive) {
+            return key.toLowerCase();
+        } else {
+            return key;
         }
     }
 
@@ -707,7 +720,7 @@ public class JSONObject {
      *
      * @return An iterator of the keys.
      */
-    public Iterator keys() {
+    public Iterator<String> keys() {
         return this.map.keySet().iterator();
     }
 
@@ -968,7 +981,7 @@ public class JSONObject {
 
         boolean includeSuperClass = klass.getClassLoader() != null;
 
-        Method[] methods = (includeSuperClass) ?
+        Method[] methods = includeSuperClass ?
                 klass.getMethods() : klass.getDeclaredMethods();
         for (int i = 0; i < methods.length; i += 1) {
             try {

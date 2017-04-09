@@ -34,7 +34,7 @@ public class JavaStringDoubleObjectInspector extends AbstractPrimitiveJavaObject
         if(o instanceof String) {
            return new DoubleWritable(Double.parseDouble((String)o)); 
         } else {
-          return new DoubleWritable(((Double) o));
+          return new DoubleWritable((Double) o);
         }
     }
 
@@ -44,7 +44,7 @@ public class JavaStringDoubleObjectInspector extends AbstractPrimitiveJavaObject
         if(o instanceof String) {
            return Double.parseDouble((String)o); 
         } else {
-          return (((Double) o));
+          return (Double) o;
         }
     }
 

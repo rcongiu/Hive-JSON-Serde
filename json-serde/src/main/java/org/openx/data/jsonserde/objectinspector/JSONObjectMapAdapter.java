@@ -35,7 +35,7 @@ import org.openx.data.jsonserde.json.JSONObject;
    and won't work well for large maps. Good enough for now since
    we seldom - if ever - use maps. */
 public class JSONObjectMapAdapter implements Map {
-    HashMap cache;
+    HashMap<String,Object> cache;
     JSONObject jsonObject;
     
     public JSONObjectMapAdapter(JSONObject obj) {
@@ -69,7 +69,7 @@ public class JSONObjectMapAdapter implements Map {
     }
     
     protected final void initialize() {
-        if(cache==null) cache = new HashMap();
+        if(cache==null) cache = new HashMap<String,Object>();
         
         for(Iterator<String> i = jsonObject.keys(); i.hasNext(); ) {
             String o = i.next();
@@ -115,7 +115,7 @@ public class JSONObjectMapAdapter implements Map {
 
     @Override
     public Object put(Object key, Object value) {
-        return cache.put(key,value);
+        return cache.put(key.toString(),value);
     }
 
     @Override
@@ -123,6 +123,7 @@ public class JSONObjectMapAdapter implements Map {
        return cache.remove(key);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void putAll(Map m) {
         cache.putAll(m);
