@@ -3,7 +3,25 @@ _Generated automatically by maven_
 
 {{#tags}}
 ## {{name}}
-   {{#commits}}
- *  *{{commitTime}}*  {{{message}}} _({{authorName}})_ [{{hash}}](https://github.com/rcongiu/Hive-JSON-Serde/commit/{{hash}})
-   {{/commits}}
+ {{#issues}}
+  {{#hasIssue}}
+   {{#hasLink}}
+* {{name}} [{{issue}}]({{link}}) {{title}} {{#hasIssueType}} *{{issueType}}* {{/hasIssueType}} {{#hasLabels}} {{#labels}} *{{.}}* {{/labels}} {{/hasLabels}}
+   {{/hasLink}}
+   {{^hasLink}}
+* {{name}} {{issue}} {{title}} {{#hasIssueType}} *{{issueType}}* {{/hasIssueType}} {{#hasLabels}} {{#labels}} *{{.}}* {{/labels}} {{/hasLabels}}
+   {{/hasLink}}
+  {{/hasIssue}}
+  {{^hasIssue}}
+* {{name}}
+  {{/hasIssue}}
+
+  {{#commits}}
+  * *{{commitTime}}* **{{{messageTitle}}}**  _({{authorName}})_  [{{hash}}](https://github.com/rcongiu/Hive-JSON-Serde/commit/{{hash}})
+{{#messageBodyItems}}
+    * {{.}}
+{{/messageBodyItems}}
+  {{/commits}}
+
+ {{/issues}}
 {{/tags}}
