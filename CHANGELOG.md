@@ -1,7 +1,6 @@
 # Changelog for the Hive-JSON-SerDe
 _Generated automatically by maven_
 
-Changelog of Git Changelog.
 ## 1.3.8
  *  *2017-04-09 22:50:53*  updating poms for branch'release/1.3.8' with non-snapshot versions _(rcongiu)_ [91cd5dcbb17c7f4](https://github.com/rcongiu/Hive-JSON-Serde/commit/91cd5dcbb17c7f4)
  *  *2017-04-09 22:46:47*  Found a better place for the automated CHANGELOG, in subproject _(rcongiu)_ [14de153f362cc34](https://github.com/rcongiu/Hive-JSON-Serde/commit/14de153f362cc34)
