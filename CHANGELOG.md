@@ -1,212 +1,1009 @@
-# openx-json-serde v1.3.8-SNAPSHOT git changelog
+# Changelog for hive JSON SerDe
 
-2017-04-09 11:58:26 -0700    Added automatic changelog generation when building package (Roberto Congiu)  
-2017-04-07 15:17:33 -0700    case sensitivity in JSON Keys (Roberto Congiu)  
-2017-04-03 13:02:24 -0700    Removed CR/LF note, this seems to be a red herring. (dblock)  
-2017-04-03 09:06:43 -0700    Added instructions to compile for a custom version of hadoop (Roberto Congiu)  
-2017-04-03 08:58:12 -0700    cleaned up profiles, made it so for one profile it only compiles its needed shim (Roberto Congiu)  
-2017-04-03 03:44:44 -0700    Timestamp serialization in UTC, independent of timezone (Roberto Congiu)  
-2017-04-03 02:11:35 -0700    test passes locally but not on travis, trying to find out why (Roberto Congiu)  
-2017-04-03 02:04:18 -0700    changelog/readme changes (Roberto Congiu)  
-2017-04-03 01:55:36 -0700    fixed test name for serializeTimestamp (Roberto Congiu)  
-2017-04-03 01:47:29 -0700    fixed non-determinism in serialization test (Roberto Congiu)  
-2017-04-03 01:11:24 -0700    Added timestamp serialization, plus test. (Roberto Congiu)  
-2017-04-03 00:54:49 -0700    line-wrapped README (Roberto Congiu)  
-2017-04-02 17:15:46 -0700    Revamped README and CONTRIBUTING. (dblock)  
-2017-04-02 11:58:54 -0700    Extracted CHANGELOG. (dblock)  
-2017-04-02 10:57:50 -0700    Added Travis-CI. (dblock)  
-2017-04-01 08:10:38 -0700    Fix: typo \[ci skip\] (GitHub)  
-2016-09-23 18:02:00 -0700    Added docs for the scalar promotion to array (Roberto Congiu)  
-2016-09-23 17:57:34 -0700    to help with issue #12, if a field is declared as an array, but a scalar is found, coerce the scalar into a one element array (Roberto Congiu)  
-2016-08-28 02:20:11 -0700    removed code lint, got rid of uncecked warnings and deprecation as well. No code/functionality change (Roberto Congiu)  
-2016-05-23 23:56:49 -0700    for String type input, JavaStringDateObjectInspector getPrimitiveJavaObject should not return null (wangxianbin1987)  
-2016-03-29 20:05:06 -0700    Added support for timestamp serialization. (Denny Riadi)  
-2016-02-21 07:19:26 -0800    Fixed typo in example (Mike Rostermund)  
-2016-02-19 06:32:48 -0800    squid:SwitchLastCaseIsDefaultCheck - switch statements should end with a default clause (George Kankava)  
-2016-02-19 05:43:53 -0800    squid:S1118 - Utility classes should not have public constructors (George Kankava)  
-2016-02-14 17:19:34 -0800    added dots/underscores translation, fixes #131 (Roberto Congiu)  
-2016-02-10 23:20:55 -0800    squid:S1854 - Dead stores should be removed (George Kankava)  
-2016-02-09 02:07:56 -0800    squid:S2583 -  Conditions should not unconditionally evaluate to TRUE or to FALSE (George Kankava)  
-2016-02-05 05:43:39 -0800    squid:UselessParenthesesCheck - Useless parentheses around expressions should be removed to prevent any misunderstanding (George Kankava)  
-2016-02-04 11:25:30 -0800    Added timestamp in milliseconds support (Kevin Stumpf)  
-2016-01-30 20:30:17 -0800    added udf to deploy (Roberto Congiu)  
-2016-01-30 20:24:58 -0800    Updating develop poms back to pre merge state (Roberto Congiu)  
-2016-01-30 20:24:57 -0800    updating develop poms to master versions to avoid merge conflicts (Roberto Congiu)  
+## 1.3.7
+### No issue
 
-**1.3.7**  
-2016-01-30 20:24:28 -0800    updating poms for branch'release/1.3.7' with non-snapshot versions (Roberto Congiu)  
-2016-01-30 20:24:16 -0800    changed docs (Roberto Congiu)  
-2016-01-30 20:23:26 -0800    updating poms for 1.3.8-SNAPSHOT development (Roberto Congiu)  
-2016-01-30 20:23:21 -0800    updating poms for 1.3.7 branch with snapshot versions (Roberto Congiu)  
-2016-01-30 20:22:32 -0800    udf docs added (Roberto Congiu)  
-2016-01-30 20:16:55 -0800    completed UDF (Roberto Congiu)  
-2015-12-16 08:51:28 -0800    Double uses the serde version instead of the hadoop version (Roberto Congiu)  
-2015-12-11 09:43:17 -0800    Added note in README (Roberto Congiu)  
-2015-12-11 09:42:38 -0800    Added support for date types (hive 1.2.0 and later) (Roberto Congiu)  
-2015-10-31 11:03:32 -0700    added tests for map (Roberto Congiu)  
-2015-10-26 11:35:06 -0700    Add support for UTC date format (Vidur Patel)  
-2015-10-08 11:06:44 -0700    Updating develop poms back to pre merge state (Roberto Congiu)  
-2015-10-08 11:06:44 -0700    updating develop poms to master versions to avoid merge conflicts (Roberto Congiu)  
+**updating poms for branch'release/1.3.7' with non-snapshot versions**
 
-**1.3.6**  
-2015-10-08 11:05:54 -0700    fixed dependency (Roberto Congiu)  
-2015-10-08 11:04:31 -0700    updating poms for branch'release/1.3.6' with non-snapshot versions (Roberto Congiu)  
-2015-10-08 11:04:10 -0700    updating poms for 1.3.6 branch with snapshot versions (Roberto Congiu)  
-2015-10-08 11:01:04 -0700    fixed master branch (Roberto Congiu)  
-2015-10-08 10:37:22 -0700    Updating develop poms back to pre merge state (Roberto Congiu)  
-2015-10-08 10:37:22 -0700    updating develop poms to master versions to avoid merge conflicts (Roberto Congiu)  
-2015-10-08 10:36:53 -0700    disabling javadoc on release (Roberto Congiu)  
-2015-10-08 10:33:42 -0700    removed javadoc plugin, causing issue with release (Roberto Congiu)  
-2015-10-08 10:31:54 -0700    updating poms for branch'release/1.3.6' with non-snapshot versions (Roberto Congiu)  
-2015-10-08 10:31:30 -0700    release docs (Roberto Congiu)  
-2015-10-08 10:28:41 -0700    updating poms for 1.3.7-SNAPSHOT development (Roberto Congiu)  
-2015-10-08 10:28:35 -0700    updating poms for 1.3.6 branch with snapshot versions (Roberto Congiu)  
-2015-10-08 10:27:39 -0700    updated jgitflow plugin (Roberto Congiu)  
-2015-10-08 10:21:05 -0700    updated version of jgitflow plugin (Roberto Congiu)  
-2015-10-08 10:17:14 -0700    added deploy script, fixed boolean support for cdh4 (Roberto Congiu)  
-2015-10-07 23:01:50 -0700    Add support for String to Boolean conversion (Rajat Jain)  
-2015-10-05 17:55:31 -0700    Added comments about multi-line json. Closes #116 (Roberto Congiu)  
-2015-10-05 17:48:25 -0700    Merged support for HDP2.3 (Roberto Congiu)  
-2015-10-02 17:16:46 -0700    Add support for HDP 2.3 (Dave Beckett)  
-2015-08-30 14:27:01 -0700    updating poms for 1.3.6-SNAPSHOT development (Roberto Congiu)  
-2015-08-30 14:26:39 -0700    merging release/1.3.5' into master (Roberto Congiu)  
 
-**1.3.5**  
-2015-08-30 14:23:31 -0700    added javadoc (Roberto Congiu)  
-2015-08-30 14:23:06 -0700    updating poms for 1.3.5 release (Roberto Congiu)  
-2015-08-30 14:15:58 -0700    preparing release (Roberto Congiu)  
-2015-08-30 14:14:12 -0700    actually, it fixes #112 (Roberto Congiu)  
-2015-08-30 14:13:08 -0700    Handle empty array where a JsonObject should be, fixes #113 (Roberto Congiu)  
-2015-08-30 14:01:35 -0700    Added UNIONTYPE support ( fixes #53) (Roberto Congiu)  
-2015-05-25 09:24:09 -0700    added reference to hive-json-schema to readme (Roberto Congiu)  
-2015-03-08 16:38:52 -0700    fixed readme (Roberto Congiu)  
-2015-03-08 16:31:10 -0700    instructions to compile for hive 1.0.0 (Roberto Congiu)  
-2015-03-08 15:56:12 -0700    updated readme (Roberto Congiu)  
-2015-02-24 16:15:16 -0800    When empty string appears where a Hive Map (JSON Object) was expected, treat it as NULL, not -1 (Martin Handwerker)  
-2014-12-15 10:15:40 -0800    add missing getPrimitiveJavaObject implementations (yuyang-lan)  
-2014-09-18 22:09:09 -0700    Fix for #issue-70 related to get_json_object (Will Moss)  
-2014-09-08 11:02:39 -0700    updated readme (Roberto Congiu)  
-2014-09-08 11:01:22 -0700    added link for binaries (Roberto Congiu)  
-2014-09-08 10:53:23 -0700    updating poms for 1.3.1-SNAPSHOT development (Roberto Congiu)  
+[c04efb67ff30922](https://github.com/tomasbjerre/git-changelog-lib/commit/c04efb67ff30922) Roberto Congiu *2016-01-31 04:24:28*
 
-**1.3**  
-2014-09-08 10:52:38 -0700    merging release/1.3' into master (Roberto Congiu)  
-2014-09-08 10:52:21 -0700    updating poms for 1.3 release (Roberto Congiu)  
-2014-08-27 14:38:27 -0700    A long should always be a long (Andy Kramolisch)  
-2014-08-27 08:32:02 -0700    lowercase mappings, since JSON does it anyway. Fixes #84 (Roberto Congiu)  
-2014-08-25 12:52:35 -0700    merging feature/issue82' into develop (Roberto Congiu)  
-2014-08-25 12:52:03 -0700    struct and map use the same logic to determine if an object is a null, considering also an empty string / string of only spaces as a null (Roberto Congiu)  
-2014-08-25 12:43:08 -0700    fixed #82, can handle maps with empty string (Roberto Congiu)  
-2014-08-25 11:22:05 -0700    moved unit test (Roberto Congiu)  
-2014-08-25 11:15:21 -0700    updating poms for issue82 branch (Roberto Congiu)  
-2014-08-25 06:07:22 -0700    Move "Fix for \a or \v, because Java does not recognize in strings" on top of develop (Piotr Stapp)  
-2014-08-08 00:32:57 -0700    added serde location after it's built (Roberto Congiu)  
-2014-07-24 14:19:07 -0700    updating poms for 1.3-SNAPSHOT development (Roberto Congiu)  
+**changed docs**
 
-**1.2**  
-2014-07-24 14:18:52 -0700    merging release/1.2' into master (Roberto Congiu)  
-2014-07-24 14:18:23 -0700    updating poms for 1.2 release (Roberto Congiu)  
-2014-07-24 12:58:53 -0700    fixed pom (Roberto Congiu)  
-2014-07-24 08:59:22 -0700    changed README (Roberto Congiu)  
-2014-07-24 08:54:41 -0700    refactoring to reduce code duplication (Roberto Congiu)  
-2014-07-24 08:04:48 -0700    refactor (Roberto Congiu)  
-2014-07-10 23:40:12 -0700    compiles with both cdh4 and cdh5 profile, but have to test it (Roberto Congiu)  
-2014-07-10 09:44:25 -0700    removing all target directories, updating gitignore (Roberto Congiu)  
-2014-07-10 09:42:13 -0700    changes (Roberto Congiu)  
-2014-05-28 18:34:40 -0700    refactoring, almost got it to work (Roberto Congiu)  
-2014-05-28 16:08:33 -0700    major refactoring for cdh compatibility (Roberto Congiu)  
-2014-05-05 05:18:14 -0700    Obj Inspector Class Cast Exception fix (appanasatya)  
-2014-04-28 17:15:59 -0700    added profile for cdh5, updated deps for cdh4 (Roberto Congiu)  
-2014-04-28 13:30:14 -0700    pom with profiles (Roberto Congiu)  
-2014-03-19 07:29:55 -0700    minor source cleanup (Roberto Congiu)  
-2014-03-03 14:09:49 -0800    Check for null, #57 (Roberto Congiu)  
-2014-02-25 09:52:18 -0800    updating poms for 1.1.9.3-SNAPSHOT development (Roberto Congiu)  
 
-**1.1.9.2**  
-2014-02-25 09:52:07 -0800    merging release/1.1.9.2' into master (Roberto Congiu)  
-2014-02-25 09:51:56 -0800    updating poms for 1.1.9.2 release (Roberto Congiu)  
-2014-02-25 09:51:02 -0800    updated readme (Roberto Congiu)  
-2014-02-25 09:50:08 -0800    updating poms for 1.1.9.2 release (Roberto Congiu)  
-2014-02-23 05:41:22 -0800    fix wrong cast (Powerrr)  
-2014-02-20 08:20:50 -0800    fixed readme (Roberto Congiu)  
-2014-02-20 08:16:45 -0800    merging feature/refactor-timestamp' into develop (Roberto Congiu)  
-2014-02-20 08:16:33 -0800    completed refactoring for timestamp (Roberto Congiu)  
-2014-02-19 23:58:04 -0800    updated readme (Roberto Congiu)  
-2014-02-19 23:56:44 -0800    merging feature/support-array-records' into develop (Roberto Congiu)  
-2014-02-19 23:56:32 -0800    added unit test, added feature (Roberto Congiu)  
-2014-02-19 23:12:50 -0800    fixe for error in JsonListObjectInspector (Roberto Congiu)  
-2014-02-19 16:29:01 -0800    merging feature/null-issue' into develop (Roberto Congiu)  
-2014-02-19 16:28:34 -0800    issue with nulls, fixes (Roberto Congiu)  
-2014-02-19 15:42:00 -0800    updating poms for null-issue branch (Roberto Congiu)  
-2014-02-16 15:02:42 -0800    fix typo (Powerrr)  
-2014-02-12 09:51:49 -0800    merging feature/timezone-issue-48' into develop (Roberto Congiu)  
-2014-02-12 09:51:29 -0800    fixed timezone issue in unit tests, fixes #48 (Roberto Congiu)  
-2014-02-07 14:47:51 -0800    added javadocs (Roberto Congiu)  
-2014-02-06 09:26:11 -0800    updated README (Roberto Congiu)  
-2014-02-06 09:15:43 -0800    merging feature/null-issue' into develop (Roberto Congiu)  
-2014-02-06 09:15:19 -0800    Fixed null handling, fixes #50 (Roberto Congiu)  
-2014-02-02 20:44:09 -0800    updating poms for 1.1.9.2-SNAPSHOT development (Roberto Congiu)  
+[fbdb56ed96c67d2](https://github.com/tomasbjerre/git-changelog-lib/commit/fbdb56ed96c67d2) Roberto Congiu *2016-01-31 04:24:16*
 
-**1.1.9.1**  
-2014-02-02 20:43:34 -0800    merging release/1.1.9.1' into master (Roberto Congiu)  
-2014-02-02 20:43:18 -0800    updating poms for 1.1.9.1 release (Roberto Congiu)  
-2014-02-02 20:43:10 -0800    updated readme (Roberto Congiu)  
-2014-02-02 20:42:23 -0800    updating poms for 1.1.9.1 release (Roberto Congiu)  
-2014-02-02 20:25:27 -0800    fixed bug reported by Sonia Ling - wrong type (long) in JavaStringInt ObjectInspector (Roberto Congiu)  
-2014-01-22 18:15:04 -0800    updating poms for 1.1.9-SNAPSHOT development (Roberto Congiu)  
+**updating poms for 1.3.7 branch with snapshot versions**
 
-**1.1.8**  
-2014-01-22 18:14:53 -0800    merging release/1.1.8' into master (Roberto Congiu)  
-2014-01-22 18:14:44 -0800    updating poms for 1.1.8 release (Roberto Congiu)  
-2014-01-22 18:13:51 -0800    no deploy (Roberto Congiu)  
-2014-01-22 18:11:21 -0800    updating poms for 1.1.8 release (Roberto Congiu)  
-2014-01-22 18:11:09 -0800    changed readme (Roberto Congiu)  
-2014-01-22 18:07:21 -0800    updating poms for 1.1.8 release (Roberto Congiu)  
-2014-01-22 18:07:08 -0800    updated cloudera dependencies (Roberto Congiu)  
-2014-01-22 18:04:28 -0800    moved to jgitflow for release (Roberto Congiu)  
-2014-01-22 08:44:56 -0800    added a bunch of unit tests. Also, centralized primitive parsing in an utility class (Roberto Congiu)  
-2014-01-21 18:03:52 -0800    Completed all the Primitive OI for all numeric types, with unit tests. (Roberto Congiu)  
-2014-01-21 09:35:14 -0800    working on unit tests (Roberto Congiu)  
-2014-01-20 16:20:48 -0800    Making SerDe smarter when handling numeric numbers. Keep string representation till it's actually time to parse it, this way the JSON parser does not need to know in advance if a number should be a short, into or large int. Work towards solving #34 and #45 (Roberto Congiu)  
-2014-01-20 09:15:51 -0800    committing (Roberto Congiu)  
-2013-11-01 07:24:05 -0700    Equals check always false. (Leonardo Bispo de Oliveira)  
 
-**1.1.7**  
-2013-09-30 09:25:02 -0700    release 1.1.7 (Roberto Congiu)  
-2013-08-07 07:46:45 -0700    updated docs (Roberto Congiu)  
-2013-08-07 07:18:54 -0700    removed static list used to deserialize json struct (Roberto Congiu)  
-2013-07-10 22:34:00 -0700    updated readme (Roberto Congiu)  
-2013-07-10 22:18:59 -0700    merged issue #28 (Roberto Congiu)  
+[5fa423fce138f2c](https://github.com/tomasbjerre/git-changelog-lib/commit/5fa423fce138f2c) Roberto Congiu *2016-01-31 04:23:21*
 
-**1.1.6**  
-2013-07-10 09:11:44 -0700    gitflow release (Roberto Congiu)  
-2013-07-10 09:05:54 -0700    updated readme (Roberto Congiu)  
-2013-07-10 00:04:23 -0700    fixes #28 , error after alter (Roberto Congiu)  
-2013-05-05 18:32:45 -0700    Merged timestamp support, plus added support for numeric timestamps (Roberto Congiu)  
-2013-03-30 09:25:12 -0700    Added check for missing fields. (Richard T. Guy)  
-2013-03-30 08:16:19 -0700    Added basic timestamp tracking. (Richard T. Guy)  
+**udf docs added**
 
-**1.1.5**  
-**json-serde-1.1.5**  
-2013-03-25 21:12:02 -0700    pom fix for release plugin (Roberto Congiu)  
-2013-03-25 10:00:03 -0700    pre-release (Roberto Congiu)  
-2013-03-25 09:02:33 -0700    mapping now works with serialization. Also added unit test for it. (Roberto Congiu)  
-2013-03-25 01:17:24 -0700    fixes #24 (Roberto Congiu)  
-2013-03-16 17:37:28 -0700    README addition (Roberto Congiu)  
-2013-03-16 15:30:07 -0700    Updated README with compilation info (Roberto Congiu)  
-2013-03-16 15:28:23 -0700    made CDH version parametric (Roberto Congiu)  
-2013-02-22 07:49:56 -0800    Verify castability before actually doing it (Martin Meyer)  
-2012-11-29 22:15:50 -0800    made JSONObject keys lowercase for case insensitivity, #17 (Roberto Congiu)  
-2012-10-04 16:15:31 -0700    new binary minor release with bugfix (Roberto Congiu)  
-2012-10-04 16:12:36 -0700    fixed issue using float, issue #13 (Roberto Congiu)  
-2012-08-29 12:25:28 -0700    Handles JSONObject.NULL when parsing arrays. (Peter Dixon-Moses)  
-2012-08-21 00:23:14 -0700    changes to make it compatible with hive 0.8 (Roberto Congiu)  
-2012-07-26 10:07:15 -0700    Fixed issue with columns that are not mapped into JSON, reported by Michael Phung (Roberto Congiu)  
-2012-07-03 18:45:02 -0700    bumped version number (Roberto Congiu)  
-2012-07-03 18:41:12 -0700    added cloudera repository, changed dependencies to cdh-3 (Roberto Congiu)  
-2012-07-03 18:31:46 -0700    Fixed infinite loop in MapAdapter (Roberto Congiu)  
-2011-08-09 18:54:19 -0700    Made 'string' type to accept non-string data in Json representation, using calling their .toString(). Added an option to tolerate malformed JSON (Roberto Congiu)  
-2011-07-29 11:23:25 -0700    - Cleaned up some 'code lint' - Added some JavaDoc (Roberto Congiu)  
-2011-07-12 14:47:54 -0700    fixed name of author of JSON.org java library (roberto congiu)  
-2011-07-12 14:21:31 -0700    Added Author to README (Roberto Congiu)  
-2011-07-12 14:19:12 -0700    first commit (Roberto Congiu)  
+
+[626735749d87b7a](https://github.com/tomasbjerre/git-changelog-lib/commit/626735749d87b7a) Roberto Congiu *2016-01-31 04:22:32*
+
+**udf docs added**
+
+
+[57c12e8e41b3e18](https://github.com/tomasbjerre/git-changelog-lib/commit/57c12e8e41b3e18) Roberto Congiu *2016-01-31 04:22:14*
+
+**completed UDF**
+
+
+[7695f01cb6387b4](https://github.com/tomasbjerre/git-changelog-lib/commit/7695f01cb6387b4) Roberto Congiu *2016-01-31 04:16:55*
+
+**Double uses the serde version instead of the hadoop version**
+
+
+[d30e2856ae28f05](https://github.com/tomasbjerre/git-changelog-lib/commit/d30e2856ae28f05) Roberto Congiu *2015-12-16 16:51:28*
+
+**Added note in README**
+
+
+[2128878c9c4a285](https://github.com/tomasbjerre/git-changelog-lib/commit/2128878c9c4a285) Roberto Congiu *2015-12-11 17:43:17*
+
+**Added support for date types (hive 1.2.0 and later)**
+
+
+[883ae1a6856c6dd](https://github.com/tomasbjerre/git-changelog-lib/commit/883ae1a6856c6dd) Roberto Congiu *2015-12-11 17:42:38*
+
+**added tests for map**
+
+
+[7e4b3db3d39cc0c](https://github.com/tomasbjerre/git-changelog-lib/commit/7e4b3db3d39cc0c) Roberto Congiu *2015-10-31 18:03:32*
+
+**Updating develop poms back to pre merge state**
+
+
+[af92a4674e8191b](https://github.com/tomasbjerre/git-changelog-lib/commit/af92a4674e8191b) Roberto Congiu *2015-10-08 18:06:44*
+
+**updating develop poms to master versions to avoid merge conflicts**
+
+
+[72bfb92910391e9](https://github.com/tomasbjerre/git-changelog-lib/commit/72bfb92910391e9) Roberto Congiu *2015-10-08 18:06:44*
+
+
+## 1.3.6
+### Jira issue-70   
+
+**Fix for #issue-70 related to get_json_object**
+
+ * This is a reworking of 
+ * https://github.com/rcongiu/Hive-JSON-Serde/pull/71 to update it to the 
+ * new directory structure in 1.3 
+
+[6770f8937c34e8e](https://github.com/tomasbjerre/git-changelog-lib/commit/6770f8937c34e8e) Will Moss *2014-09-19 05:09:09*
+
+
+### No issue
+
+**fixed dependency**
+
+
+[4ae11d4d6f80e6d](https://github.com/tomasbjerre/git-changelog-lib/commit/4ae11d4d6f80e6d) Roberto Congiu *2015-10-08 18:05:54*
+
+**updating poms for branch'release/1.3.6' with non-snapshot versions**
+
+
+[93b48285ce73f67](https://github.com/tomasbjerre/git-changelog-lib/commit/93b48285ce73f67) Roberto Congiu *2015-10-08 18:04:31*
+
+**updating poms for 1.3.6 branch with snapshot versions**
+
+
+[93cf52c88db3d21](https://github.com/tomasbjerre/git-changelog-lib/commit/93cf52c88db3d21) Roberto Congiu *2015-10-08 18:04:10*
+
+**fixed master branch**
+
+
+[70cfc607ac36afa](https://github.com/tomasbjerre/git-changelog-lib/commit/70cfc607ac36afa) Roberto Congiu *2015-10-08 18:01:04*
+
+**updating develop poms to master versions to avoid merge conflicts**
+
+
+[ccbb4ba363e287a](https://github.com/tomasbjerre/git-changelog-lib/commit/ccbb4ba363e287a) Roberto Congiu *2015-10-08 17:37:22*
+
+**Updating develop poms back to pre merge state**
+
+
+[4d79bd6292cdba6](https://github.com/tomasbjerre/git-changelog-lib/commit/4d79bd6292cdba6) Roberto Congiu *2015-10-08 17:37:22*
+
+**disabling javadoc on release**
+
+
+[7710285ff5eefa1](https://github.com/tomasbjerre/git-changelog-lib/commit/7710285ff5eefa1) Roberto Congiu *2015-10-08 17:36:53*
+
+**removed javadoc plugin, causing issue with release**
+
+
+[2318937077ebe4e](https://github.com/tomasbjerre/git-changelog-lib/commit/2318937077ebe4e) Roberto Congiu *2015-10-08 17:33:42*
+
+**updating poms for branch'release/1.3.6' with non-snapshot versions**
+
+
+[21a3ad9dab81d37](https://github.com/tomasbjerre/git-changelog-lib/commit/21a3ad9dab81d37) Roberto Congiu *2015-10-08 17:31:54*
+
+**release docs**
+
+
+[fe3d2f41bbdabfb](https://github.com/tomasbjerre/git-changelog-lib/commit/fe3d2f41bbdabfb) Roberto Congiu *2015-10-08 17:31:30*
+
+**updating poms for 1.3.7-SNAPSHOT development**
+
+
+[ed1fb90913c49ad](https://github.com/tomasbjerre/git-changelog-lib/commit/ed1fb90913c49ad) Roberto Congiu *2015-10-08 17:28:41*
+
+**updating poms for 1.3.6 branch with snapshot versions**
+
+
+[d4a2a2c156d11d2](https://github.com/tomasbjerre/git-changelog-lib/commit/d4a2a2c156d11d2) Roberto Congiu *2015-10-08 17:28:35*
+
+**updated jgitflow plugin**
+
+
+[a5fd6dc284037fd](https://github.com/tomasbjerre/git-changelog-lib/commit/a5fd6dc284037fd) Roberto Congiu *2015-10-08 17:27:39*
+
+**updated version of jgitflow plugin**
+
+
+[f5358252e781e2b](https://github.com/tomasbjerre/git-changelog-lib/commit/f5358252e781e2b) Roberto Congiu *2015-10-08 17:21:05*
+
+**added deploy script, fixed boolean support for cdh4**
+
+
+[2899dd5433a3ef7](https://github.com/tomasbjerre/git-changelog-lib/commit/2899dd5433a3ef7) Roberto Congiu *2015-10-08 17:17:14*
+
+**added deploy script, fixed boolean support for cdh4**
+
+
+[7e04e79af6ecdb2](https://github.com/tomasbjerre/git-changelog-lib/commit/7e04e79af6ecdb2) Roberto Congiu *2015-10-08 17:16:46*
+
+**Add support for String to Boolean conversion**
+
+
+[6bf79969104b90a](https://github.com/tomasbjerre/git-changelog-lib/commit/6bf79969104b90a) Rajat Jain *2015-10-08 06:01:50*
+
+**Added comments about multi-line json. Closes #116**
+
+
+[eff2f561f0ad043](https://github.com/tomasbjerre/git-changelog-lib/commit/eff2f561f0ad043) Roberto Congiu *2015-10-06 00:55:31*
+
+**Add support for HDP 2.3**
+
+ * Update POM to add hdp23 profile 
+ * Add json-hdp23-shim shim 
+ * Adjust testSerializeWithMapping result. 
+ * The serialized keys are in a different order. 
+ * Document how to build this: mvn -Phdp23 clean package 
+
+[b2dbdeb3b8660cd](https://github.com/tomasbjerre/git-changelog-lib/commit/b2dbdeb3b8660cd) Dave Beckett *2015-10-03 00:16:46*
+
+**updating poms for 1.3.6-SNAPSHOT development**
+
+
+[fb2c4aa0d0fbf81](https://github.com/tomasbjerre/git-changelog-lib/commit/fb2c4aa0d0fbf81) Roberto Congiu *2015-08-30 21:27:01*
+
+**merging release/1.3.5' into master**
+
+
+[a408e471cd98df8](https://github.com/tomasbjerre/git-changelog-lib/commit/a408e471cd98df8) Roberto Congiu *2015-08-30 21:26:39*
+
+**fixed conflict**
+
+
+[231b315c914c86f](https://github.com/tomasbjerre/git-changelog-lib/commit/231b315c914c86f) Roberto Congiu *2015-08-30 21:26:12*
+
+
+## 1.3.5
+### No issue
+
+**added javadoc**
+
+
+[a6aa602702c1e87](https://github.com/tomasbjerre/git-changelog-lib/commit/a6aa602702c1e87) Roberto Congiu *2015-08-30 21:23:31*
+
+**updating poms for 1.3.5 release**
+
+
+[7abe02b85763696](https://github.com/tomasbjerre/git-changelog-lib/commit/7abe02b85763696) Roberto Congiu *2015-08-30 21:23:06*
+
+**updating poms for 1.3.5 release**
+
+
+[41ed5ebe17a587d](https://github.com/tomasbjerre/git-changelog-lib/commit/41ed5ebe17a587d) Roberto Congiu *2015-08-30 21:23:06*
+
+**updating poms for 1.3.5 release**
+
+
+[7fc8afdc44829e0](https://github.com/tomasbjerre/git-changelog-lib/commit/7fc8afdc44829e0) Roberto Congiu *2015-08-30 21:21:55*
+
+**updating poms for 1.3.5 release**
+
+
+[360d64bddf46434](https://github.com/tomasbjerre/git-changelog-lib/commit/360d64bddf46434) Roberto Congiu *2015-08-30 21:21:55*
+
+**updating poms for 1.3.5 release**
+
+
+[1df410edd760131](https://github.com/tomasbjerre/git-changelog-lib/commit/1df410edd760131) Roberto Congiu *2015-08-30 21:18:17*
+
+**updating poms for 1.3.5 release**
+
+
+[7dd49dfa9660176](https://github.com/tomasbjerre/git-changelog-lib/commit/7dd49dfa9660176) Roberto Congiu *2015-08-30 21:18:04*
+
+**preparing release**
+
+
+[8063622801b689d](https://github.com/tomasbjerre/git-changelog-lib/commit/8063622801b689d) Roberto Congiu *2015-08-30 21:15:58*
+
+**actually, it fixes #112**
+
+
+[792d01e106f5d3b](https://github.com/tomasbjerre/git-changelog-lib/commit/792d01e106f5d3b) Roberto Congiu *2015-08-30 21:14:12*
+
+**Handle empty array where a JsonObject should be, fixes #113**
+
+
+[3faa28dd6c7f791](https://github.com/tomasbjerre/git-changelog-lib/commit/3faa28dd6c7f791) Roberto Congiu *2015-08-30 21:13:08*
+
+**Added UNIONTYPE support ( fixes #53)**
+
+
+[8add4d05aaffdc0](https://github.com/tomasbjerre/git-changelog-lib/commit/8add4d05aaffdc0) Roberto Congiu *2015-08-30 21:01:35*
+
+**added reference to hive-json-schema to readme**
+
+
+[48e6ce88258df63](https://github.com/tomasbjerre/git-changelog-lib/commit/48e6ce88258df63) Roberto Congiu *2015-05-25 16:24:09*
+
+**fixed readme**
+
+
+[daf245ca73adf66](https://github.com/tomasbjerre/git-changelog-lib/commit/daf245ca73adf66) Roberto Congiu *2015-03-08 23:38:52*
+
+**instructions to compile for hive 1.0.0**
+
+
+[5279e6ccf943883](https://github.com/tomasbjerre/git-changelog-lib/commit/5279e6ccf943883) Roberto Congiu *2015-03-08 23:31:10*
+
+**instructions to compile for hive 1.0.0**
+
+
+[65b33ad0de14da7](https://github.com/tomasbjerre/git-changelog-lib/commit/65b33ad0de14da7) Roberto Congiu *2015-03-08 23:30:53*
+
+**updated readme**
+
+
+[954dcaf7ab38a02](https://github.com/tomasbjerre/git-changelog-lib/commit/954dcaf7ab38a02) Roberto Congiu *2015-03-08 22:57:24*
+
+**updated readme**
+
+
+[a7f31c9a2d05605](https://github.com/tomasbjerre/git-changelog-lib/commit/a7f31c9a2d05605) Roberto Congiu *2015-03-08 22:56:12*
+
+**add missing getPrimitiveJavaObject implementations**
+
+
+[d3b50120412d95d](https://github.com/tomasbjerre/git-changelog-lib/commit/d3b50120412d95d) yuyang-lan *2014-12-15 18:15:40*
+
+**updated readme**
+
+
+[bda3740b2c64c01](https://github.com/tomasbjerre/git-changelog-lib/commit/bda3740b2c64c01) Roberto Congiu *2014-09-08 18:02:39*
+
+**added link for binaries**
+
+
+[10f1bc078567bf1](https://github.com/tomasbjerre/git-changelog-lib/commit/10f1bc078567bf1) Roberto Congiu *2014-09-08 18:01:22*
+
+**updating poms for 1.3.1-SNAPSHOT development**
+
+
+[6e4fd3f77033bd7](https://github.com/tomasbjerre/git-changelog-lib/commit/6e4fd3f77033bd7) Roberto Congiu *2014-09-08 17:53:23*
+
+**merging release/1.3' into master**
+
+
+[d1bf5203e4b0a6c](https://github.com/tomasbjerre/git-changelog-lib/commit/d1bf5203e4b0a6c) Roberto Congiu *2014-09-08 17:52:38*
+
+
+## 1.3
+### No issue
+
+**merging release/1.3' into master**
+
+
+[8859c6d5e94408b](https://github.com/tomasbjerre/git-changelog-lib/commit/8859c6d5e94408b) Roberto Congiu *2014-09-08 17:52:38*
+
+**updating poms for 1.3 release**
+
+
+[ed28e4ada6842ef](https://github.com/tomasbjerre/git-changelog-lib/commit/ed28e4ada6842ef) Roberto Congiu *2014-09-08 17:52:21*
+
+**A long should always be a long**
+
+
+[40ac43b0538b57f](https://github.com/tomasbjerre/git-changelog-lib/commit/40ac43b0538b57f) Andy Kramolisch *2014-08-27 21:38:27*
+
+**lowercase mappings, since JSON does it anyway. Fixes #84**
+
+
+[1cda97657a8737c](https://github.com/tomasbjerre/git-changelog-lib/commit/1cda97657a8737c) Roberto Congiu *2014-08-27 15:32:02*
+
+**merging feature/issue82' into develop**
+
+
+[bd782a284f5e48a](https://github.com/tomasbjerre/git-changelog-lib/commit/bd782a284f5e48a) Roberto Congiu *2014-08-25 19:52:35*
+
+**struct and map use the same logic to determine if an object is a null, considering also an empty string / string of only spaces as a null**
+
+
+[38001f146c5baec](https://github.com/tomasbjerre/git-changelog-lib/commit/38001f146c5baec) Roberto Congiu *2014-08-25 19:52:03*
+
+**fixed #82, can handle maps with empty string**
+
+
+[a3873367774c380](https://github.com/tomasbjerre/git-changelog-lib/commit/a3873367774c380) Roberto Congiu *2014-08-25 19:43:08*
+
+**moved unit test**
+
+
+[d367e3a5557ae5e](https://github.com/tomasbjerre/git-changelog-lib/commit/d367e3a5557ae5e) Roberto Congiu *2014-08-25 18:22:05*
+
+**updating poms for issue82 branch**
+
+
+[2ad33ef00e1d1f1](https://github.com/tomasbjerre/git-changelog-lib/commit/2ad33ef00e1d1f1) Roberto Congiu *2014-08-25 18:15:21*
+
+**Move "Fix for \a or \v, because Java does not recognize in strings" on top of develop**
+
+
+[4141ee1bb2df6d6](https://github.com/tomasbjerre/git-changelog-lib/commit/4141ee1bb2df6d6) Piotr Stapp *2014-08-25 13:07:22*
+
+**added serde location after it's built**
+
+
+[2bffa97f7ca1187](https://github.com/tomasbjerre/git-changelog-lib/commit/2bffa97f7ca1187) Roberto Congiu *2014-08-08 07:32:57*
+
+**updating poms for 1.3-SNAPSHOT development**
+
+
+[e712269e9821058](https://github.com/tomasbjerre/git-changelog-lib/commit/e712269e9821058) Roberto Congiu *2014-07-24 21:19:07*
+
+**merging release/1.2' into master**
+
+
+[9c49b17ee26c90a](https://github.com/tomasbjerre/git-changelog-lib/commit/9c49b17ee26c90a) Roberto Congiu *2014-07-24 21:18:52*
+
+
+## 1.2
+### Jira issue-48   
+
+**merging feature/timezone-issue-48' into develop**
+
+
+[00ab4aecc7101d3](https://github.com/tomasbjerre/git-changelog-lib/commit/00ab4aecc7101d3) Roberto Congiu *2014-02-12 17:51:49*
+
+
+### No issue
+
+**merging release/1.2' into master**
+
+
+[34cb96413457bae](https://github.com/tomasbjerre/git-changelog-lib/commit/34cb96413457bae) Roberto Congiu *2014-07-24 21:18:52*
+
+**updating poms for 1.2 release**
+
+
+[faee84ff4bf0a2d](https://github.com/tomasbjerre/git-changelog-lib/commit/faee84ff4bf0a2d) Roberto Congiu *2014-07-24 21:18:23*
+
+**updating poms for 1.2 release**
+
+
+[9431bedfa8dc98b](https://github.com/tomasbjerre/git-changelog-lib/commit/9431bedfa8dc98b) Roberto Congiu *2014-07-24 21:18:23*
+
+**committing**
+
+
+[85827e0dfcc5c2c](https://github.com/tomasbjerre/git-changelog-lib/commit/85827e0dfcc5c2c) Roberto Congiu *2014-07-24 21:18:01*
+
+**updating poms for 1.2 release**
+
+
+[8d96a3baa56d578](https://github.com/tomasbjerre/git-changelog-lib/commit/8d96a3baa56d578) Roberto Congiu *2014-07-24 21:15:29*
+
+**updating poms for 1.2 release**
+
+
+[790f1ceedb65b41](https://github.com/tomasbjerre/git-changelog-lib/commit/790f1ceedb65b41) Roberto Congiu *2014-07-24 21:15:29*
+
+**updating poms for 1.2 release**
+
+
+[00bb58b72901bec](https://github.com/tomasbjerre/git-changelog-lib/commit/00bb58b72901bec) Roberto Congiu *2014-07-24 21:15:19*
+
+**fixed pom**
+
+
+[a8ea74b631eda69](https://github.com/tomasbjerre/git-changelog-lib/commit/a8ea74b631eda69) Roberto Congiu *2014-07-24 19:58:53*
+
+**fixed pom**
+
+
+[89549e91e3cfcfe](https://github.com/tomasbjerre/git-changelog-lib/commit/89549e91e3cfcfe) Roberto Congiu *2014-07-24 19:57:06*
+
+**changed README**
+
+
+[c818c304aa69418](https://github.com/tomasbjerre/git-changelog-lib/commit/c818c304aa69418) Roberto Congiu *2014-07-24 15:59:22*
+
+**refactoring to reduce code duplication**
+
+
+[1c3ac021384a3aa](https://github.com/tomasbjerre/git-changelog-lib/commit/1c3ac021384a3aa) Roberto Congiu *2014-07-24 15:54:41*
+
+**refactor**
+
+
+[f055fc7e601530c](https://github.com/tomasbjerre/git-changelog-lib/commit/f055fc7e601530c) Roberto Congiu *2014-07-24 15:04:48*
+
+**compiles with both cdh4 and cdh5 profile, but have to test it**
+
+
+[f7a1e55581dfcac](https://github.com/tomasbjerre/git-changelog-lib/commit/f7a1e55581dfcac) Roberto Congiu *2014-07-11 06:40:12*
+
+**removing all target directories, updating gitignore**
+
+
+[faefd1813fe83f0](https://github.com/tomasbjerre/git-changelog-lib/commit/faefd1813fe83f0) Roberto Congiu *2014-07-10 16:44:25*
+
+**changes**
+
+
+[dff393a29e955a1](https://github.com/tomasbjerre/git-changelog-lib/commit/dff393a29e955a1) Roberto Congiu *2014-07-10 16:42:13*
+
+**refactoring, almost got it to work**
+
+
+[bc10f2a78937814](https://github.com/tomasbjerre/git-changelog-lib/commit/bc10f2a78937814) Roberto Congiu *2014-05-29 01:34:40*
+
+**major refactoring for cdh compatibility**
+
+
+[5c303d8f237b354](https://github.com/tomasbjerre/git-changelog-lib/commit/5c303d8f237b354) Roberto Congiu *2014-05-28 23:08:33*
+
+**Obj Inspector Class Cast Exception fix**
+
+
+[2b57f271b80c285](https://github.com/tomasbjerre/git-changelog-lib/commit/2b57f271b80c285) appanasatya *2014-05-05 12:18:14*
+
+**added profile for cdh5, updated deps for cdh4**
+
+
+[aca676c536c8146](https://github.com/tomasbjerre/git-changelog-lib/commit/aca676c536c8146) Roberto Congiu *2014-04-29 00:15:59*
+
+**pom with profiles**
+
+
+[ffca88db0eff898](https://github.com/tomasbjerre/git-changelog-lib/commit/ffca88db0eff898) Roberto Congiu *2014-04-28 20:30:14*
+
+**minor source cleanup**
+
+
+[a97ccdf5493825c](https://github.com/tomasbjerre/git-changelog-lib/commit/a97ccdf5493825c) Roberto Congiu *2014-03-19 14:29:55*
+
+**Check for null, #57**
+
+
+[a29316bd320768f](https://github.com/tomasbjerre/git-changelog-lib/commit/a29316bd320768f) Roberto Congiu *2014-03-03 22:09:49*
+
+**updating poms for 1.1.9.3-SNAPSHOT development**
+
+
+[0c70dae82ce6b93](https://github.com/tomasbjerre/git-changelog-lib/commit/0c70dae82ce6b93) Roberto Congiu *2014-02-25 17:52:18*
+
+**merging release/1.1.9.2' into master**
+
+
+[71a54d6349be3ee](https://github.com/tomasbjerre/git-changelog-lib/commit/71a54d6349be3ee) Roberto Congiu *2014-02-25 17:52:07*
+
+**fixed readme**
+
+
+[d9b812da1ffcc0c](https://github.com/tomasbjerre/git-changelog-lib/commit/d9b812da1ffcc0c) Roberto Congiu *2014-02-20 16:20:50*
+
+**fixed readme**
+
+
+[e8a9bd5db4f28c3](https://github.com/tomasbjerre/git-changelog-lib/commit/e8a9bd5db4f28c3) Roberto Congiu *2014-02-20 16:20:04*
+
+**merging feature/refactor-timestamp' into develop**
+
+
+[c3f2132f355153f](https://github.com/tomasbjerre/git-changelog-lib/commit/c3f2132f355153f) Roberto Congiu *2014-02-20 16:16:45*
+
+**completed refactoring for timestamp**
+
+
+[3d44fe5709a9aff](https://github.com/tomasbjerre/git-changelog-lib/commit/3d44fe5709a9aff) Roberto Congiu *2014-02-20 16:16:33*
+
+**updated readme**
+
+
+[2e2d21f919aac68](https://github.com/tomasbjerre/git-changelog-lib/commit/2e2d21f919aac68) Roberto Congiu *2014-02-20 07:58:04*
+
+**merging feature/support-array-records' into develop**
+
+
+[439f723e4ca5759](https://github.com/tomasbjerre/git-changelog-lib/commit/439f723e4ca5759) Roberto Congiu *2014-02-20 07:56:44*
+
+**added unit test, added feature**
+
+
+[3faf637b6cad832](https://github.com/tomasbjerre/git-changelog-lib/commit/3faf637b6cad832) Roberto Congiu *2014-02-20 07:56:32*
+
+**fixe for error in JsonListObjectInspector**
+
+
+[bade2b89b8997df](https://github.com/tomasbjerre/git-changelog-lib/commit/bade2b89b8997df) Roberto Congiu *2014-02-20 07:12:50*
+
+**merging feature/null-issue' into develop**
+
+
+[b3b4d402533248e](https://github.com/tomasbjerre/git-changelog-lib/commit/b3b4d402533248e) Roberto Congiu *2014-02-20 00:29:01*
+
+**issue with nulls, fixes**
+
+
+[be530c198f4e96f](https://github.com/tomasbjerre/git-changelog-lib/commit/be530c198f4e96f) Roberto Congiu *2014-02-20 00:28:34*
+
+**updating poms for null-issue branch**
+
+
+[f2682837026629e](https://github.com/tomasbjerre/git-changelog-lib/commit/f2682837026629e) Roberto Congiu *2014-02-19 23:42:00*
+
+**fix typo**
+
+
+[46e829f2b8fc1c9](https://github.com/tomasbjerre/git-changelog-lib/commit/46e829f2b8fc1c9) Powerrr *2014-02-16 23:02:42*
+
+**fixed timezone issue in unit tests, fixes #48**
+
+
+[72bbf27a6406782](https://github.com/tomasbjerre/git-changelog-lib/commit/72bbf27a6406782) Roberto Congiu *2014-02-12 17:51:29*
+
+**added javadocs**
+
+
+[87da936d765866c](https://github.com/tomasbjerre/git-changelog-lib/commit/87da936d765866c) Roberto Congiu *2014-02-07 22:47:51*
+
+**updated README**
+
+
+[73b538887f34d07](https://github.com/tomasbjerre/git-changelog-lib/commit/73b538887f34d07) Roberto Congiu *2014-02-06 17:26:11*
+
+**merging feature/null-issue' into develop**
+
+
+[b70680759c1b74d](https://github.com/tomasbjerre/git-changelog-lib/commit/b70680759c1b74d) Roberto Congiu *2014-02-06 17:15:43*
+
+**Fixed null handling, fixes #50**
+
+
+[feaa5919737847d](https://github.com/tomasbjerre/git-changelog-lib/commit/feaa5919737847d) Roberto Congiu *2014-02-06 17:15:19*
+
+**updating poms for 1.1.9.2-SNAPSHOT development**
+
+
+[fc5a76572d91f87](https://github.com/tomasbjerre/git-changelog-lib/commit/fc5a76572d91f87) Roberto Congiu *2014-02-03 04:44:09*
+
+**merging release/1.1.9.1' into master**
+
+
+[67553d2e8f12a41](https://github.com/tomasbjerre/git-changelog-lib/commit/67553d2e8f12a41) Roberto Congiu *2014-02-03 04:43:34*
+
+
+## 1.1.9.2
+### No issue
+
+**merging release/1.1.9.2' into master**
+
+
+[079471f0333df4b](https://github.com/tomasbjerre/git-changelog-lib/commit/079471f0333df4b) Roberto Congiu *2014-02-25 17:52:07*
+
+**updating poms for 1.1.9.2 release**
+
+
+[ee75cbe2d7f15d8](https://github.com/tomasbjerre/git-changelog-lib/commit/ee75cbe2d7f15d8) Roberto Congiu *2014-02-25 17:51:56*
+
+**updating poms for 1.1.9.2 release**
+
+
+[5ba3e739d8f479c](https://github.com/tomasbjerre/git-changelog-lib/commit/5ba3e739d8f479c) Roberto Congiu *2014-02-25 17:51:56*
+
+**updating poms for 1.1.9.2 release**
+
+
+[f6bb9083a311af8](https://github.com/tomasbjerre/git-changelog-lib/commit/f6bb9083a311af8) Roberto Congiu *2014-02-25 17:51:10*
+
+**updating poms for 1.1.9.2 release**
+
+
+[09f447bc1baa640](https://github.com/tomasbjerre/git-changelog-lib/commit/09f447bc1baa640) Roberto Congiu *2014-02-25 17:51:10*
+
+**updated readme**
+
+
+[e2b092a2f79a695](https://github.com/tomasbjerre/git-changelog-lib/commit/e2b092a2f79a695) Roberto Congiu *2014-02-25 17:51:02*
+
+**updating poms for 1.1.9.2 release**
+
+
+[84977e2659379dd](https://github.com/tomasbjerre/git-changelog-lib/commit/84977e2659379dd) Roberto Congiu *2014-02-25 17:50:08*
+
+**fix wrong cast**
+
+
+[eb5fbd522386c6b](https://github.com/tomasbjerre/git-changelog-lib/commit/eb5fbd522386c6b) Powerrr *2014-02-23 13:41:22*
+
+
+## 1.1.9.1
+### Jira cdh-3   
+
+**added cloudera repository, changed dependencies to cdh-3**
+
+
+[d706d7be99ffb7f](https://github.com/tomasbjerre/git-changelog-lib/commit/d706d7be99ffb7f) Roberto Congiu *2012-07-04 01:41:12*
+
+
+### No issue
+
+**merging release/1.1.9.1' into master**
+
+
+[7e161a3f81ddb16](https://github.com/tomasbjerre/git-changelog-lib/commit/7e161a3f81ddb16) Roberto Congiu *2014-02-03 04:43:34*
+
+**updating poms for 1.1.9.1 release**
+
+
+[9c6d533ae44904e](https://github.com/tomasbjerre/git-changelog-lib/commit/9c6d533ae44904e) Roberto Congiu *2014-02-03 04:43:18*
+
+**updated readme**
+
+
+[fd61a5d3b4f36bc](https://github.com/tomasbjerre/git-changelog-lib/commit/fd61a5d3b4f36bc) Roberto Congiu *2014-02-03 04:43:10*
+
+**updating poms for 1.1.9.1 release**
+
+
+[310f41499b97b35](https://github.com/tomasbjerre/git-changelog-lib/commit/310f41499b97b35) Roberto Congiu *2014-02-03 04:42:23*
+
+**fixed bug reported by Sonia Ling - wrong type (long) in JavaStringInt ObjectInspector**
+
+
+[aa48bd98539f456](https://github.com/tomasbjerre/git-changelog-lib/commit/aa48bd98539f456) Roberto Congiu *2014-02-03 04:25:27*
+
+**fixed bug reported by Sonia Ling - wrong type (long) in JavaStringInt ObjectInspector**
+
+
+[630d09d7edd7d53](https://github.com/tomasbjerre/git-changelog-lib/commit/630d09d7edd7d53) Roberto Congiu *2014-02-03 04:24:17*
+
+**updating poms for 1.1.9-SNAPSHOT development**
+
+
+[7307f2ca9d2ac68](https://github.com/tomasbjerre/git-changelog-lib/commit/7307f2ca9d2ac68) Roberto Congiu *2014-01-23 02:15:04*
+
+**merging release/1.1.8' into master**
+
+
+[1e07f0e96b11b80](https://github.com/tomasbjerre/git-changelog-lib/commit/1e07f0e96b11b80) Roberto Congiu *2014-01-23 02:14:53*
+
+**updated cloudera dependencies**
+
+
+[61432e414ea8a83](https://github.com/tomasbjerre/git-changelog-lib/commit/61432e414ea8a83) Roberto Congiu *2014-01-23 02:07:08*
+
+**moved to jgitflow for release**
+
+
+[aa12cca4012b81e](https://github.com/tomasbjerre/git-changelog-lib/commit/aa12cca4012b81e) Roberto Congiu *2014-01-23 02:04:28*
+
+**added a bunch of unit tests. Also, centralized primitive parsing in an utility class**
+
+
+[73c53faaf1ed24d](https://github.com/tomasbjerre/git-changelog-lib/commit/73c53faaf1ed24d) Roberto Congiu *2014-01-22 16:44:56*
+
+**Completed all the Primitive OI for all numeric types, with unit tests.**
+
+
+[3788ede6b2822ed](https://github.com/tomasbjerre/git-changelog-lib/commit/3788ede6b2822ed) Roberto Congiu *2014-01-22 02:03:52*
+
+**working on unit tests**
+
+
+[002c53adef5fa09](https://github.com/tomasbjerre/git-changelog-lib/commit/002c53adef5fa09) Roberto Congiu *2014-01-21 17:35:14*
+
+**Making SerDe smarter when handling numeric numbers. Keep string representation till it's actually time to parse it, this way the JSON parser does not need to know in advance if a number should be a short, into or large int.**
+
+ * Work towards solving #34 and #45 
+
+[3331d9f4865c2ad](https://github.com/tomasbjerre/git-changelog-lib/commit/3331d9f4865c2ad) Roberto Congiu *2014-01-21 00:20:48*
+
+**committing**
+
+
+[8aab1efe93d5663](https://github.com/tomasbjerre/git-changelog-lib/commit/8aab1efe93d5663) Roberto Congiu *2014-01-20 17:15:51*
+
+**Verify castability before actually doing it**
+
+ * We are experiencing problems with mis-formed lines, where we think a 
+ * field is supposed to be a Map, but due to a series of unfortunate events 
+ * it is actually a String. When we encounter this line, Hive flips out and 
+ * fails the entire job due to a recurring ClassCastException. 
+ * This patch simply checks the castability of the variable before actually 
+ * doing the cast. It returns NULL if it&#39;s not castable, and logs the 
+ * toString() of it at warn level. 
+
+[52b37b7da94b325](https://github.com/tomasbjerre/git-changelog-lib/commit/52b37b7da94b325) Martin Meyer *2013-02-22 15:49:56*
+
+**made JSONObject keys lowercase for case insensitivity, #17**
+
+
+[704a3b7474d3806](https://github.com/tomasbjerre/git-changelog-lib/commit/704a3b7474d3806) Roberto Congiu *2012-11-30 06:15:50*
+
+**new binary minor release with bugfix**
+
+
+[ba662072bd86535](https://github.com/tomasbjerre/git-changelog-lib/commit/ba662072bd86535) Roberto Congiu *2012-10-04 23:15:31*
+
+**fixed issue using float, issue #13**
+
+
+[df0d1f4621a6ca4](https://github.com/tomasbjerre/git-changelog-lib/commit/df0d1f4621a6ca4) Roberto Congiu *2012-10-04 23:12:36*
+
+**Handles JSONObject.NULL when parsing arrays.**
+
+
+[4f2eaaeb7efec45](https://github.com/tomasbjerre/git-changelog-lib/commit/4f2eaaeb7efec45) Peter Dixon-Moses *2012-08-29 19:25:28*
+
+**changes to make it compatible with hive 0.8**
+
+
+[740cb298512fcb6](https://github.com/tomasbjerre/git-changelog-lib/commit/740cb298512fcb6) Roberto Congiu *2012-08-21 07:23:14*
+
+**Fixed issue with columns that are not mapped into JSON, reported by Michael Phung**
+
+
+[250356609bf18d6](https://github.com/tomasbjerre/git-changelog-lib/commit/250356609bf18d6) Roberto Congiu *2012-07-26 17:07:15*
+
+**Fixed issue with columns that are not mapped into JSON, reported by Michael Phung**
+
+
+[8755589c2a33d85](https://github.com/tomasbjerre/git-changelog-lib/commit/8755589c2a33d85) Roberto Congiu *2012-07-26 17:06:51*
+
+**bumped version number**
+
+
+[bf82458236e3b1f](https://github.com/tomasbjerre/git-changelog-lib/commit/bf82458236e3b1f) Roberto Congiu *2012-07-04 01:45:02*
+
+**Fixed infinite loop in MapAdapter**
+
+
+[d6538b1f6b2c157](https://github.com/tomasbjerre/git-changelog-lib/commit/d6538b1f6b2c157) Roberto Congiu *2012-07-04 01:31:46*
+
+**Made 'string' type to accept non-string data in Json representation, using calling their .toString().**
+
+ * Added an option to tolerate malformed JSON 
+
+[7b4bb79538d716f](https://github.com/tomasbjerre/git-changelog-lib/commit/7b4bb79538d716f) Roberto Congiu *2011-08-10 01:54:19*
+
+**- Cleaned up some 'code lint'**
+
+ * - Added some JavaDoc 
+
+[d67639e32d7cd67](https://github.com/tomasbjerre/git-changelog-lib/commit/d67639e32d7cd67) Roberto Congiu *2011-07-29 18:23:25*
+
+**fixed name of author of JSON.org java library**
+
+
+[74e904569c4a1c1](https://github.com/tomasbjerre/git-changelog-lib/commit/74e904569c4a1c1) roberto congiu *2011-07-12 21:47:54*
+
+**Added Author to README**
+
+
+[654bedf39f8837d](https://github.com/tomasbjerre/git-changelog-lib/commit/654bedf39f8837d) Roberto Congiu *2011-07-12 21:21:31*
+
+
+## 1.1.8
+### No issue
+
+**merging release/1.1.8' into master**
+
+
+[1df6c7a5b1a6f60](https://github.com/tomasbjerre/git-changelog-lib/commit/1df6c7a5b1a6f60) Roberto Congiu *2014-01-23 02:14:53*
+
+**updating poms for 1.1.8 release**
+
+
+[8c92cc82c5e4ead](https://github.com/tomasbjerre/git-changelog-lib/commit/8c92cc82c5e4ead) Roberto Congiu *2014-01-23 02:14:44*
+
+**updating poms for 1.1.8 release**
+
+
+[6fca38310bc7c92](https://github.com/tomasbjerre/git-changelog-lib/commit/6fca38310bc7c92) Roberto Congiu *2014-01-23 02:14:44*
+
+**updating poms for 1.1.8 release**
+
+
+[89b91917770798d](https://github.com/tomasbjerre/git-changelog-lib/commit/89b91917770798d) Roberto Congiu *2014-01-23 02:14:01*
+
+**updating poms for 1.1.8 release**
+
+
+[65e75ac86e38ac1](https://github.com/tomasbjerre/git-changelog-lib/commit/65e75ac86e38ac1) Roberto Congiu *2014-01-23 02:14:01*
+
+**no deploy**
+
+
+[462206d9fa59ab2](https://github.com/tomasbjerre/git-changelog-lib/commit/462206d9fa59ab2) Roberto Congiu *2014-01-23 02:13:51*
+
+**updating poms for 1.1.8 release**
+
+
+[fde8a49a511d3f3](https://github.com/tomasbjerre/git-changelog-lib/commit/fde8a49a511d3f3) Roberto Congiu *2014-01-23 02:11:21*
+
+**updating poms for 1.1.8 release**
+
+
+[c585919e64d74d6](https://github.com/tomasbjerre/git-changelog-lib/commit/c585919e64d74d6) Roberto Congiu *2014-01-23 02:11:21*
+
+**changed readme**
+
+
+[73140e192a8d50a](https://github.com/tomasbjerre/git-changelog-lib/commit/73140e192a8d50a) Roberto Congiu *2014-01-23 02:11:09*
+
+**updating poms for 1.1.8 release**
+
+
+[15db92b1ca6dcaa](https://github.com/tomasbjerre/git-changelog-lib/commit/15db92b1ca6dcaa) Roberto Congiu *2014-01-23 02:07:21*
+
+**Equals check always false.**
+
+ * - The equals is checking if object is not instance of JSONObject and it 
+ * is always the case. Changed the Null to be instance of JSONObject 
+
+[ab83a5ad947dbb2](https://github.com/tomasbjerre/git-changelog-lib/commit/ab83a5ad947dbb2) Leonardo Bispo de Oliveira *2013-11-01 14:24:05*
+
+
+## 1.1.7
+### No issue
+
+**release 1.1.7**
+
+
+[1a4a503ec901c96](https://github.com/tomasbjerre/git-changelog-lib/commit/1a4a503ec901c96) Roberto Congiu *2013-09-30 16:25:02*
+
+**updated docs**
+
+
+[f40e1bc280c1c91](https://github.com/tomasbjerre/git-changelog-lib/commit/f40e1bc280c1c91) Roberto Congiu *2013-08-07 14:46:45*
+
+**updated docs**
+
+
+[b2e6113840ec982](https://github.com/tomasbjerre/git-changelog-lib/commit/b2e6113840ec982) Roberto Congiu *2013-08-07 14:45:12*
+
+**updated docs**
+
+
+[8ad055d979d8e1d](https://github.com/tomasbjerre/git-changelog-lib/commit/8ad055d979d8e1d) Roberto Congiu *2013-08-07 14:36:19*
+
+**removed static list used to deserialize json struct**
+
+
+[cfeaf208c977cba](https://github.com/tomasbjerre/git-changelog-lib/commit/cfeaf208c977cba) Roberto Congiu *2013-08-07 14:18:54*
+
+**updated readme**
+
+
+[53dffb5de8bc5b4](https://github.com/tomasbjerre/git-changelog-lib/commit/53dffb5de8bc5b4) Roberto Congiu *2013-07-11 05:34:00*
+
+**fixes issue #25**
+
+
+[83d1c67b29721a3](https://github.com/tomasbjerre/git-changelog-lib/commit/83d1c67b29721a3) Roberto Congiu *2013-07-11 05:30:45*
+
+**merged issue #28**
+
+
+[648dd297d9e6881](https://github.com/tomasbjerre/git-changelog-lib/commit/648dd297d9e6881) Roberto Congiu *2013-07-11 05:18:59*
+
+**gitflow release**
+
+
+[d58e72ded4d9eb1](https://github.com/tomasbjerre/git-changelog-lib/commit/d58e72ded4d9eb1) Roberto Congiu *2013-07-10 16:10:59*
+
+**wMerge branch 'guyrt-timestamp-support' into feature/25-timestamp-support**
+
+
+[8407fe67454d796](https://github.com/tomasbjerre/git-changelog-lib/commit/8407fe67454d796) Roberto Congiu *2013-05-06 00:49:46*
+
+**fixed conflict**
+
+
+[396820277d29ac6](https://github.com/tomasbjerre/git-changelog-lib/commit/396820277d29ac6) Roberto Congiu *2013-05-06 00:49:18*
+
+**Added check for missing fields.**
+
+
+[e2e8a8dbeb8d1d2](https://github.com/tomasbjerre/git-changelog-lib/commit/e2e8a8dbeb8d1d2) Richard T. Guy *2013-03-30 16:25:12*
+
+**Added basic timestamp tracking.**
+
+
+[1fd17ae488e29b3](https://github.com/tomasbjerre/git-changelog-lib/commit/1fd17ae488e29b3) Richard T. Guy *2013-03-30 15:16:19*
+
+
+## 1.1.6
+### No issue
+
+**gitflow release**
+
+
+[4212ba5c54f318c](https://github.com/tomasbjerre/git-changelog-lib/commit/4212ba5c54f318c) Roberto Congiu *2013-07-10 16:11:44*
+
+**updated readme**
+
+
+[6d738a106eb307f](https://github.com/tomasbjerre/git-changelog-lib/commit/6d738a106eb307f) Roberto Congiu *2013-07-10 16:05:54*
+
+**fixes #28 , error after alter**
+
+
+[e3171a4e7fe61d6](https://github.com/tomasbjerre/git-changelog-lib/commit/e3171a4e7fe61d6) Roberto Congiu *2013-07-10 07:04:23*
+
+**pre-release**
+
+
+[1def93b8c891f6d](https://github.com/tomasbjerre/git-changelog-lib/commit/1def93b8c891f6d) Roberto Congiu *2013-03-25 17:00:03*
+
+**mapping now works with serialization. Also added unit test for it.**
+
+
+[fc6b524298026a4](https://github.com/tomasbjerre/git-changelog-lib/commit/fc6b524298026a4) Roberto Congiu *2013-03-25 16:02:33*
+
+**fixes #24**
+
+
+[b26d5c8e7460922](https://github.com/tomasbjerre/git-changelog-lib/commit/b26d5c8e7460922) Roberto Congiu *2013-03-25 08:17:24*
+
+**README addition**
+
+
+[518dc0387c9eed4](https://github.com/tomasbjerre/git-changelog-lib/commit/518dc0387c9eed4) Roberto Congiu *2013-03-17 00:37:28*
+
+
+## 1.1.5
+### No issue
+
+**Updated README with compilation info**
+
+
+[5b9dd752c8a0265](https://github.com/tomasbjerre/git-changelog-lib/commit/5b9dd752c8a0265) Roberto Congiu *2013-03-16 22:30:07*
+
+**made CDH version parametric**
+
+
+[748b34653a2c1b5](https://github.com/tomasbjerre/git-changelog-lib/commit/748b34653a2c1b5) Roberto Congiu *2013-03-16 22:28:23*
+
+
+## json-serde-1.1.5
+### No issue
+
+**pom fix for release plugin**
+
+
+[bf600daefb0917f](https://github.com/tomasbjerre/git-changelog-lib/commit/bf600daefb0917f) Roberto Congiu *2013-03-26 04:12:02*
+
+

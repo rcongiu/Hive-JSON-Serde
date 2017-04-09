@@ -241,22 +241,20 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>com.github.danielflower.mavenplugins</groupId>
-                <artifactId>gitlog-maven-plugin</artifactId>
-                <version>1.13.3</version>
-                <configuration>
-                    <markdownChangeLogFilename>../CHANGELOG.md</markdownChangeLogFilename>
-                    <generateMarkdownChangeLog>true</generateMarkdownChangeLog>
-                    <generatePlainTextChangeLog>false</generatePlainTextChangeLog>
-                    <generateSimpleHTMLChangeLog>true</generateSimpleHTMLChangeLog>
-                    <generateJSONChangeLog>false</generateJSONChangeLog>
-                    <generateHTMLTableOnlyChangeLog>false</generateHTMLTableOnlyChangeLog>
-                </configuration>
+                <groupId>se.bjurr.gitchangelog</groupId>
+                <artifactId>git-changelog-maven-plugin</artifactId>
+                <version>1.43</version>
                 <executions>
                     <execution>
+                        <id>GenerateGitChangelog</id>
+                        <phase>generate-sources</phase>
                         <goals>
-                            <goal>generate</goal>
+                            <goal>git-changelog</goal>
                         </goals>
+                        <configuration>
+                            <!-- A file on filesystem //-->
+                            <filePath>CHANGELOG.md</filePath>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

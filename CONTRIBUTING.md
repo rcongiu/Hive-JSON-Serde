@@ -157,6 +157,8 @@ git push origin my-feature-branch -f
 
 Update the [CHANGELOG](CHANGELOG.md) with the pull request number. A typical entry looks as follows.
 
+It can be generated automatically with `mvn generate-sources`.
+
 ```
 * [#123](https://github.com/rcongiu/Hive-JSON-Serde/pull/123): Reticulated splines - [@contributor](https://github.com/contributor).
 ```
