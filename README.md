@@ -281,8 +281,8 @@ CREATE TABLE mytable (
  ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
 WITH SERDEPROPERTIES (
    "case.insensitive" = "false", --tells hive to ignore key case
-   "mappings.time1"= "time", -- lowercase 'time' mapped into 'time1'
-   "mappings.time2"= "Time) -- uppercase to 'time2'
+   "mapping.time1"= "time", -- lowercase 'time' mapped into 'time1'
+   "mapping.time2"= "Time) -- uppercase to 'time2'
 
 -- Data: { "time" : "2012-10-22:, "Time": "2012-11-22"} 
 SELECT time1,time2 from mytable
