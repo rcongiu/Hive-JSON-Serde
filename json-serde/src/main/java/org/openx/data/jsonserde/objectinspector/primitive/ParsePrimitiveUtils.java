@@ -10,7 +10,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -22,8 +24,19 @@ public final class ParsePrimitiveUtils {
         throw new InstantiationError("This class must not be instantiated.");
     }
 
-    private static DateFormat UTC_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-    private static DateFormat NON_UTC_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    // timestamps are expected to be in UTC
+    public final static DateFormat UTC_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    public final static DateFormat OFFSET_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
+    public final static DateFormat NON_UTC_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    static DateFormat[] dateFormats = { UTC_FORMAT, OFFSET_FORMAT,NON_UTC_FORMAT};
+    static {
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        for( DateFormat df : dateFormats) {
+            df.setTimeZone(tz);
+        }
+    }
+
+    static Pattern hasTZOffset = Pattern.compile(".+(\\+|-)\\d{2}:?\\d{2}$");
 
     public static boolean isHex(String s) {
         return s.startsWith("0x") || s.startsWith("0X");
@@ -89,15 +102,35 @@ public final class ParsePrimitiveUtils {
         return value;
     }
 
+    /**
+     * Timestamp.parse gets an absolute time, without the timezone.
+     * This function translates to the right string format that Timestamp
+     * can parse.
+     *
+     * @param s
+     * @return
+     */
     public static String nonUTCFormat(String s) {
-        if(s.endsWith("Z")) {
-            try {
-                return NON_UTC_FORMAT.format(UTC_FORMAT.parse(s));
-            } catch (ParseException e) {
-                e.printStackTrace();
+        Date parsed = null;
+        try {
+            if(s.endsWith("Z")) { // 003Z
+                parsed = UTC_FORMAT.parse(s);
+            } else if ( hasTZOffset.matcher(s).matches()) {
+                parsed = OFFSET_FORMAT.parse(s); // +0600 or -06:00
+            } else {
+                return s;
             }
+
+        } catch (ParseException e) {
+                e.printStackTrace();
         }
-        return s;
+
+        if(parsed!=null) {
+            return NON_UTC_FORMAT.format(parsed);
+        } else {
+            return s;
+        }
     }
+
 
 }
