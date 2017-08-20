@@ -207,7 +207,6 @@ public class JsonSerDeTimeStampTest {
             ObjectInspectorFactory.ObjectInspectorOptions.JAVA));
 
 
-
     java.sql.Timestamp ts = new Timestamp(1326439500L);
     Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     cal.set(2015,10,12,22,33,44); // month is zero-based!
@@ -227,7 +226,7 @@ public class JsonSerDeTimeStampTest {
     // one by one
     assertTrue(serialized.contains("\"one\":true"));
     assertTrue(serialized.contains("\"two\":\"field\""));
-    assertTrue(serialized.contains("\"three\":\"2015-11-13T06:33:44Z\"")); // UTC
+    assertTrue(serialized.contains("\"three\":\"2015-11-12T22:33:44Z\"")); // UTC
 
   }
 

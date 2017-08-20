@@ -76,7 +76,7 @@ public final class ParsePrimitiveUtils {
 
     static TimeZone defaultZone = TimeZone.getDefault();
     public static String serializeAsUTC(Timestamp ts) {
-        return UTC_FORMAT.format(ts.getTime() - defaultZone.getOffset(ts.getTime()) );
+        return UTC_FORMAT.format(ts.getTime() );
     }
 
     public static Timestamp parseTimestamp(String s) {

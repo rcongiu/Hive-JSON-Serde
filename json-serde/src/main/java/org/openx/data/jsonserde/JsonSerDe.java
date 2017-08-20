@@ -332,7 +332,7 @@ public class JsonSerDe extends AbstractSerDe {
                         result = ((StringObjectInspector)poi).getPrimitiveJavaObject(obj);
                         break;
                     case TIMESTAMP:
-                        result = ParsePrimitiveUtils.serializeAsUTC((Timestamp)((TimestampObjectInspector)poi).getPrimitiveJavaObject(obj));
+                        result = ParsePrimitiveUtils.serializeAsUTC(((TimestampObjectInspector)poi).getPrimitiveJavaObject(obj));
                         break;
                     case UNKNOWN:
                         throw new RuntimeException("Unknown primitive");
