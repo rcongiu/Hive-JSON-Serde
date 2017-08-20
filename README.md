@@ -255,7 +255,7 @@ WITH SERDEPROPERTIES ("dots.in.keys" = "true" )
 Load the following JSON.
 
 ```
-{ "my.field" : "value" , "other" : { "with.dots" : "blah } }
+{ "my.field" : "value" , "other" : { "with.dots" : "blah" } }
 ```
 
 Query data substituting periods with underscores.
