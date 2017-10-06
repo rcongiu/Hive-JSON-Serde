@@ -1131,6 +1131,23 @@ public class JSONObject {
 
 
     /**
+     * Put a null value for key in the JSONObject.
+     * @param key   A key string.
+     * @return this.
+     * @throws JSONException if the key is null.
+     */
+    public JSONObject putNull(String key) throws JSONException {
+        if (key == null) {
+            throw new JSONException("Null key.");
+        }
+
+        this.map.put(key, null);
+
+        return this;
+    }
+
+
+    /**
      * Put a key/value pair in the JSONObject, but only if the key and the
      * value are both non-null, and only if there is not already a member
      * with that name.

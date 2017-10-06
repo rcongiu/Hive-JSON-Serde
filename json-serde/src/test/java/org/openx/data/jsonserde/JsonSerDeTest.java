@@ -628,5 +628,86 @@ public class JsonSerDeTest {
         Object col2 = soi.getStructFieldData(res, soi.getStructFieldRef("col2"));
         assertTrue(soi2.getStructFieldData(col2, soi2.getStructFieldRef("time1")).equals("foryou"));
     }
-    
+
+    @Test
+    public void testExplicitNullValueDefault() throws SerDeException, IOException {
+        System.out.println("testExplicitNullValue");
+        JsonSerDe serde = new JsonSerDe();
+        Configuration conf = null;
+        Properties tbl = new Properties();
+        tbl.setProperty(serdeConstants.LIST_COLUMNS, "stringCol,nullCol,missingCol");
+        tbl.setProperty(serdeConstants.LIST_COLUMN_TYPES, "string,string,string");
+        serde.initialize(conf, tbl);
+        StructObjectInspector soi = (StructObjectInspector) serde.getObjectInspector();
+
+        // Load json string with one 'null' value and one 'missing' value
+        Object res = serde.deserialize(new Text("{\"stringCol\":\"str\",\"nullCol\":null}"));
+
+        // Get the serialized json string
+        String jsonStr = serde.serialize(res, soi).toString();
+
+        assertTrue(soi.getStructFieldData(res, soi.getStructFieldRef("stringCol")).equals("str"));
+        assertNull(soi.getStructFieldData(res, soi.getStructFieldRef("nullCol")));
+        assertNull(soi.getStructFieldData(res, soi.getStructFieldRef("missingCol")));
+        assertEquals(jsonStr,"{\"stringCol\":\"str\"}");
+    }
+
+    @Test
+    public void testExplicitNullValue() throws SerDeException, IOException {
+        System.out.println("testExplicitNullValue");
+        JsonSerDe serde = new JsonSerDe();
+        Configuration conf = null;
+        Properties tbl = new Properties();
+        tbl.setProperty(serdeConstants.LIST_COLUMNS, "stringCol,nullCol,missingCol");
+        tbl.setProperty(serdeConstants.LIST_COLUMN_TYPES, "string,string,string");
+
+        // Set 'explicit.null.value' to true
+        tbl.setProperty(JsonSerDe.PROP_EXPLICIT_NULL, "true");
+
+        serde.initialize(conf, tbl);
+        StructObjectInspector soi = (StructObjectInspector) serde.getObjectInspector();
+
+        // Load json string with one 'null' value and one 'missing' value
+        Object res = serde.deserialize(new Text("{\"stringCol\":\"str\",\"nullCol\":null}"));
+
+        // Get the serialized json string
+        String jsonStr = serde.serialize(res, soi).toString();
+
+        assertTrue(soi.getStructFieldData(res, soi.getStructFieldRef("stringCol")).equals("str"));
+        assertNull(soi.getStructFieldData(res, soi.getStructFieldRef("nullCol")));
+        assertNull(soi.getStructFieldData(res, soi.getStructFieldRef("missingCol")));
+        assertEquals(jsonStr,"{\"nullCol\":null,\"stringCol\":\"str\",\"missingCol\":null}");
+    }
+
+    @Test
+    public void testNestedExplicitNullValue() throws SerDeException, IOException {
+        System.out.println("testNestedExplicitNullValue");
+        JsonSerDe serde = new JsonSerDe();
+        Configuration conf = null;
+        Properties tbl = new Properties();
+        tbl.setProperty(serdeConstants.LIST_COLUMNS, "structCol,structNullCol,missingStructCol");
+        tbl.setProperty(serdeConstants.LIST_COLUMN_TYPES, "struct<name:string>,struct<name:string>,struct<name:string>");
+
+        // Set 'explicit.null.value' to true
+        tbl.setProperty(JsonSerDe.PROP_EXPLICIT_NULL, "true");
+
+        serde.initialize(conf, tbl);
+        StructObjectInspector soi = (StructObjectInspector) serde.getObjectInspector();
+        Object res = serde.deserialize(new Text("{\"structCol\":{\"name\":\"myName\"},\"structNullCol\":{\"name\":null}}"));
+
+        // Get the serialized json string
+        String jsonStr = serde.serialize(res, soi).toString();
+
+        StructObjectInspector structColSoi = (StructObjectInspector) soi.getStructFieldRef("structCol").getFieldObjectInspector();
+        Object structCol = soi.getStructFieldData(res, soi.getStructFieldRef("structCol"));
+        assertTrue(structColSoi.getStructFieldData(structCol, structColSoi.getStructFieldRef("name")).equals("myName"));
+
+        StructObjectInspector structNullColSoi = (StructObjectInspector) soi.getStructFieldRef("structNullCol").getFieldObjectInspector();
+        Object structNullCol = soi.getStructFieldData(res, soi.getStructFieldRef("structNullCol"));
+        assertNull(structNullColSoi.getStructFieldData(structNullCol, structNullColSoi.getStructFieldRef("name")));
+
+        assertNull(soi.getStructFieldData(res, soi.getStructFieldRef("missingStructCol")));
+
+        assertEquals(jsonStr,"{\"missingStructCol\":null,\"structCol\":{\"name\":\"myName\"},\"structNullCol\":{\"name\":null}}");
+    }
 }

@@ -288,6 +288,36 @@ WITH SERDEPROPERTIES (
 SELECT time1,time2 from mytable
 ```
 
+### Explicit Null Value In Serialized JSON String
+
+In order to be complaint with some object oriented systems an explicit 'null' json value is required in the serialized string.
+As default, Hive-JSON-Serde will not produce null values in the output serialized JSON string and just drop the key, if you do want to have explicit 'null' values in your output JSON string, use the following:
+
+```
+DROP TABLE tableWithNull;
+CREATE EXTERNAL TABLE tableWithNull
+(
+    `stringCol` STRING,
+    'stringNullCol' STRING,
+    'stringMissingCol' STRING,
+    'structCol' STRUCT<name : STRING>,
+    'structNullCol' STRUCT<name : STRING>,
+    'structMissingCol' STRUCT<name : STRING>
+)
+ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+WITH SERDEPROPERTIES ("explicit.null.value" = "true");
+
+-- JSON string: {\"stringCol\":"blabla",\"stringNullCol\":null,\"structCol\":{\"name\":\"myName\"},\"structNullCol\":{\"name\":null}}
+LOAD DATA LOCAL INPATH 'pathToJsonFile.json' OVERWRITE INTO TABLE tableWithNull;
+
+-- The output when ("explicit.null.value" = "true"):
+-- {\"stringCol\":"blabla",\"stringNullCol\":null,\"stringMissingCol\":null,\"structCol\":{\"name\":\"myName\"},\"structNullCol\":{\"name\":null},\"structMissingCol\":null}
+
+-- The default output or when ("explicit.null.value" = "false"):
+-- {\"stringCol\":"blabla",\"structCol\":{\"name\":\"myName\"},\"structNullCol\":{}}
+```
+
+
 ### User Defined Functions (UDF)
 
 #### tjson
