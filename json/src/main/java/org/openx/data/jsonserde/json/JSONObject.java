@@ -1140,9 +1140,7 @@ public class JSONObject {
         if (key == null) {
             throw new JSONException("Null key.");
         }
-
         this.map.put(key, null);
-
         return this;
     }
 
