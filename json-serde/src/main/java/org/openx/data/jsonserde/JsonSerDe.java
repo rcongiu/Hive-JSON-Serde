@@ -80,11 +80,13 @@ public class JsonSerDe extends AbstractSerDe {
     long serializedDataSize;
     // if set, will ignore malformed JSON in deserialization
     boolean ignoreMalformedJson = false;
+    boolean explicitNull = false;
 
     // properties used in configuration
     public static final String PROP_IGNORE_MALFORMED_JSON = "ignore.malformed.json";
     public static final String PROP_DOTS_IN_KEYS = "dots.in.keys";
     public static final String PROP_CASE_INSENSITIVE ="case.insensitive" ;
+    public static final String PROP_EXPLICIT_NULL ="explicit.null" ;
 
    JsonStructOIOptions options;
 
@@ -151,7 +153,9 @@ public class JsonSerDe extends AbstractSerDe {
         // other configuration
         ignoreMalformedJson = Boolean.parseBoolean(tbl
                 .getProperty(PROP_IGNORE_MALFORMED_JSON, "false"));
-        
+
+        explicitNull = Boolean.parseBoolean(tbl
+                .getProperty(PROP_EXPLICIT_NULL, "false"));
     }
 
     /**
@@ -266,20 +270,22 @@ public class JsonSerDe extends AbstractSerDe {
             StructField sf = fields.get(i);
             Object data = soi.getStructFieldData(obj, sf);
 
-            if (null != data) {
-                try {
-                    // we want to serialize columns with their proper HIVE name,
-                    // not the _col2 kind of name usually generated upstream
-                    result.put(
-                            getSerializedFieldName(columnNames, i, sf), 
-                            serializeField(
-                                data,
-                                sf.getFieldObjectInspector()));
-                    
-                } catch (JSONException ex) {
-                   LOG.warn("Problem serializing", ex);
-                   throw new RuntimeException(ex);
+            try {
+                if (null != data) {
+
+                        // we want to serialize columns with their proper HIVE name,
+                        // not the _col2 kind of name usually generated upstream
+                        result.put(
+                                getSerializedFieldName(columnNames, i, sf),
+                                serializeField(
+                                    data,
+                                    sf.getFieldObjectInspector()));
+                } else if(explicitNull) {
+                    result.putNull(getSerializedFieldName(columnNames, i, sf));
                 }
+            } catch (JSONException ex) {
+                LOG.warn("Problem serializing", ex);
+                throw new RuntimeException(ex);
             }
         }
         return result;
