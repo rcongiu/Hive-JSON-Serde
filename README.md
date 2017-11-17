@@ -305,15 +305,15 @@ CREATE EXTERNAL TABLE tableWithNull
     'structMissingCol' STRUCT<name : STRING>
 )
 ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
-WITH SERDEPROPERTIES ("explicit.null.value" = "true");
+WITH SERDEPROPERTIES ("explicit.null" = "true");
 
 -- JSON string: {\"stringCol\":"blabla",\"stringNullCol\":null,\"structCol\":{\"name\":\"myName\"},\"structNullCol\":{\"name\":null}}
 LOAD DATA LOCAL INPATH 'pathToJsonFile.json' OVERWRITE INTO TABLE tableWithNull;
 
--- The output when ("explicit.null.value" = "true"):
+-- The output when ("explicit.null" = "true"):
 -- {\"stringCol\":"blabla",\"stringNullCol\":null,\"stringMissingCol\":null,\"structCol\":{\"name\":\"myName\"},\"structNullCol\":{\"name\":null},\"structMissingCol\":null}
 
--- The default output or when ("explicit.null.value" = "false"):
+-- The default output or when ("explicit.null" = "false"):
 -- {\"stringCol\":"blabla",\"structCol\":{\"name\":\"myName\"},\"structNullCol\":{}}
 ```
 

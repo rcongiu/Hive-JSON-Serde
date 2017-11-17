@@ -661,7 +661,7 @@ public class JsonSerDeTest {
         tbl.setProperty(serdeConstants.LIST_COLUMNS, "stringCol,nullCol,missingCol");
         tbl.setProperty(serdeConstants.LIST_COLUMN_TYPES, "string,string,string");
 
-        // Set 'explicit.null.value' to true
+        // Set 'explicit.null' to true
         tbl.setProperty(JsonSerDe.PROP_EXPLICIT_NULL, "true");
 
         serde.initialize(conf, tbl);
@@ -688,7 +688,7 @@ public class JsonSerDeTest {
         tbl.setProperty(serdeConstants.LIST_COLUMNS, "structCol,structNullCol,missingStructCol");
         tbl.setProperty(serdeConstants.LIST_COLUMN_TYPES, "struct<name:string>,struct<name:string>,struct<name:string>");
 
-        // Set 'explicit.null.value' to true
+        // Set 'explicit.null' to true
         tbl.setProperty(JsonSerDe.PROP_EXPLICIT_NULL, "true");
 
         serde.initialize(conf, tbl);
