@@ -13,6 +13,7 @@
 
 package org.openx.data.jsonserde;
 
+import java.nio.charset.CharacterCodingException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +28,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.*;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
+import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.Writable;
 
 import org.apache.commons.logging.Log;
@@ -158,41 +160,44 @@ public class JsonSerDe extends AbstractSerDe {
                 .getProperty(PROP_EXPLICIT_NULL, "false"));
     }
 
+    JSONObject emptyJson = new JSONObject();
     /**
      * Deserializes the object. Reads a Writable and uses JSONObject to
      * parse its text
-     * 
+     *
      * @param w the text to parse
      * @return a JSONObject
-     * @throws SerDeException 
+     * @throws SerDeException
      */
     @Override
     public Object deserialize(Writable w) throws SerDeException {
-        Text rowText = (Text) w;
-        deserializedDataSize = rowText.getBytes().length;
-	
         // Try parsing row into JSON object
         Object jObj = null;
-        
+        String txt = null;
         try {
-            String txt = rowText.toString().trim();
-            
-            if(txt.startsWith("{")) {
+            if (w instanceof Text) {
+                Text rowText = (Text) w;
+                deserializedDataSize = rowText.getLength();
+                txt = rowText.toString().trim();
+            } else if (w instanceof BytesWritable) {
+                byte[] rowByteArr = ((BytesWritable) w).getBytes();
+                deserializedDataSize = rowByteArr.length;
+                txt = Text.decode(rowByteArr,0,rowByteArr.length).trim();
+            }
+            if (txt.startsWith("{")) {
                 jObj = new JSONObject(txt);
-            } else if (txt.startsWith("[")){
+            } else if (txt.startsWith("[")) {
                 jObj = new JSONArray(txt);
             }
         } catch (JSONException e) {
             // If row is not a JSON object, make the whole row NULL
-            onMalformedJson("Row is not a valid JSON Object - JSONException: "
-                    + e.getMessage());
-            try {
-                jObj = new JSONObject("{}");
-            } catch (JSONException ex) {
-                onMalformedJson("Error parsing empty row. This should never happen.");
-            }
+            onMalformedJson("Row is not a valid JSON Object - JSONException: " + e.getMessage());
+            return emptyJson;
+        } catch (CharacterCodingException e) {
+            onMalformedJson("unable to decode bytes to text : " + e.getMessage());
+            return emptyJson;
         }
-	
+
         return jObj;
     }
 
