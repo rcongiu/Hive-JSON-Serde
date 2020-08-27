@@ -2,6 +2,7 @@
 _Generated automatically by maven_
 
 ## Next Release
+ *  *2020-08-27 14:37:38*  [#228](https://github.com/rcongiu/Hive-JSON-Serde/pull/228) Make usages of SimpleDateFormat thread-local and therefore thread safe _[@pettyjamesm](https://github.com/pettjamesm)_
  *  *2017-10-06 10:04:22*  Add configuration for explicit null value in the serialized output JSON  _(lyair1)_
 
 ## 1.3.8
