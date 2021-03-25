@@ -14,7 +14,6 @@
 
     <name>json-serde-main</name>
 
-
     <build>
         <!-- wagon-ssh-external extension is necessary for deploying with scpexe -->
         <extensions>
@@ -52,9 +51,7 @@
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
                     <archive>
-                        <manifest>
-
-                        </manifest>
+                        <manifest></manifest>
                     </archive>
                 </configuration>
                 <executions>
@@ -85,7 +82,6 @@
             </plugin>
         </plugins>
     </build>
-
     <dependencies>
         <dependency>
             <groupId>org.openx.data</groupId>
@@ -93,15 +89,12 @@
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
-
         <dependency>
             <groupId>org.openx.data</groupId>
             <artifactId>json</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
-
-
         <dependency>
             <groupId>org.apache.hive</groupId>
             <artifactId>hive-serde</artifactId>
@@ -114,16 +107,17 @@
             <version>${cdh.hive.version}</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>${hadoop.dependency}</artifactId>
             <version>${cdh.hadoop.version}</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jdk.tools</artifactId>
+                    <groupId>jdk.tools</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
-
     </dependencies>
 </project>
-
-
-

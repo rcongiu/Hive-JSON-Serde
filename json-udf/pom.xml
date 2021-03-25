@@ -13,7 +13,6 @@
 
     <name>json-udf</name>
 
-
     <build>
         <!-- wagon-ssh-external extension is necessary for deploying with scpexe -->
         <extensions>
@@ -51,9 +50,7 @@
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
                     <archive>
-                        <manifest>
-
-                        </manifest>
+                        <manifest></manifest>
                     </archive>
                 </configuration>
                 <executions>
@@ -95,10 +92,13 @@
             <artifactId>${hadoop.dependency}</artifactId>
             <version>${cdh.hadoop.version}</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jdk.tools</artifactId>
+                    <groupId>jdk.tools</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
     </dependencies>
 </project>
-
-
-
