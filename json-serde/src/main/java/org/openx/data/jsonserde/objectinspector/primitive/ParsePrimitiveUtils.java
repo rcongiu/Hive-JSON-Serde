@@ -6,10 +6,7 @@
 package org.openx.data.jsonserde.objectinspector.primitive;
 
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
@@ -25,16 +22,9 @@ public final class ParsePrimitiveUtils {
     }
 
     // timestamps are expected to be in UTC
-    public final static DateFormat UTC_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-    public final static DateFormat OFFSET_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
-    public final static DateFormat NON_UTC_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    static DateFormat[] dateFormats = { UTC_FORMAT, OFFSET_FORMAT,NON_UTC_FORMAT};
-    static {
-        TimeZone tz = TimeZone.getTimeZone("UTC");
-        for( DateFormat df : dateFormats) {
-            df.setTimeZone(tz);
-        }
-    }
+    public final static ThreadLocalSimpleDateFormat UTC_FORMAT = new ThreadLocalSimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC"));
+    public final static ThreadLocalSimpleDateFormat OFFSET_FORMAT = new ThreadLocalSimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", TimeZone.getTimeZone("UTC"));
+    public final static ThreadLocalSimpleDateFormat NON_UTC_FORMAT = new ThreadLocalSimpleDateFormat("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone("UTC"));
 
     static Pattern hasTZOffset = Pattern.compile(".+(\\+|-)\\d{2}:?\\d{2}$");
 

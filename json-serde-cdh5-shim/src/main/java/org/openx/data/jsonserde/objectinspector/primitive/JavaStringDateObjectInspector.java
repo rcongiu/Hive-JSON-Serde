@@ -5,7 +5,6 @@ import org.apache.hadoop.hive.serde2.objectinspector.primitive.AbstractPrimitive
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.SettableDateObjectInspector;
 
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 
 /**
  * Created by rcongiu on 11/12/15.
@@ -13,7 +12,7 @@ import java.text.SimpleDateFormat;
 public class JavaStringDateObjectInspector  extends AbstractPrimitiveJavaObjectInspector
         implements SettableDateObjectInspector {
 
-    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    private static final ThreadLocalSimpleDateFormat sdf = new ThreadLocalSimpleDateFormat("yyyy-MM-dd");
 
     public JavaStringDateObjectInspector() {
         super(TypeEntryShim.dateType);
