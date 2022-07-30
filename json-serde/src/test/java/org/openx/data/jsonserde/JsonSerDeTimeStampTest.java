@@ -176,9 +176,14 @@ public class JsonSerDeTimeStampTest {
   public void testformatDateFromUTC() throws ParseException {
     System.out.println("testFormatDateFromUTC");
     String string1 = "2001-07-04T12:08:56Z";
-    assertEquals("2001-07-04 12:08:56", ParsePrimitiveUtils.nonUTCFormat(string1));
+    assertEquals("2001-07-04 12:08:56.000", ParsePrimitiveUtils.nonUTCFormat(string1));
   }
 
+  @Test
+  public void testParseUTCTimestampWithMillis() throws ParseException {
+    assertEquals(Timestamp.valueOf("2020-07-30 15:20:05.424"),
+        ParsePrimitiveUtils.parseTimestamp("2020-07-30T15:20:05.424Z"));
+  }
 
   @Test
   public void testSerializeTimestamp() throws SerDeException, JSONException {

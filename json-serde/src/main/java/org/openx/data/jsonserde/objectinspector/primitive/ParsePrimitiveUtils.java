@@ -24,11 +24,15 @@ public final class ParsePrimitiveUtils {
         throw new InstantiationError("This class must not be instantiated.");
     }
 
+    // check to see if UTC_WITH_MILLIS_FORMAT should be used.
+    private static final Pattern UTC_MILLIS_PATTERN = Pattern.compile(".*\\.[0-9]{3}Z$");
+
     // timestamps are expected to be in UTC
     public final static DateFormat UTC_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    public final static DateFormat UTC_WITH_MILLIS_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     public final static DateFormat OFFSET_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
-    public final static DateFormat NON_UTC_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    static DateFormat[] dateFormats = { UTC_FORMAT, OFFSET_FORMAT,NON_UTC_FORMAT};
+    public final static DateFormat NON_UTC_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    static DateFormat[] dateFormats = { UTC_FORMAT, UTC_WITH_MILLIS_FORMAT, OFFSET_FORMAT,NON_UTC_FORMAT};
     static {
         TimeZone tz = TimeZone.getTimeZone("UTC");
         for( DateFormat df : dateFormats) {
@@ -114,7 +118,11 @@ public final class ParsePrimitiveUtils {
         Date parsed = null;
         try {
             if(s.endsWith("Z")) { // 003Z
-                parsed = UTC_FORMAT.parse(s);
+                if (UTC_MILLIS_PATTERN.matcher(s).matches()) {
+                    parsed = UTC_WITH_MILLIS_FORMAT.parse(s);
+                } else {
+                    parsed = UTC_FORMAT.parse(s);
+                }
             } else if ( hasTZOffset.matcher(s).matches()) {
                 parsed = OFFSET_FORMAT.parse(s); // +0600 or -06:00
             } else {
